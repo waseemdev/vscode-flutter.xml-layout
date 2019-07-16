@@ -1,0 +1,22 @@
+{
+	"fxml_widget": {
+		"prefix": "fxml_widget",
+		"body": [
+			"<${1:My}Page controller=\"${1:My}Controller\">",
+			"  <Scaffold>",
+			"    <appBar>",
+			"      <AppBar>",
+			"        <title>",
+			"          <Text text=\"'${2:PageTitle}'\" />",
+			"        </title>",
+			"      </AppBar>",
+			"    </appBar>",
+			"    <body>",
+			"      <Container>",
+			"      </Container>",
+			"    </body>",
+			"  </Scaffold>",
+			"</${1:My}Page>"
+		]
+	}
+}

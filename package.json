@@ -1,0 +1,66 @@
+{
+	"name": "flutter-xml-layout",
+	"displayName": "XML Layout for Flutter",
+	"description": "XML Layout for Flutter. Bring Angular's style to Flutter!",
+	"publisher": "WaseemDev",
+	"version": "0.0.1",
+	"icon": "images/logo.png",
+	"repository": {
+		"type": "github",
+		"url": "https://github.com/waseemdev/vscode-flutter.xml-layout"
+	},
+	"engines": {
+		"vscode": "^1.34.0"
+	},
+	"categories": [
+		"Other"
+	],
+	"activationEvents": [
+		"*"
+	],
+	"main": "./dist/extension.js",
+	"contributes": {
+		"commands": [
+			{
+				"command": "flutter.xml-layout.regenerate-all",
+				"title": "XML Layout for Flutter: Re-generate all XML & JSON files"
+			}
+		],
+		"snippets": [
+			{
+				"language": "dart",
+				"path": "./snippets/dart.json"
+			},
+			{
+				"language": "xml",
+				"path": "./snippets/xml.json"
+			}
+		]
+	},
+	"scripts": {
+		"vscode:prepublish": "webpack --mode production",
+		"compile": "webpack --mode none",
+		"watch": "webpack --mode none --watch",
+		"postinstall": "node ./node_modules/vscode/bin/install",
+		"test-compile": "tsc -p ./"
+	},
+	"devDependencies": {
+		"@types/mkdirp": "^0.5.2",
+		"@types/mocha": "^2.2.42",
+		"@types/node": "^10.12.21",
+		"@types/q": "^1.5.2",
+		"@types/rgrove__parse-xml": "^1.1.0",
+		"mkdirp": "^0.5.1",
+		"ts-loader": "^6.0.4",
+		"ts-node": "^8.2.0",
+		"tslint": "^5.12.1",
+		"typescript": "^3.3.1",
+		"vscode": "^1.1.28",
+		"webpack": "^4.35.3",
+		"webpack-cli": "^3.3.5"
+	},
+	"dependencies": {
+		"@rgrove/parse-xml": "^2.0.1",
+		"q": "^1.5.1"
+	}
+}
