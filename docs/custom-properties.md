@@ -463,7 +463,7 @@ Full example:
 
   <RaisedButton :formSubmit="loginFormGroup" :text="'login' | translate" />
   <!-- or manually -->
-  <RaisedButton onPressed="ctrl.login" :disable="(ctrl.loginFormGroup.statusStream | stream:ControlStatus.invalid) != ControlStatus.valid" :text="'login' | translate">
+  <RaisedButton onPressed="ctrl.login" :disable="ctrl.loginFormGroup.submitEnabledStream | stream:ctrl.loginFormGroup.submitEnabled" :text="'login' | translate">
   </RaisedButton>
 
 </Column>
@@ -480,7 +480,7 @@ Then add the controls in the controller class:
     loginFormGroup.onSubmit(_login);
   }
 
-  void _login(dynamic data) async {
+  Future _login(dynamic data) async {
     final username = data['username'];
     final password = data['password'];
     // login logic goes here...
