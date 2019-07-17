@@ -132,7 +132,7 @@ export default class Manager {
         switch (p.type) {
             case 'enum': return p.enumType ? new EnumValueTransformer(p.enumType) : null;
             case 'color': return new ColorValueTransformer();
-            case 'edgeInset': return new EdgeInsetsValueTransformer();
+            case 'edgeInsets': return new EdgeInsetsValueTransformer();
             default: return null;
         }
     }

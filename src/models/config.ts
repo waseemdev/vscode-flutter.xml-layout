@@ -15,7 +15,7 @@ export interface ConfigWrapper {
 
 export interface ConfigValueTransformer {
     properties: string[];
-    type: 'enum' | 'color' | 'edgeInset';
+    type: 'enum' | 'color' | 'edgeInsets';
     enumType?: string;
 }
 
