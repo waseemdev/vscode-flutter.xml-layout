@@ -68,4 +68,21 @@ suite("Child Wrapper Properties Tests", function () {
         const generated = generateWidget(xml);
         assertEqual(generated, expected);
     });
+
+    test("with pipes", function() {
+        const xml = `
+        <RaisedButton :text="'hello' | translate">
+        </RaisedButton>
+      `;
+        
+        const expected = `
+        RaisedButton(
+          child: Text(
+            _pipeProvider.transform(context, "translate", 'hello', [])
+          )
+        )`;
+
+        const generated = generateWidget(xml);
+        assertEqual(generated, expected);
+    });
 });

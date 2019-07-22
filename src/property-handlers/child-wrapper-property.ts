@@ -83,7 +83,7 @@ export class ChildWrapperPropertyHandler extends WrapperPropertyHandler {
         
         const result = this.propertyResolver.pipeValueResolver.resolve(element, attr.name, attr.value, widget, true);
         const wrapperWidget = result.wrapperWidget;
-        if (result.wrapperWidget) {
+        if (attr.value !== result.value) {
             value = result.value;
         }
 
