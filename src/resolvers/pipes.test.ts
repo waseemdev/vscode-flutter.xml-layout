@@ -220,16 +220,13 @@ suite("Pipes Tests", function () {
         assertEqual(generated, expected);
     });
 
-    test("tests)", function() {
+    test("no pipes just string", function() {
         const xml = `
       <Column>
-        <Text text='"someText | translate"'/>  <!-- valid string -->
-        <Text text="'someText | translate'"/>  <!-- valid string -->
-        <Text text="'\${someText | translate}'"/>  <!-- valid string -->
-        <Text text='"(someText | translate)"'/>  <!-- error -->
-        <Text text='"\${(someText | translate)}"'/> <!-- valid pipe -->
-        <Text text="'\${someText | translate}'"/> <!-- malformed dart code -->
-        <Text text="'\${(someText | translate)}'"/> <!-- valid pipe -->
+        <Text text='"someText | translate"'/>
+        <Text text="'someText | translate'"/>
+        <Text text='"(someText | translate)"'/>
+        <Text text="'(someText | translate)'"/>
       </Column>
 `;
 
@@ -243,22 +240,42 @@ suite("Pipes Tests", function () {
               'someText | translate'
             ),
             Text(
-              '\${someText | translate}'
+              "(someText | translate)"
             ),
             Text(
-              "(_pipeProvider.transform(context, "translate", someText, []))"
-            ),
-            Text(
-              "\${(_pipeProvider.transform(context, "translate", someText, []))}"
-            ),
-            Text(
-              '\${someText | translate}'
-            ),
-            Text(
-              '\${(_pipeProvider.transform(context, "translate", someText, []))}'
+                '(someText | translate)'
             ),
           ]
         )
+`;
+
+        const generated = generateWidget(xml);
+        assertEqual(generated, expected);
+    });
+
+    test("pipes inside ${}", function() {
+        const xml = `
+      <Column>
+        <Text text="'\${someText | translate}'"/>
+        <Text text='"\${(someText | translate)}"'/>
+        <Text text="'\${(someText | translate)}'"/> 
+      </Column>
+`;
+
+        const expected = `
+    Column(
+      children: [
+        Text(
+          '\${_pipeProvider.transform(context, "translate", {someText, [])}'
+        ),
+        Text(
+          "\${(_pipeProvider.transform(context, "translate", someText, []))}"
+        ),
+        Text(
+          '\${(_pipeProvider.transform(context, "translate", someText, []))}'
+        ),
+      ]
+    )
 `;
 
         const generated = generateWidget(xml);

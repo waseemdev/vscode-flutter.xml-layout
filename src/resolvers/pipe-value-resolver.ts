@@ -193,24 +193,80 @@ export class PipeValueResolver {
     private resolvePipes(value: string): { value: string, pipes: { name: string, args: any[] }[], groupedPipes: any[] } {
         // prepare grouped pipes (pipes that are between braces).
         const groupedPipes: { value: string, pipes:{ name: string, args: any[] }[] }[] = [];
-        const finalResult = value.replace(/[^(\)]+(?=\))/g, 
-            (match, index, originalValue) => {
-                // if (!this.isPipeString(originalValue, match, index)) {
-                //     return match;
-                // }
-                const result = this.extractPipes(match);
-                const pipesNames = makePipeUniqueName(result);
-                groupedPipes.push(result);
-                return '_placeholder_for_' + pipesNames + '_pipes';
-            });
-        
-        // other pipes
-        const result = this.extractPipes(finalResult);
-        return { ...result, groupedPipes };
+        const { groups, output } = this.resolveGroupedPipes(value);
+        const result = this.extractPipes(output);
+        return { ...result, groupedPipes: groups };
     }
 
-    // private isPipeString(originalValue: string, match: string, index: number): boolean {
-    // }
+    private resolveGroupedPipes(input: string): { groups: any[], output: string } {
+        const stack: { index: number, exp: string }[] = [];
+        const groupedPipes: any[] = [];
+        let quotedWith = '';
+        let hasInterpolation = false;
+
+        const resolvePipes = (start: { index: number, exp: string }, index: number, groupStart: string, groupEnd: string): number => {
+            const group = input.substring(start.index + 1, index).trim();
+            if (group) {
+                const result = this.extractPipes(group);
+                if (result.pipes.length) {
+                    groupedPipes.push(result);
+                    const pipesNames = makePipeUniqueName(result);
+                    const placeholder = groupStart + '_placeholder_for_' + pipesNames + '_pipes' + groupEnd;
+                    const originalLength = input.length;
+                    input = this.replaceAt(input, placeholder, start.index, index);
+                    index -= originalLength - input.length;
+                }
+            }
+            return index;
+        };
+
+        for (let index = 0; index < input.length; index++) {
+            const c = input[index];
+            
+            // start of ${}
+            if (c === '$' && input.length > index && input[index + 1] === '{') {
+                stack.push({ exp: c, index });
+                hasInterpolation = true;
+            }
+            // end of ${}
+            else if (c === '}') {
+                hasInterpolation = false;
+                const start = stack.pop();
+                if (start) {
+                    index = resolvePipes(start, index, '${', '}');
+                }
+            }
+            // if quoted
+            else if (quotedWith && !hasInterpolation) {
+                // end of quote
+                if (quotedWith === c) {
+                    quotedWith = '';
+                }
+            }
+            // start of quote
+            else if (c === '"' || c === "'") {
+                quotedWith = c;
+            }
+            // start of brace
+            else if (c === '(') {
+                stack.push({ exp: c, index });
+            }
+            // end of brace
+            else if (c === ')') {
+                const start = stack.pop();
+                if (start) {
+                    index = resolvePipes(start, index, '(', ')');
+                }
+            }
+        }
+        return { groups: groupedPipes, output: input };
+    }
+
+    private replaceAt(input: string, replace: string, startsAt: number, endsAt: number = -1) {
+        const first = input.substring(0, startsAt);
+        const second = input.substring((endsAt === -1 ? startsAt : endsAt) + 1);
+        return first + replace + second;
+    }
     
     private extractPipes(value: string) {
         const pipesReduced = value

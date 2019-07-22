@@ -129,32 +129,15 @@ FutureBuilder(
 <Container width="50 | widthPercent" height="50 | widthPercent" />
 ```
 
-
------------------
-
-Pipes supports these usecases:
-- Grouped pipes with (braces):
+You can use multiple pipes with (braces):
 ```XML
 <Text text="'${(ctrl.greatingText | translate)} ${(ctrl.counterStream | stream)}'" />
 ```
 
-- Pipes chaining:
+You also can use pipes chaining:
 ```XML
 <Text text="ctrl.greatingTextStream | stream | translate" />
 ```
 
-Pipes are made for simple usecases and have some limitions:
-- Pipes will not be resolved if they're between quotations, even if they are inside ${} e.g. `text="'${someText | translate}'"`.
-
-- Also this `text='"(someText | translate)"'` will be treated as a pipe and will produce a malformed dart code, so try to avoid writting text like this, but this will be considered as a string: `text="'(someText | translate)'"`:
-```XML
-<Text text="'${(someText | translate)}'"/> <!-- valid pipe -->
-<Text text='"${(someText | translate)}"'/> <!-- valid pipe -->
-<Text text='"someText | translate"'/>  <!-- valid string (not pipe) -->
-<Text text="'someText | translate'"/>  <!-- valid string (not pipe) -->
-<Text text="'${someText | translate}'"/> <!-- malformed dart code -->
-<Text text='"(someText | translate)"'/>  <!-- malformed dart code -->
-```
-
-- You can't use multi-chained stream or future e.g. `text="streamThatReturnsStream | stream | stream"` or `text="textStream | stream | anotherPipe | stream"`. only one stream/future per chain, but you can, of course, use grouped pipes and each group has one stream or future.
+***NOTE*** You can't use multi-chained stream or future e.g. `text="streamThatReturnsStream | stream | stream"` or `text="textStream | stream | anotherPipe | stream"`. only one stream/future per chain, but you can, of course, use grouped pipes and each group has one stream or future.
 
