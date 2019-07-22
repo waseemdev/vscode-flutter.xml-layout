@@ -1,6 +1,6 @@
 import { WidgetModel, PropertyModel, VariableModel } from '../models/models';
 import { WrapperPropertyHandler } from "./wrapper-property";
-import { makeTabs } from '../until';
+import { makeTabs } from '../utils';
 import { PropertyResolver } from '../resolvers/property-resolver';
 
 export class WrapperAnimationHandler extends WrapperPropertyHandler {

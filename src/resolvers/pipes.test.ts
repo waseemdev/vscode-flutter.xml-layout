@@ -264,4 +264,152 @@ suite("Pipes Tests", function () {
         const generated = generateWidget(xml);
         assertEqual(generated, expected);
     });
+
+    test("stream pipe - mutiple times - with :disable (should generate one StreamBuilder)", function() {
+        const xml = `
+    <RaisedButton :margin="30 0 0" padding="10 0" color="#3b5998" onPressed="ctrl.loginWithFacebook"
+                    shape="RoundedRectangleBorder(borderRadius: BorderRadius.circular(8))"
+                    :disable="(ctrl.facebookLoggingStatusStream | stream) == ButtonState.inProgress">
+        <Row mainAxisAlignment="center">
+          <Icon :margin="0 10" icon="Ionicons.getIconData('logo-facebook')" />
+          <Text text="'Login with Facebook'" />
+          <SizedBox :margin="0 4" :if="(ctrl.facebookLoggingStatusStream | stream) == ButtonState.inProgress" width="28" height="28">
+            <CircularProgressIndicator strokeWidth="2" />
+          </SizedBox>
+        </Row>
+      </RaisedButton>
+`;
+
+        const expected = `
+        StreamBuilder(
+          initialData: null,
+          stream: ctrl.facebookLoggingStatusStream,
+          builder: (BuildContext context, ctrlFacebookLoggingStatusStreamSnapshot) {
+            final ctrlFacebookLoggingStatusStreamValue = ctrlFacebookLoggingStatusStreamSnapshot.data;
+            return Disable(
+              event: ctrl.loginWithFacebook,
+              value: (ctrlFacebookLoggingStatusStreamValue) == ButtonState.inProgress,
+              builder: (BuildContext context, event) {
+                return Padding(
+                  padding: const EdgeInsets.fromLTRB(0, 30, 0, 0),
+                  child: RaisedButton(
+                    color: Color.fromARGB(255, 59, 89, 152),
+                    onPressed: event,
+                    padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 0),
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 10),
+                          child: Icon(
+                            Ionicons.getIconData('logo-facebook')
+                          )
+                        ),
+                        Text(
+                          'Login with Facebook'
+                        ),
+                        WidgetHelpers.ifTrue((ctrlFacebookLoggingStatusStreamValue) == ButtonState.inProgress,
+                          () => Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 4),
+                            child: SizedBox(
+                              height: 28,
+                              width: 28,
+                              child: CircularProgressIndicator(
+                                strokeWidth: 2
+                              )
+                            )
+                          ),
+                          () => Container(width: 0, height: 0)
+                        ),
+                      ]
+                    )
+                  )
+                );
+              }
+            );
+          }
+        )
+`;
+
+        const generated = generateWidget(xml);
+        assertEqual(generated, expected);
+    });
+
+    test("stream pipe - mutiple times - propertyElement (should generate one StreamBuilder)", function() {
+        const xml = `
+      <Scaffold>
+        <body>
+          <RaisedButton :margin="30 0 0" padding="10 0" color="#3b5998" onPressed="ctrl.loginWithFacebook"
+                          shape="RoundedRectangleBorder(borderRadius: BorderRadius.circular(8))"
+                          :disable="(ctrl.facebookLoggingStatusStream | stream) == ButtonState.inProgress">
+              <Row mainAxisAlignment="center">
+                <Icon :margin="0 10" icon="Ionicons.getIconData('logo-facebook')" />
+                <Text text="'Login with Facebook'" />
+                <SizedBox :margin="0 4" :if="(ctrl.facebookLoggingStatusStream | stream) == ButtonState.inProgress" width="28" height="28">
+                  <CircularProgressIndicator strokeWidth="2" />
+                </SizedBox>
+              </Row>
+            </RaisedButton>
+        </body>
+      </Scaffold>
+`;
+
+        const expected = `
+        Scaffold(
+          body: StreamBuilder(
+            initialData: null,
+            stream: ctrl.facebookLoggingStatusStream,
+            builder: (BuildContext context, ctrlFacebookLoggingStatusStreamSnapshot) {
+              final ctrlFacebookLoggingStatusStreamValue = ctrlFacebookLoggingStatusStreamSnapshot.data;
+              return Disable(
+                event: ctrl.loginWithFacebook,
+                value: (ctrlFacebookLoggingStatusStreamValue) == ButtonState.inProgress,
+                builder: (BuildContext context, event) {
+                  return Padding(
+                    padding: const EdgeInsets.fromLTRB(0, 30, 0, 0),
+                    child: RaisedButton(
+                      color: Color.fromARGB(255, 59, 89, 152),
+                      onPressed: event,
+                      padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 0),
+                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 10),
+                            child: Icon(
+                              Ionicons.getIconData('logo-facebook')
+                            )
+                          ),
+                          Text(
+                            'Login with Facebook'
+                          ),
+                          WidgetHelpers.ifTrue((ctrlFacebookLoggingStatusStreamValue) == ButtonState.inProgress,
+                            () => Padding(
+                              padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 4),
+                              child: SizedBox(
+                                height: 28,
+                                width: 28,
+                                child: CircularProgressIndicator(
+                                  strokeWidth: 2
+                                )
+                              )
+                            ),
+                            () => Container(width: 0, height: 0)
+                          ),
+                        ]
+                      )
+                    )
+                  );
+                }
+              );
+            }
+          )
+        )
+`;
+
+        const generated = generateWidget(xml);
+        assertEqual(generated, expected);
+    });
 });

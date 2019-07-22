@@ -1,7 +1,7 @@
 import { CustomPropertyHandler, WidgetResolveResult } from "../providers/property-handler-provider";
 import * as parseXml from '../parser/types';
 import { WidgetModel, PropertyModel } from '../models/models';
-import { makeTabs } from "../until";
+import { makeTabs } from "../utils";
 import { PropertyResolver } from "../resolvers/property-resolver";
 
 interface IfModel {

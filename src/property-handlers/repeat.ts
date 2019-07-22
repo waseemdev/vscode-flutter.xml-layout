@@ -1,7 +1,7 @@
 import { CustomPropertyHandler, PropertyResolveResult } from "../providers/property-handler-provider";
 import * as parseXml from '../parser/types';
 import { WidgetModel, ExtraDataModel, AttributeModel, PropertyModel } from '../models/models';
-import { extractForLoopParams, makeTabs } from "../until";
+import { extractForLoopParams, makeTabs } from "../utils";
 import { PropertyResolver } from "../resolvers/property-resolver";
 
 export class RepeatHandler extends CustomPropertyHandler {
@@ -31,6 +31,12 @@ export class RepeatHandler extends CustomPropertyHandler {
                     dataType: 'function',
                     name: ':repeat',
                     value: ''
+                },
+                {
+                    dataType: 'widget',
+                    name: 'child',
+                    value: widget,
+                    skipGeneratingCode: true
                 }
             ],
             type: '', // empty type to generate properties only and skip generating widget constractor e.g.: Container(...)

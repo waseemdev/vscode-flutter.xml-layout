@@ -2,7 +2,7 @@ import { scan } from "../parser/parser";
 import * as parseXml from '../parser/types';
 import * as Syntax from '../parser/syntax';
 import { WidgetModel, ExtraDataModel } from "../models/models";
-import { makeVariableName, makePipeUniqueName } from "../until";
+import { makeVariableName, makePipeUniqueName } from "../utils";
 
 export class PipeValueResolver {
 

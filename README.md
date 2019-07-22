@@ -59,6 +59,15 @@ Extension features:
     * [flutter_xmllayout_helpers](https://pub.dartlang.org/packages/flutter_xmllayout_helpers)
     * [provider](https://pub.dartlang.org/packages/provider)
     * flutter_localizations
+```yaml
+dependencies:
+  flutter:
+    sdk: flutter
+  flutter_localizations:
+    sdk: flutter
+  provider: ^3.0.0+1
+  flutter_xmllayout_helpers: ^0.0.2
+```
 4. Apply one of the following steps:
     * Clear all `main.dart` content then use `fxml_app` snippet to create the app.
     * Modify `main.dart` to use `MultiProvider` from `provider` package:

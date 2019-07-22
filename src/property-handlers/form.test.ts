@@ -1,6 +1,6 @@
 import { generateWidget, assertEqual } from '../test/shared';
 
-suite("If custom property", function () {
+suite("Forms", function () {
 
     test(":formSubmit", function() {
         const xml = `
@@ -11,13 +11,13 @@ suite("If custom property", function () {
         
         const expected = `
         StreamBuilder(
-          initialData: ctrl.loginFormGroup.status,
-          stream: ctrl.loginFormGroup.statusStream,
-          builder: (BuildContext context, ctrlLoginFormGroupStatusStreamSnapshot) {
-            final ctrlLoginFormGroupStatusStreamValue = ctrlLoginFormGroupStatusStreamSnapshot.data;
+          initialData: ctrl.loginFormGroup.submitEnabled,
+          stream: ctrl.loginFormGroup.submitEnabledStream,
+          builder: (BuildContext context, ctrlLoginFormGroupSubmitEnabledStreamSnapshot) {
+            final ctrlLoginFormGroupSubmitEnabledStreamValue = ctrlLoginFormGroupSubmitEnabledStreamSnapshot.data;
             return Disable(
               event: ctrl.loginFormGroup.submit,
-              value: (ctrlLoginFormGroupStatusStreamValue) != ControlStatus.valid,
+              value: !(ctrlLoginFormGroupSubmitEnabledStreamValue),
               builder: (BuildContext context, event) {
                 return ProgressButton(
                   onPressed: event,
@@ -53,13 +53,13 @@ suite("If custom property", function () {
               return Container(width: 0, height: 0);
             }
             return StreamBuilder(
-              initialData: ctrl.loginFormGroup.status,
-              stream: ctrl.loginFormGroup.statusStream,
-              builder: (BuildContext context, ctrlLoginFormGroupStatusStreamSnapshot) {
-                final ctrlLoginFormGroupStatusStreamValue = ctrlLoginFormGroupStatusStreamSnapshot.data;
+              initialData: ctrl.loginFormGroup.submitEnabled,
+              stream: ctrl.loginFormGroup.submitEnabledStream,
+              builder: (BuildContext context, ctrlLoginFormGroupSubmitEnabledStreamSnapshot) {
+                final ctrlLoginFormGroupSubmitEnabledStreamValue = ctrlLoginFormGroupSubmitEnabledStreamSnapshot.data;
                 return Disable(
                   event: ctrl.loginFormGroup.submit,
-                  value: (ctrlLoginFormGroupStatusStreamValue) != ControlStatus.valid,
+                  value: !(ctrlLoginFormGroupSubmitEnabledStreamValue),
                   builder: (BuildContext context, event) {
                     return Padding(
                       padding: const EdgeInsets.all(0),
@@ -74,6 +74,30 @@ suite("If custom property", function () {
                   }
                 );
               }
+            );
+          }
+        )
+`;
+
+        const generated = generateWidget(xml);
+        assertEqual(generated, expected);
+    });
+
+    test(":formControl with :width wrapper", function() {
+        const xml = `
+<TextField :formControl="quantity" :width="80" />
+`;
+        
+        const expected = `
+        StreamBuilder(
+          initialData: ctrl.formGroup.get('quantity').value,
+          stream: ctrl.formGroup.get('quantity').valueStream,
+          builder: (BuildContext context, ctrlFormGroupGetQuantityValueStreamSnapshot) {
+            return SizedBox(
+              width: 80,
+              child: TextField(
+                controller: formGroupQuantityController
+              )
             );
           }
         )

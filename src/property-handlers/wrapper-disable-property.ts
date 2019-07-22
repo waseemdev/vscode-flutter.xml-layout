@@ -1,6 +1,6 @@
 import { WidgetModel, PropertyModel } from '../models/models';
 import { WrapperPropertyHandler } from "./wrapper-property";
-import { makeVariableName } from "../until";
+import { makeVariableName } from "../utils";
 import { PropertyResolver } from '../resolvers/property-resolver';
 
 export class WrapperDisablePropertyHandler extends WrapperPropertyHandler {

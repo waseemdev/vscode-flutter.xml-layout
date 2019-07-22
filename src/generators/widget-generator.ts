@@ -1,5 +1,5 @@
 import { RootWidgetModel, WidgetModel, PropertyModel, VariableModel, FormControlModel } from "../models/models";
-import { makeTabs, sortProperties } from "../until";
+import { makeTabs, sortProperties } from "../utils";
 import { PropertyHandlerProvider } from "../providers/property-handler-provider";
 
 

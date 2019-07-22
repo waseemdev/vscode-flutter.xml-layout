@@ -1,4 +1,4 @@
-import { PropertyModel } from "./models/models";
+import { PropertyModel, WidgetModel } from "./models/models";
 
 
 export function extractForLoopParams(value: string) {
@@ -80,4 +80,12 @@ export function getUniqueBy(array: any[], key: (val: any) => any) {
           array.map(x => [key(x), x])
         ).values()
     ];
+}
+
+
+export function findWidgetByName(name: string, widget: WidgetModel): WidgetModel {
+    if (name === widget.type) {
+        return widget;
+    }
+    return findWidgetByName(name, widget.wrappedWidgets[0]);
 }

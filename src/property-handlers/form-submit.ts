@@ -4,6 +4,7 @@ import { WidgetModel, AttributeModel } from '../models/models';
 import { WrapperDisablePropertyHandler } from "./wrapper-disable-property";
 import { FormGroupHandler } from "./form-group";
 import { PropertyResolver } from "../resolvers/property-resolver";
+import { findWidgetByName } from "../utils";
 
 export class FormSubmitHandler extends CustomPropertyHandler {
     priority = 9000 - 1; // less than Disable
@@ -27,18 +28,11 @@ export class FormSubmitHandler extends CustomPropertyHandler {
             widget
         );
 
-        const targetWidget = this.getTargetWidget(element.name, widget);
+        const targetWidget = findWidgetByName(element.name, widget);
         targetWidget.properties.push({
             dataType: 'object', name: 'onPressed', value: `${formGroupName}.submit`
         });
 
         return resolveResult;
-    }
-
-    private getTargetWidget(name: string, widget: WidgetModel): WidgetModel {
-        if (name === widget.type) {
-            return widget;
-        }
-        return this.getTargetWidget(name, widget.wrappedWidgets[0]);
     }
 }

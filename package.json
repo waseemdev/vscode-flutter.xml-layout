@@ -3,7 +3,7 @@
 	"displayName": "XML Layout for Flutter",
 	"description": "XML Layout for Flutter. Brings Angular's style to Flutter!",
 	"publisher": "WaseemDev",
-	"version": "0.0.4",
+	"version": "0.0.5",
 	"icon": "images/logo.png",
 	"repository": {
 		"type": "github",
@@ -40,7 +40,7 @@
 	"scripts": {
 		"vscode:prepublish": "webpack --mode production",
 		"compile": "webpack --mode none",
-		"watch": "webpack --mode none --watch",
+		"watch": "webpack --mode none",
 		"postinstall": "node ./node_modules/vscode/bin/install",
 		"test-compile": "tsc -p ./"
 	},
