@@ -1,10 +1,9 @@
-
 import * as parseXml from '../parser/types';
 import { PropertyResolver } from './property-resolver';
-import { PropertyHandlerProvider, PropertyResolveResult, WidgetResolveResult } from '../providers/property-handler-provider';
+import { PropertyHandlerProvider, WidgetResolveResult } from '../providers/property-handler-provider';
 import { RootWidgetModel, ImportModel, WidgetModel, PropertyModel, ParamModel, VariableModel } from '../models/models';
 import { Config } from '../models/config';
-
+import { removeDuplicatedBuilders } from './util';
 
 export class WidgetResolver {
     constructor(private readonly config: Config, 
@@ -18,7 +17,7 @@ export class WidgetResolver {
         const rootChild = this.getChildWidget(rootElement);
         const rootChildWidget = this.resolveWidget(rootChild, null);
 
-        this.removeDuplicatedBuilders(rootChildWidget.widget, null, { });
+        removeDuplicatedBuilders(rootChildWidget.widget, null, 'wrappedWidgets', { });
         this.callOnResolved(rootChildWidget.widget);
 
         const mixins = this.resolveMixins(rootElement);
@@ -29,10 +28,10 @@ export class WidgetResolver {
         
         const routeAware = 'routeAware' in rootElementAttrs;
         if (routeAware) {
-          const hasRouteAware = mixins.filter(a => a === 'RouteAware').length > 0;
-          if (!hasRouteAware) {
-            mixins.push('RouteAware');
-          }
+            const hasRouteAware = mixins.filter(a => a === 'RouteAware').length > 0;
+            if (!hasRouteAware) {
+                mixins.push('RouteAware');
+            }
         }
 
         const rootWidget: RootWidgetModel = {
@@ -50,44 +49,6 @@ export class WidgetResolver {
             routeAware: routeAware
         };
         return rootWidget;
-    }
-
-    private removeDuplicatedBuilders(widget: WidgetModel, parent: WidgetModel | null, buildersCache: any) {
-        // find and remove duplicated StreamBuilder & FutureBuilder that have same value.
-        let detach = false;
-
-        if (widget.type === 'StreamBuilder' || widget.type === 'FutureBuilder') {
-            const builderValue = widget.properties[0].value as string;
-            if (builderValue in buildersCache && buildersCache[builderValue] === widget.type) {
-                detach = true;
-            }
-            else {
-                // register as visited
-                buildersCache[builderValue] = widget.type;
-            }
-        }
-
-        for (const child of widget.wrappedWidgets) {
-            this.removeDuplicatedBuilders(child, widget, buildersCache);
-        }
-
-        const childWidget = widget.properties.filter(a => a.dataType === 'widget')[0];
-        if (childWidget) {
-            this.removeDuplicatedBuilders(childWidget.value as any, widget, buildersCache);
-        }
-
-        const childrenWidgets = widget.properties.filter(a => a.dataType === 'widgetList')[0];
-        if (childrenWidgets) {
-            for (const child of childrenWidgets.value as any[]) {
-                this.removeDuplicatedBuilders(child, widget, buildersCache);
-            }
-        }
-
-        // detach builder from the hierarchy.
-        // this operation should be last step
-        if (detach && parent) {
-            parent.wrappedWidgets = widget.wrappedWidgets;
-        }
     }
 
     private callOnResolved(widget: WidgetModel) {
@@ -346,7 +307,11 @@ export class WidgetResolver {
         let result = !!elementsHaveChildren.find(a => a === name);
 
         if (!result) {
-            result = !!this.config.arrayProperties && this.config.arrayProperties[parentName] && this.config.arrayProperties[parentName].filter(a => a === name).length === 1;
+            const arrayProperties: any = {
+                'DropdownButton': ['items']
+            };
+            result = arrayProperties[parentName] && arrayProperties[parentName].filter((a: any) => a === name).length === 1 || 
+                !!this.config.arrayProperties && this.config.arrayProperties[parentName] && this.config.arrayProperties[parentName].filter(a => a === name).length === 1;
         }
 
         return result;
