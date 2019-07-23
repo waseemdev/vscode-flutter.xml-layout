@@ -43,7 +43,6 @@ Then register your pipe in the `main` file:
 
 
 ## Built-in pipes
------------------
 
 ### 1. stream
 ```XML
@@ -129,9 +128,12 @@ FutureBuilder(
 <Container width="50 | widthPercent" height="50 | widthPercent" />
 ```
 
+-----------
 You can use multiple pipes with (braces):
 ```XML
-<Text text="'${(ctrl.greatingText | translate)} ${(ctrl.counterStream | stream)}'" />
+<Text text="'${(ctrl.greatingText | translate)}: ${(ctrl.counterStream | stream)}'" />
+<!-- or -->
+<Text text="(ctrl.greatingText | translate) + (ctrl.anotherTextStream | stream)" />
 ```
 
 You also can use pipes chaining:

@@ -1,8 +1,7 @@
 
 # Custom properties
 
-#### 1. :if
------------
+### 1. :if
 Will add/remove the widget from the UI hierarchy according to its value:
 ```XML
 <Text :if="ctrl.showText" text="'Hello world'" />
@@ -42,8 +41,7 @@ StreamBuilder(
 ```
 
 
-#### 2. if & elseIf & else
------------
+### 2. if & elseIf & else
 For complex cases you can use if-elseIf-else chaining:
 ```XML
 <Container>
@@ -93,7 +91,7 @@ Container(
 )
 ```
 
-You can also use multiple if-elseIf-else chains:
+You also can use multiple if-elseIf-else chains:
 ```XML
 <Column>
   <if value="ifCondition | stream">
@@ -122,8 +120,7 @@ You can also use multiple if-elseIf-else chains:
 </Column>
 ```
 
-#### 3. :use
------------
+### 3. :use
 `:use` will create the widget with a named constractor:
 ```XML
 <ListView :use="separated">
@@ -140,8 +137,7 @@ ListView.separated(...),
 ListView.builder(...)
 ```
 
-#### 4. builder
------------
+### 4. builder
 Creates a builder function to build the child/children:
 ```XML
 <ListView :use="separated" itemCount="10">
@@ -236,8 +232,7 @@ StreamBuilder(
 );
 ```
 
-#### 5. :itemBuilder
------------
+### 5. :itemBuilder
 It's a custom `builder` property made specifically for `ListView` and `GridView`. the following code is exactly the same as the previous `builder` example:
 ```XML
 <ListView :itemBuilder="item of ctrl.items | stream">
@@ -246,8 +241,7 @@ It's a custom `builder` property made specifically for `ListView` and `GridView`
 ```
 
 
-#### 6. :childBuilder
------------
+### 6. :childBuilder
 Repeats the content child and put them in the `children` property of the target widget:
 ```XML
 <ListView :childBuilder="item of ctrl.items">
@@ -271,8 +265,7 @@ For large amount of data you should use `itemBuilder` or a custom `builder` inst
 Also the content child of `childBuilder`, `itemBuilder` and `builder` must be one widget. Except for `builder` and `itemBuilder` when it has a `switch` or children with `if` condition.
 
 
-#### 7. :repeat
------------
+### 7. :repeat
 Repeats the widget itself within a widget that has a list property (e.g. `children`):
 ```XML
 <Column>
@@ -359,8 +352,7 @@ PopupMenuButton(
 ***NOTE*** You can't use `stream` or `future` pipes with `:repeat` e.g. `:repeat="item of ctrl.items | stream"`, because the builder function of `StreamBuilder` & `FutureBuilder` returns one widget only.
 
 
-#### 8. :switch & :switchCase
------------
+### 8. :switch & :switchCase
 ```XML
 <AppBar>
     <title :switch="ctrl.selectedTab | stream">
@@ -437,8 +429,7 @@ But you can use it with `builder` property:
 ```
 
 
-#### 9. :formControl & :formGroup & :formSubmit
------------
+### 9. :formControl & :formGroup & :formSubmit
 Forms made easy!
 `:formControl` handles value changes of the target widget.
 `:formGroup` groups multiple `:formControl`s and manage their status.
@@ -541,8 +532,7 @@ Then add the controls in the controller class:
   }
 ```
 
-#### 10. animation
------------
+### 10. animation
 `animation` can be applied on any widget easily, it uses a modified version of the [animator](https://github.com/GIfatahTH/animator) but without the usage of the [states_rebuilder](https://pub.dev/packages/states_rebuilder).
 `animation` has these properties:
 - `curve`: animation curve.
@@ -613,7 +603,7 @@ AnimationBuilder(
 );
 ```
 
-You can also access the `AnimationBuilderState` to trigger the animation manually by specifying the `name` property:
+You also can access the `AnimationBuilderState` to trigger the animation manually by specifying the `name` property:
 ```XML
 <Container>
   <animation name="myAnimation" duration="milliseconds: 1000" cycles="5">

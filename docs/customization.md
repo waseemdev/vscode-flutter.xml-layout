@@ -257,7 +257,7 @@ Current transformer types are:
 - edgeInsets
 - color
 
-You can also override the built-in transformers, so if you want to use, for example, `CupertinoIcons` instead of `Icons` can be done by adding this transformer:
+You also can override the built-in transformers, so if you want to use, for example, `CupertinoIcons` instead of `Icons` can be done by adding this transformer:
 ```json
 {
   "valueTransformers": [

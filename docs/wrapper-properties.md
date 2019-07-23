@@ -21,8 +21,8 @@ Or even this:
 
 All wrapper properties start with `:` to avoid ambiguity with the real properties which might have the same name so you can write the both of previous examples.
 
-#### 1. :margin
------------
+### 1. :margin
+
 ```XML
 <Text :margin="4" text="'Hello!'" />
 <Text :margin="1 2" text="'Hello!'" />
@@ -50,8 +50,8 @@ Padding(
 ```
 The value formatting follows Web standards (top right bottom left).
 
-#### 2. :opacity
------------
+### 2. :opacity
+
 ```XML
 <Text :opacity="0.5" text="'Hello!'" />
 ```
@@ -63,8 +63,8 @@ Opacity(
 )
 ```
 
-#### 3. :visible
------------
+### 3. :visible
+
 ```XML
 <Text text="'Hello world!'" :visible="false" />
 ```
@@ -76,8 +76,8 @@ Visibility(
 )
 ```
 
-#### 4. :padding
------------
+### 4. :padding
+
 This is actualy a child-wrapper that wrap the child widget:
 ```XML
 <Card :padding="4">
@@ -98,8 +98,8 @@ Card(
 The target widget must have a `child` property. and for this reason the `Text` can't have a `:padding` but can have a `:margin`.
 
 
-#### 5. :text
------------
+### 5. :text
+
 This also behaves as a child-wrapper but doesn't wrap the child, instead it adds a `Text` child to the target widget:
 ```XML
 <RaisedButton :text="'Hello!'" />
@@ -113,8 +113,8 @@ RaisedButton(
 );
 ```
 
-#### 6. :icon
------------
+### 6. :icon
+
 Its like `:text` but for icons:
 ```XML
 <RaisedButton :icon="home" />
@@ -128,8 +128,8 @@ RaisedButton(
 );
 ```
 
-#### 7. :width & :height
------------
+### 7. :width & :height
+
 Adding one or both of these properties will wrap the target widget with SizedBox:
 ```XML
 <Card :width="100">
@@ -171,8 +171,8 @@ SizedBox(
 )
 ```
 
-#### 8. :onTap & :onDoubleTap & :onLongPress
------------
+### 8. :onTap & :onDoubleTap & :onLongPress
+
 Wraps the target widget with `GestureDetector` and maps each event to its function:
 ```XML
 <Column :onTap="ctrl.doSomthing"></Column>
@@ -188,8 +188,8 @@ GestureDetector(
 )
 ```
 
-#### 9. :theme
------------
+### 9. :theme
+
 Wraps the target widget with `Theme`:
 ```XML
 <Text text="'Hello'" :theme="ctrl.myTheme" />
@@ -219,8 +219,8 @@ Theme(
 ```
 
 
-#### 10. :hero
------------
+### 10. :hero
+
 Wraps the target widget with `Hero`:
 
 ```XML
@@ -237,8 +237,8 @@ Hero(
 ```
 
 
-#### 11. :aspectRatio
------------
+### 11. :aspectRatio
+
 Wraps the target widget with `AspectRatio`:
 ```XML
 <Image :use="asset" source="'assets/images/image_name.png'" :aspectRatio="16.0/9.0" />
@@ -254,8 +254,8 @@ AspectRatio(
 ```
 
 
-#### 12. :center
------------
+### 12. :center
+
 Wraps the target widget with `Center`:
 
 ```XML
@@ -271,8 +271,8 @@ Center(
 ```
 
 
-#### 13. :align
------------
+### 13. :align
+
 Wraps the target widget with `Align`:
 
 ```XML
@@ -289,8 +289,8 @@ Align(
 ```
 
 
-#### 14. :flex
------------
+### 14. :flex
+
 Wraps the target widget with `Expanded`:
 ```XML
 <Text text="'Hello'" :flex="2" />
@@ -306,8 +306,8 @@ Expanded(
 ```
 
 
-#### 15. :disable
------------
+### 15. :disable
+
 Wraps any widget has an event handler (e.g.: onPressed, onChange), the target widget will be disabled according to the `:disable`'s value.
 ```XML
 <RaisedButton onPressed="ctrl.login" :disable="statusStream | stream:true">
@@ -338,8 +338,8 @@ StreamBuilder(
 ```
 
 
-#### 16. :consumer
------------
+### 16. :consumer
+
 `:consumer` wraps the target widget with a `Consumer` widget (which is part of `provider` package), this can be used instead of injecting the [provider](./providers.md) at the top level of the current Widget's State to avoid rebuilding the whole widget when the provider changes.
 ```XML
 <MyWidget :consumer="MyProvider myProvider" title="myProvider.title">
