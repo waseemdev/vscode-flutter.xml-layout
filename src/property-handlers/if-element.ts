@@ -10,6 +10,8 @@ interface IfModel {
 }
 
 export class IfElementHandler extends CustomPropertyHandler {
+    isElement = true;
+    elementAttributes: string[] = ['value'];
 
     constructor(private readonly propertyResolver: PropertyResolver) {
         super();

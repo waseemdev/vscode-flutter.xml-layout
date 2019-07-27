@@ -117,6 +117,38 @@ Example:
 `xmlns:*` an optional property(s) used to import packges and files to be used in HomePage class. (in this example we imported cupertino.dart to use CupertinoIcons).
 
 
+## Controller:
+If you added a `controller` property to your widget then will be generated (if not exists), the file looks like this:
+```dart
+import 'package:flutter/widgets.dart';
+import 'home.xml.dart';
+
+class HomeController extends HomeControllerBase {
+
+  //
+  // here you can add you own logic and called the variables and methods
+  // from inside the XML file like this <Text text="ctrl.myText" />
+  //
+
+  @override
+  void didLoad(BuildContext context) {
+  }
+
+  @override
+  void onBuild(BuildContext context) {
+  }
+
+  @override
+  void afterFirstBuild(BuildContext context) {
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+  }
+}
+```
+
 # Features documentation
 
 ### 1. [Wrapper properties](./docs/wrapper-properties.md)

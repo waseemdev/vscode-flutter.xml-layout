@@ -2,6 +2,7 @@ import { AttributeModel, WidgetModel } from "../models/models";
 import { ItemBuilderHandler } from "./item-builder";
 
 export class ItemBuilderPropertyHandler extends ItemBuilderHandler {
+    isElement = false;
 
     protected resolveValueProperty(widget: WidgetModel, attr: AttributeModel): { grandparentWidget: WidgetModel | null, hasIndex: boolean | null, indexName: string } {
         let grandparentWidget = null;

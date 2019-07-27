@@ -3,6 +3,8 @@ import { WidgetModel, ExtraDataModel, AttributeModel, PropertyModel } from '../m
 
 export abstract class CustomPropertyHandler {
     priority: number = 100;
+    isElement = false;
+    elementAttributes: string[];
     
     getRelatedProperties(element: parseXml.Element, handlerProperty: string, widget: WidgetModel): string[] {
         return [];
@@ -50,6 +52,10 @@ export class PropertyHandlerProvider {
         else {
             this.handlers[name] = handler;
         }
+    }
+
+    getAll(): { [name: string]: CustomPropertyHandler } {
+        return this.handlers;
     }
 
     get(name: string): CustomPropertyHandler {

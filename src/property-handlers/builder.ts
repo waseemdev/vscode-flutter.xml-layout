@@ -6,12 +6,18 @@ import { PropertyResolver } from "../resolvers/property-resolver";
 
 export class BuilderHandler extends CustomPropertyHandler {
     priority = -100000; // lowest priority
+    isElement = true;
+    elementAttributes: string[] = ['name', 'data', 'params'];
 
     constructor(private readonly propertyResolver: PropertyResolver) {
         super();
     }
 
     canResolve(element: parseXml.Element, handlerProperty: string, widget: WidgetModel): boolean {
+        return true;
+    }
+
+    canResolvePropertyElement(): boolean {
         return true;
     }
 

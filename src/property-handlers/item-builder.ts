@@ -4,6 +4,8 @@ import { PropertyResolveResult } from "../providers/property-handler-provider";
 import * as parseXml from '../parser/types';
 
 export class ItemBuilderHandler extends BuilderHandler {
+    isElement = true;
+    elementAttributes: string[] = ['data', 'params'];
 
     resolve(element: parseXml.Element, attr: AttributeModel, widget: WidgetModel): PropertyResolveResult {
 

@@ -4,6 +4,9 @@ import { makeTabs } from '../utils';
 import { PropertyResolver } from '../resolvers/property-resolver';
 
 export class WrapperAnimationHandler extends WrapperPropertyHandler {
+    isElement = true;
+    elementAttributes: string[] = ['name', 'duration', 'cycles', 'repeats', 'autoTrigger', 'curve'];
+
     constructor(propertyResolver: PropertyResolver) {
         super(propertyResolver, [{ handler: 'animation', targetProperty: 'animation' }], 'AnimationBuilder');
     }

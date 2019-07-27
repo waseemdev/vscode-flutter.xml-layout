@@ -1,5 +1,6 @@
 'use strict';
 import * as vscode from 'vscode';
+// source: https://github.com/formulahendry/vscode-auto-close-tag
 
 export function insertAutoCloseTag(event: vscode.TextDocumentChangeEvent): void {
     if (!event.contentChanges[0]) {

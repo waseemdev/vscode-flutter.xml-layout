@@ -79,7 +79,7 @@ export function registerBuiltInPropertyHandlers(provider: PropertyHandlerProvide
     //
     // wrapper events
     //
-    provider.register([':onTap', ':onDoubleTap', 'onLongPress'], new WrapperPropertyHandler(propertyResolver, [
+    provider.register([':onTap', ':onDoubleTap', ':onLongPress'], new WrapperPropertyHandler(propertyResolver, [
             { handler: ':onTap', targetProperty: 'onTap' },
             { handler: ':onDoubleTap', targetProperty: 'onDoubleTap' },
             { handler: ':onLongPress', targetProperty: 'onLongPress' }
