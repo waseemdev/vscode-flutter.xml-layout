@@ -49,7 +49,7 @@ Extension features:
 * Generates localization code depending on json files.
 * Forms & animation made easy.
 * Customizable! so developers can add their own properties and modify some features.
-
+* Supports Code completion, hover information, Go to Definition.
 
 # Get Started
 

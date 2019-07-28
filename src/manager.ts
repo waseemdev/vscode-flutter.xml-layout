@@ -32,7 +32,7 @@ export default class Manager {
     private readonly propertyResolver: PropertyResolver;
     private readonly pipeValueResolver: PipeValueResolver;
     private readonly resolver: WidgetResolver;
-    private readonly propertyHandlersProvider: PropertyHandlerProvider;
+    public readonly propertyHandlersProvider: PropertyHandlerProvider;
     private readonly valueTransformersProvider: ValueTransformersProvider;
     private readonly classGenerator: ClassCodeGenerator;
     private readonly output: vscode.OutputChannel;
