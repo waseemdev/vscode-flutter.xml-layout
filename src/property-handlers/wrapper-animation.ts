@@ -1,11 +1,18 @@
-import { WidgetModel, PropertyModel, VariableModel } from '../models/models';
+import { WidgetModel, PropertyModel, VariableModel, AttributeInfo } from '../models/models';
 import { WrapperPropertyHandler } from "./wrapper-property";
 import { makeTabs } from '../utils';
 import { PropertyResolver } from '../resolvers/property-resolver';
 
 export class WrapperAnimationHandler extends WrapperPropertyHandler {
     isElement = true;
-    elementAttributes: string[] = ['name', 'duration', 'cycles', 'repeats', 'autoTrigger', 'curve'];
+    elementAttributes: AttributeInfo[] = [
+        { name: 'name' },
+        { name: 'duration', snippet: 'millisecond: ${0:250}' },
+        { name: 'cycles' },
+        { name: 'repeats' },
+        { name: 'autoTrigger' },
+        { name: 'curve' }
+    ];
 
     constructor(propertyResolver: PropertyResolver) {
         super(propertyResolver, [{ handler: 'animation', targetProperty: 'animation' }], 'AnimationBuilder');

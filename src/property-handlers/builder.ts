@@ -1,13 +1,18 @@
-import { CustomPropertyHandler, PropertyResolveResult } from "../providers/property-handler-provider";
+import { CustomPropertyHandler, PropertyResolveResult, WidgetResolveResult } from "../providers/property-handler-provider";
 import * as parseXml from '../parser/types';
-import { WidgetModel, ExtraDataModel, AttributeModel, PropertyModel } from '../models/models';
+import { WidgetModel, ExtraDataModel, AttributeModel, PropertyModel, AttributeInfo } from '../models/models';
 import { extractForLoopParams, makeTabs, sortProperties } from "../utils";
 import { PropertyResolver } from "../resolvers/property-resolver";
 
 export class BuilderHandler extends CustomPropertyHandler {
     priority = -100000; // lowest priority
     isElement = true;
-    elementAttributes: string[] = ['name', 'data', 'params'];
+    elementAttributes: AttributeInfo[] = [
+        { name: 'name' },
+        { name: 'data', snippet: 'item of ${0:items}' },
+        { name: 'params' }
+    ];
+    valueSnippet = 'name="${0:builderName}" data="${1:item of ${2:items}}" params="${3:context}"';
 
     constructor(private readonly propertyResolver: PropertyResolver) {
         super();
@@ -17,9 +22,17 @@ export class BuilderHandler extends CustomPropertyHandler {
         return true;
     }
 
-    canResolvePropertyElement(): boolean {
-        return true;
-    }
+    // canResolvePropertyElement(): boolean {
+    //     return true;
+    // }
+
+    // resolvePropertyElement(element: parseXml.Element, widgetResolveResult: WidgetResolveResult, parent: parseXml.Element, parentChildren: parseXml.Element[], resolveWidget: (element: parseXml.Element, parent: parseXml.Element) => WidgetResolveResult): WidgetModel | null {
+    //     const res = this.resolve(element, {
+    //         value: { value: widgetResolveResult.propertyElementProperties.filter(a => a.name === 'data')[0].value },
+    //         name: widgetResolveResult.propertyElementProperties.filter(a => a.name === 'name')[0].value || 'builder'
+    //     } as any, widgetResolveResult.widget);
+    //     return res.wrapperWidget;
+    // }
 
     resolve(element: parseXml.Element, attr: AttributeModel, widget: WidgetModel): PropertyResolveResult {
         let wrapperWidget: WidgetModel | null = null;

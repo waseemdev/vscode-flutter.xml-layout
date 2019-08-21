@@ -168,7 +168,7 @@ export class DartCompletionItemProvider implements CompletionItemProvider, IAmDi
 			});
 
 		const cachedResults = await this.getCachedResults(xmlDocument, token, nextCharacter, enableCommitCharacters, insertArgumentPlaceholders, xmlDocument.offsetAt(xmlPosition), resp);
-		return [...includedResults, ...cachedResults, ...(isTag ? this.getWrapperPropertiesElementsCompletionItems() : this.getWrapperPropertiesCompletionItems())];
+		return [...includedResults, ...cachedResults, ...(isTag ? this.getWrapperPropertiesElementsCompletionItems(xmlDocument, xmlPosition) : this.getWrapperPropertiesCompletionItems(xmlDocument, xmlPosition))];
 	}
 
 	private getAttributeCompletionsForAttribute(elementTag: string, document: TextDocument, position: Position): vs.CompletionItem[] {
@@ -178,79 +178,88 @@ export class DartCompletionItemProvider implements CompletionItemProvider, IAmDi
 			.filter((k) => handlers[k].isElement && elementTag === k)
 			.forEach((k) => {
 				handlers[k].elementAttributes.forEach((a) => {
-					items.push(this.createCompletionItem(a, vs.CompletionItemKind.Variable));
+					items.push(this.createCompletionItem(document, position, a.name, vs.CompletionItemKind.Variable, false, '="' + a.snippet + '"'));
 				});
 			});
 		return items;
 	}
 
-	private getWrapperPropertiesCompletionItems(): vs.CompletionItem[] {
+	private getWrapperPropertiesCompletionItems(document: TextDocument, position: Position): vs.CompletionItem[] {
 		const handlers = this.propertyHandlerProvider.getAll();
 		const items = Object.keys(handlers)
 			.filter((k) => !handlers[k].isElement)
 			.map((k) => {
-				return this.createCompletionItem(k, vs.CompletionItemKind.Variable);
+				return this.createCompletionItem(document, position, k, vs.CompletionItemKind.Variable, false, handlers[k].valueSnippet);
 			});
 		return items;
 	}
 
-	private getWrapperPropertiesElementsCompletionItems(): vs.CompletionItem[] {
+	private getWrapperPropertiesElementsCompletionItems(document: TextDocument, position: Position): vs.CompletionItem[] {
 		const handlers = this.propertyHandlerProvider.getAll();
 		const items = Object.keys(handlers)
 			.filter((k) => handlers[k].isElement)
 			.map((k) => {
-				return this.createCompletionItem(k, vs.CompletionItemKind.Variable, true);
+				return this.createCompletionItem(document, position, k, vs.CompletionItemKind.Variable, true, handlers[k].valueSnippet);
 			});
 		return items;
 	}
 
 	private getTopLevelElementAttributesCompletions(document: TextDocument, position: Position): vs.CompletionItem[] {
 		return [
-			this.createCompletionItem('xmlns', vs.CompletionItemKind.Variable),
-			this.createCompletionItem('controller', vs.CompletionItemKind.Variable),
-			this.createCompletionItem('routeAware', vs.CompletionItemKind.Variable),
+			this.createCompletionItem(document, position, 'xmlns', vs.CompletionItemKind.Variable),
+			this.createCompletionItem(document, position, 'controller', vs.CompletionItemKind.Variable),
+			this.createCompletionItem(document, position, 'routeAware', vs.CompletionItemKind.Variable),
 		];
 	}
 
 	private getSecondLevelElementCompletions(document: TextDocument, position: Position): vs.CompletionItem[] {
 		return [
-			this.createCompletionItem('provider', vs.CompletionItemKind.Class),
-			this.createCompletionItem('with', vs.CompletionItemKind.Class),
-			this.createCompletionItem('var', vs.CompletionItemKind.Class),
-			this.createCompletionItem('param', vs.CompletionItemKind.Class),
+			this.createCompletionItem(document, position, 'provider', vs.CompletionItemKind.Class, true, ' type="$0" name="$1">$2'),
+			this.createCompletionItem(document, position, 'with', vs.CompletionItemKind.Class, true, ' mixin="$0">$1'),
+			this.createCompletionItem(document, position, 'var', vs.CompletionItemKind.Class, true, ' name="$0" value="$1">$2'),
+			this.createCompletionItem(document, position, 'param', vs.CompletionItemKind.Class, true, ' type="$0" name="$1">$2'),
 		];
 	}
 
 	private getSecondLevelElementAttributesCompletions(elementTag: string, document: TextDocument, position: Position): vs.CompletionItem[] {
 		const elements: { [name: string]: vs.CompletionItem[] } = {
 			'provider': [
-				this.createCompletionItem('type', vs.CompletionItemKind.Variable),
-				this.createCompletionItem('name', vs.CompletionItemKind.Variable),
+				this.createCompletionItem(document, position, 'type', vs.CompletionItemKind.Variable),
+				this.createCompletionItem(document, position, 'name', vs.CompletionItemKind.Variable),
 			],
 			'with': [
-				this.createCompletionItem('mixin', vs.CompletionItemKind.Variable),
+				this.createCompletionItem(document, position, 'mixin', vs.CompletionItemKind.Variable),
 			],
 			'var': [
-				this.createCompletionItem('type', vs.CompletionItemKind.Variable),
-				this.createCompletionItem('name', vs.CompletionItemKind.Variable),
-				this.createCompletionItem('value', vs.CompletionItemKind.Variable),
+				this.createCompletionItem(document, position, 'type', vs.CompletionItemKind.Variable),
+				this.createCompletionItem(document, position, 'name', vs.CompletionItemKind.Variable),
+				this.createCompletionItem(document, position, 'value', vs.CompletionItemKind.Variable),
 			],
 			'param': [
-				this.createCompletionItem('type', vs.CompletionItemKind.Variable),
-				this.createCompletionItem('name', vs.CompletionItemKind.Variable),
+				this.createCompletionItem(document, position, 'type', vs.CompletionItemKind.Variable),
+				this.createCompletionItem(document, position, 'name', vs.CompletionItemKind.Variable),
 			],
 		};
 
 		return elements[elementTag];
 	}
 
-	private createCompletionItem(label: string, kind: vs.CompletionItemKind, isTag = false): vs.CompletionItem {
+	private createCompletionItem(document: TextDocument, position: Position, label: string, kind: vs.CompletionItemKind, isTag = false, snippet?: string): vs.CompletionItem {
 		let insertText = '';
-		if (kind === vs.CompletionItemKind.Variable && !isTag) {
+		const nextChar = document.getText(new Range(position, new Position(position.line, position.character + 1)));
+		if (snippet) {
+			if (kind === vs.CompletionItemKind.Variable && !isTag) {
+				insertText = label + '="' + snippet + '"';
+			}
+			else {
+				insertText = label + ' ' + snippet + (nextChar === '>' ? '' : '>');
+			}
+		}
+		else if (kind === vs.CompletionItemKind.Variable && !isTag) {
 			insertText = label + '="$0"';
 		}
 		else {
-			insertText = label + '>$0';
+			insertText = label + (nextChar === '>' ? '' : '>') + '$0';
 		}
 
 		const item = new vs.CompletionItem(label, kind);

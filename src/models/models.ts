@@ -103,3 +103,8 @@ export interface AttributeModel {
     // isEvent?: boolean;
     // isBound?: boolean;
 }
+
+export interface AttributeInfo {
+    name: string;
+    snippet?: string;
+}

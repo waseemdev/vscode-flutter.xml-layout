@@ -41,15 +41,24 @@ export async function getDartCodeIndex(xmlDocument: TextDocument, xmlPosition: P
     let dartOffset = -1;
   
     if (isAttribute(xmlDocument, xmlPosition)) {
-      const tag = xPath[xPath.length - 1];
-      let count = countWords(xml, '<' + tag + ' ', offset + tag.length);
-      count += countWords(xml, '<' + tag + '>', offset + tag.length);
-      const classIndex = wordIndexAfter(dart, ' ' +  tag + '(', count) + 2; // 2 = space + (
-      dartOffset = classIndex;
-      if (wordRange) {
-        const attrName = xmlDocument.getText(wordRange);
-        dartOffset = dart.indexOf(attrName, classIndex);
-      }
+        const tag = xPath[xPath.length - 1];
+        let count = countWords(xml, '<' + tag + ' ', offset + tag.length);
+        count += countWords(xml, '<' + tag + '>', offset + tag.length);
+        let classIndex = wordIndexAfter(dart, ' ' +  tag + '(', count) + 2; // 2 = space + (
+        if (classIndex === tag.length + 3) {
+            // e.g. Class.namedCtor(...)
+            const namedCtorIndex = wordIndexAfter(xml, ':use="', count) + 6;
+            if (namedCtorIndex > 6) {
+                const namedCtorPos = xmlDocument.positionAt(namedCtorIndex);
+                const namedCtor = xmlDocument.getText(new Range(namedCtorPos, new Position(namedCtorPos.line, namedCtorPos.character + 50))).split('"\'')[0];
+                classIndex = wordIndexAfter(dart, ' ' + tag + '.' + namedCtor + '(', count) + 3 + namedCtor.length; // 2 = space + (
+            }
+        }
+        dartOffset = classIndex;
+        if (wordRange) {
+            const attrName = xmlDocument.getText(wordRange);
+            dartOffset = dart.indexOf(attrName, classIndex);
+        }
     }
     else if (isTagName(xmlDocument, xmlPosition) || (includeCloseTag && isClosingTagName(xmlDocument, xmlPosition))) {
         if (wordRange) {
@@ -66,7 +75,10 @@ export async function getDartCodeIndex(xmlDocument: TextDocument, xmlPosition: P
             else {
                 let count = countWords(xml, '<' + tag + ' ', offset + tag.length);
                 count += countWords(xml, '<' + tag + '>', offset + tag.length);
-                const classIndex = wordIndexAfter(dart, ' ' + tag + '(', count) + 2; // 2 = space + (
+                let classIndex = wordIndexAfter(dart, ' ' + tag + '(', count) + 2; // 2 = space + (
+                if (classIndex == tag.length + 3) {
+                    classIndex = wordIndexAfter(dart, ' ' + tag + '.', count) + 2; // 2 = space + (
+                }
                 dartOffset = classIndex - 3;
             }
         }

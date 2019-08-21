@@ -1,3 +1,7 @@
+## [0.0.10] - 2019-08-15
+Breaking changes:
+  - :formControl now accept both a variable and a string value, so current usge will break and all you need to do is to convert this :formControl="MyControlName" to :formControl="'MyControlName'".
+
 ## [0.0.8] - 2019-07-27
 - Added language features:
   - Code completion

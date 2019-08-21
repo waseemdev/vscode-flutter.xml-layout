@@ -1,6 +1,6 @@
 import { CustomPropertyHandler, WidgetResolveResult } from "../providers/property-handler-provider";
 import * as parseXml from '../parser/types';
-import { WidgetModel, PropertyModel } from '../models/models';
+import { WidgetModel, PropertyModel, AttributeInfo } from '../models/models';
 import { makeTabs } from "../utils";
 import { PropertyResolver } from "../resolvers/property-resolver";
 
@@ -11,7 +11,10 @@ interface IfModel {
 
 export class IfElementHandler extends CustomPropertyHandler {
     isElement = true;
-    elementAttributes: string[] = ['value'];
+    elementAttributes: AttributeInfo[] = [
+        { name: 'value' }
+    ];
+    valueSnippet = 'value="${0:condition}"';
 
     constructor(private readonly propertyResolver: PropertyResolver) {
         super();

@@ -6,6 +6,7 @@ import { PropertyResolver } from "../resolvers/property-resolver";
 
 export class IfHandler extends CustomPropertyHandler {
     priority = 100000;
+    valueSnippet = '${0:condition}';
 
     constructor(private readonly propertyResolver: PropertyResolver) {
         super();

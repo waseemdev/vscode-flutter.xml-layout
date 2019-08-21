@@ -3,6 +3,8 @@ import { WrapperPropertyHandler } from "./wrapper-property";
 import { PropertyResolver } from '../resolvers/property-resolver';
 
 export class WrapperConsumerPropertyHandler extends WrapperPropertyHandler {
+    valueSnippet = '${0:DataType} ${1:instanceName}';
+
     constructor(propertyResolver: PropertyResolver) {
         super(propertyResolver,[{ handler: ':consumer', targetProperty: 'consumer' }], 'Consumer', undefined, 10000); // top priority but less than if & repeat
     }

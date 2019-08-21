@@ -6,6 +6,7 @@ import { PropertyResolver } from "../resolvers/property-resolver";
 
 export class ChildBuilderHandler extends CustomPropertyHandler {
     priority = -100000; // lowest priority
+    valueSnippet = 'item of ${0:items}';
 
     constructor(private readonly propertyResolver: PropertyResolver) {
         super();

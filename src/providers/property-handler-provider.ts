@@ -1,10 +1,17 @@
 import * as parseXml from '../parser/types';
-import { WidgetModel, ExtraDataModel, AttributeModel, PropertyModel } from '../models/models';
+import { WidgetModel, ExtraDataModel, AttributeModel, PropertyModel, AttributeInfo } from '../models/models';
 
 export abstract class CustomPropertyHandler {
     priority: number = 100;
+    
+    //
+    // language features' properties
+    //
     isElement = false;
-    elementAttributes: string[];
+    elementAttributes: AttributeInfo[];
+    valueSnippet: string;
+    documentation: string;
+    
     
     getRelatedProperties(element: parseXml.Element, handlerProperty: string, widget: WidgetModel): string[] {
         return [];

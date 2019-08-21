@@ -1,16 +1,20 @@
 import { BuilderHandler } from "./builder";
-import { AttributeModel, WidgetModel, PropertyModel } from "../models/models";
+import { AttributeModel, WidgetModel, PropertyModel, AttributeInfo } from "../models/models";
 import { PropertyResolveResult } from "../providers/property-handler-provider";
 import * as parseXml from '../parser/types';
 
 export class ItemBuilderHandler extends BuilderHandler {
     isElement = true;
-    elementAttributes: string[] = ['data', 'params'];
+    elementAttributes: AttributeInfo[] = [
+        { name: 'data', snippet: 'item of ${0:items}' },
+        { name: 'params' }
+    ];
 
     resolve(element: parseXml.Element, attr: AttributeModel, widget: WidgetModel): PropertyResolveResult {
 
         let { grandparentWidget, hasIndex, indexName } = this.resolveValueProperty(widget, attr);
 
+        console.log(attr);
         const data = attr.value as any;
         const properties = data.extraData.properties as PropertyModel[];
 

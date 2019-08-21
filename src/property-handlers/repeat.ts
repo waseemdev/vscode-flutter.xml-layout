@@ -6,6 +6,7 @@ import { PropertyResolver } from "../resolvers/property-resolver";
 
 export class RepeatHandler extends CustomPropertyHandler {
     priority = 1000000; // top priority
+    valueSnippet = 'item of ${0:items}';
 
     constructor(private readonly propertyResolver: PropertyResolver) {
         super();
