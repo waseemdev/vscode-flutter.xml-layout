@@ -27,7 +27,8 @@ export class FormControlHandler extends CustomPropertyHandler {
             type: 'FormGroup'
         });
         
-        const formControlName = `${formGroupName}.get('${attr.value}')`;
+        const name = attr.value;
+        const formControlName = `${formGroupName}.get(${name})`;
         // const formControlName = `${attr.value}FormControl`;
         // targetWidget.vars.push({
         //     name: `FormControl get ${attr.value}FormControl => ${formGroupName}.get('${attr.value}');`,
@@ -39,17 +40,17 @@ export class FormControlHandler extends CustomPropertyHandler {
         if (['TextField', 'TextFormField'].filter(a => a === targetWidget.type).length === 1) {
             addLocalVar = false;
             const controllerName = element.attributes['controller'] ? element.attributes['controller'].split(' ')[1] : '';
-            const privateControllerName = `${formGroupName}${attr.value[0].toUpperCase()}${attr.value.length > 1 ? attr.value.substring(1) : ''}Controller`;
+            const privateControllerName = `ctrl._attachController(${name}, ${controllerName || '() => TextEditingController()'})`;
 
             if (!controllerName) {
                 // only add controller if there is no one present
                 targetWidget.properties.push({
                     dataType: 'object',
-                    controller: {
-                        name: privateControllerName,
-                        type: 'TextEditingController',
-                        isPrivate: true
-                    },
+                    // controller: {
+                    //     name: privateControllerName,
+                    //     type: 'TextEditingController',
+                    //     isPrivate: true
+                    // },
                     value: privateControllerName,
                     name: 'controller'
                 });

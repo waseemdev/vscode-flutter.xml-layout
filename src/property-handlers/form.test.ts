@@ -85,7 +85,7 @@ suite("Forms", function () {
 
     test(":formControl with :width wrapper", function() {
         const xml = `
-<TextField :formControl="quantity" :width="80" />
+<TextField :formControl="'quantity'" :width="80" />
 `;
         
         const expected = `
@@ -96,7 +96,7 @@ suite("Forms", function () {
             return SizedBox(
               width: 80,
               child: TextField(
-                controller: formGroupQuantityController
+                controller: ctrl._attachController('quantity', () => TextEditingController())
               )
             );
           }

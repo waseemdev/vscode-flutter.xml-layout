@@ -438,14 +438,14 @@ Forms made easy!
 Full example:
 ```XML
 <Column :formGroup="loginFormGroup">
-  <TextField :formControl="username">
+  <TextField :formControl="'username'">
     <decoration>
         <InputDecoration labelText="'username' | translate" errorText="ctrl.loginFormGroup.get('username').firstErrorIfTouched | translate">
         </InputDecoration>
     </decoration>
   </TextField>
 
-  <TextField :formControl="password" obscureText="true">
+  <TextField :formControl="'password'" obscureText="true">
     <decoration>
         <InputDecoration labelText="'password' | translate" errorText="ctrl.loginFormGroup.get('password').firstErrorIfTouched | translate">
         </InputDecoration>
@@ -464,8 +464,8 @@ Then add the controls in the controller class:
 ```dart
   MyLoginController() {
     loginFormGroup.addAll([
-      FomrControl<String>('username', '', validators: [Validators.required]),
-      FomrControl<String>('password', '', validators: [Validators.required])
+      FormControl<String>('username', '', validators: [Validators.required]),
+      FormControl<String>('password', '', validators: [Validators.required])
     ]);
     // add this only if you use :formSubmit
     loginFormGroup.onSubmit(_login);
@@ -495,13 +495,13 @@ Then add the controls in the controller class:
 - The `:formGroup` is optional, if you didn't add it then the form group will be named as `formGroup`.
 - The `:formControl` can be added to `TextField` or any Widget that have `value` property and `onChanged` event like `Switch`, `DropdownButton`:
 ```XML
-  <SwitchListTile :formControl="darkModeEnabled">
+  <SwitchListTile :formControl="'darkModeEnabled'">
     <title>
       <Text text="'Dark mode'" />
     </title>
   </SwitchListTile>
 
-  <DropdownButton :formControl="selectedLocale">
+  <DropdownButton :formControl="'selectedLocale'">
     <items>
       <DropdownMenuItem value="'ar'">
         <Text text="'العربية'" />

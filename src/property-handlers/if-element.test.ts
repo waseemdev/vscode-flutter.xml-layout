@@ -348,7 +348,7 @@ Container(
     <Text text="'if'" />
   </if>
   <elseIf value="ifElseCondition | stream">
-    <TextField :formControl="test">
+    <TextField :formControl="'test'">
     </TextField>
   </elseIf>
   <else>
@@ -389,7 +389,7 @@ Container(
                           stream: ctrl.formGroup.get('test').valueStream,
                           builder: (BuildContext context, ctrlFormGroupGetTestValueStreamSnapshot) {
                             return TextField(
-                              controller: formGroupTestController
+                              controller: ctrl._attachController('test', () => TextEditingController())
                             );
                           }
                         )

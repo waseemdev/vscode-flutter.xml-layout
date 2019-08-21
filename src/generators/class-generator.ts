@@ -137,15 +137,18 @@ export class ClassCodeGenerator {
 
 class ${rootWidget.controller}Base {
   bool _loaded = false;
-  bool _controllerAttached = false;
+	Map<String, dynamic> _attachedControllers = Map();
   ${varsLines.join('\n  ')}
 
-  void _attachFormControllers(${formControls.map(a => `${a.controller}`).join(',\n      ')}) {
-    if (_controllerAttached) {
-      return;
+  dynamic _attachController(String controlName, controllerBuilder) {
+    if (_attachedControllers.containsKey(controlName)) {
+			final controller = _attachedControllers[controlName];
+      return controller;
     }
-    _controllerAttached = true;
-    ${formControls.map(a => `${a.name}.attachTextEditingController(${a.controller});`).join('\n    ')}
+		final controller = controllerBuilder();
+    _attachedControllers[controlName] = controller;
+    formGroup.get(controlName).attachTextEditingController(controller);
+		return controller;
   }
 
   void _load(BuildContext context) {
@@ -196,7 +199,6 @@ class ${widgetName} extends StatelessWidget${mixinsCode} {
             ...rootWidget.vars.map(a => `${a.type} ${a.name};`),
             ...(routeAware ? [`RouteObserver<Route> _routeObserver;`] : [])
         ];
-        const attachFormControllersCode = `ctrl._attachFormControllers(${formControls.map(a => `${a.controller}`).join(',\n      ')});`;
         const stateVarsInit: string[] = [
             ...(hasController ? [`ctrl = new ${rootWidget.controller}();`] : []),
             ...rootWidget.params.map(a => `ctrl._${a.name} = widget.${a.name};`),
@@ -231,7 +233,7 @@ class _${widgetName}State extends State<${widgetName}>${mixinsCode} {
   void didChangeDependencies() {
     super.didChangeDependencies();${routeAware ? `\n    _routeObserver = Provider.of<RouteObserver<Route>>(context)..subscribe(this, ModalRoute.of(context));` : ''}
     ${rootWidget.providers.map(a => `${hasController ? `ctrl._${a.name} = `: ''}${a.name} = Provider.of<${a.type}>(context);`).join('\n  ')}
-    ${hasController ? `ctrl._load(context);\n    ${attachFormControllersCode}` : ''}
+    ${hasController ? `ctrl._load(context);` : ''}
   }
 
   @override
