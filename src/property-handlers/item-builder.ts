@@ -14,7 +14,7 @@ export class ItemBuilderHandler extends BuilderHandler {
 
         let { grandparentWidget, hasIndex, indexName } = this.resolveValueProperty(widget, attr);
 
-        console.log(attr);
+        // console.log(attr);
         const data = attr.value as any;
         const properties = data.extraData.properties as PropertyModel[];
 

@@ -13,9 +13,9 @@ suite("Child Builder Tests", function () {
         ListView(
           children: WidgetHelpers.mapToWidgetList(component.items, (item, index) {
             return Text(
-              item.title
+              item.title,
             );
-          })
+          }),
         )
 `;
 
@@ -42,11 +42,11 @@ suite("Child Builder Tests", function () {
             return ListView(
               children: WidgetHelpers.mapToWidgetList(componentItemsValue, (item, index) {
                 return Text(
-                  item.title
+                  item.title,
                 );
-              })
+              }),
             );
-          }
+          },
         )
 `;
 

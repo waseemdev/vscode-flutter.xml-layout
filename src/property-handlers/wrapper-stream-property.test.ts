@@ -23,23 +23,23 @@ suite("Wrapper Stream Property Tests", function () {
                   opacity: selectedTabValue == 0 ? 1: 0,
                   child: LatestPage(
     
-                  )
+                  ),
                 ),
                 Opacity(
                   opacity: selectedTabValue == 1 ? 1: 0,
                   child: Text(
-                    'Home'
-                  )
+                    'Home',
+                  ),
                 ),
                 Opacity(
                   opacity: selectedTabValue == 2 ? 1: 0,
                   child: Text(
-                    'Profile'
-                  )
+                    'Profile',
+                  ),
                 ),
-              ]
+              ],
             );
-          }
+          },
       )`;
 
         const generated = generateWidget(xml);
@@ -69,24 +69,24 @@ suite("Wrapper Stream Property Tests", function () {
                     opacity: selectedTabValue == 0 ? 1: 0,
                     child: LatestPage(
     
-                    )
+                    ),
                   ),
                   Opacity(
                     opacity: selectedTabValue == 1 ? 1: 0,
                     child: Text(
-                      'Home'
-                    )
+                      'Home',
+                    ),
                   ),
                   Opacity(
                     opacity: selectedTabValue == 2 ? 1: 0,
                     child: Text(
-                      'Profile'
-                    )
+                      'Profile',
+                    ),
                   ),
-                ]
-              )
+                ],
+              ),
             );
-          }
+          },
         )
         `;
 

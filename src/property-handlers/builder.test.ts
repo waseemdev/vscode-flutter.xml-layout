@@ -18,10 +18,10 @@ suite("Builder Tests", function () {
           itemBuilder: (BuildContext context) {
             return PopupMenuItem(
               child: Text(
-                'text'
-              )
+                'text',
+              ),
             );
-          }
+          },
         )
 `;
 
@@ -46,10 +46,10 @@ suite("Builder Tests", function () {
           itemBuilder: (context, index) {
             return PopupMenuItem(
               child: Text(
-                'text'
-              )
+                'text',
+              ),
             );
-          }
+          },
         )
 `;
 
@@ -75,10 +75,10 @@ suite("Builder Tests", function () {
             itemBuilder: (context, index) {
               return PopupMenuItem(
                 child: Text(
-                  'text'
-                )
+                  'text',
+                ),
               );
-            }
+            },
           ),
           () => Container(width: 0, height: 0)
         )
@@ -110,11 +110,11 @@ suite("Builder Tests", function () {
               return RaisedButton(
                 onPressed: event,
                 child: Text(
-                  'Login'
-                )
+                  'Login',
+                ),
               );
-            }
-          )
+            },
+          ),
         )
 `;
 
@@ -150,12 +150,12 @@ suite("Builder Tests", function () {
                 return RaisedButton(
                   onPressed: event,
                   child: Text(
-                    'Login'
-                  )
+                    'Login',
+                  ),
                 );
-              }
+              },
             );
-          }
+          },
         )
 `;
 
@@ -181,10 +181,10 @@ suite("Builder Tests", function () {
             final item = items == null || items.length <= myIndex || items.length == 0 ? null : items[myIndex];
             return PopupMenuItem(
               child: Text(
-                'text'
-              )
+                'text',
+              ),
             );
-          }
+          },
         )
 `;
 
@@ -218,12 +218,12 @@ suite("Builder Tests", function () {
                 final item = itemsStreamValue == null || itemsStreamValue.length <= index || itemsStreamValue.length == 0 ? null : itemsStreamValue[index];
                 return PopupMenuItem(
                   child: Text(
-                    'text'
-                  )
+                    'text',
+                  ),
                 );
-              }
+              },
             );
-          }
+          },
         )
 `;
 
@@ -250,7 +250,7 @@ suite("Builder Tests", function () {
           itemBuilder: (context, index) {
             final item = component.items == null || component.items.length <= index || component.items.length == 0 ? null : component.items[index];
             return Text(
-              item.title
+              item.title,
             );
           },
           separatorBuilder: (context, index) {
@@ -258,7 +258,7 @@ suite("Builder Tests", function () {
             return Divider(
     
             );
-          }
+          },
         )
 `;
 
@@ -293,7 +293,7 @@ suite("Builder Tests", function () {
               itemBuilder: (context, index) {
                 final item = componentItemsValue == null || componentItemsValue.length <= index || componentItemsValue.length == 0 ? null : componentItemsValue[index];
                 return Text(
-                  item.title
+                  item.title,
                 );
               },
               separatorBuilder: (context, index) {
@@ -301,9 +301,9 @@ suite("Builder Tests", function () {
                 return Divider(
     
                 );
-              }
+              },
             );
-          }
+          },
         )
 `;
 
@@ -338,7 +338,7 @@ suite("Builder Tests", function () {
               itemBuilder: (context, index) {
                 final item = component.items == null || component.items.length <= index || component.items.length == 0 ? null : component.items[index];
                 return Text(
-                  item.title
+                  item.title,
                 );
               },
               separatorBuilder: (context, index) {
@@ -346,9 +346,9 @@ suite("Builder Tests", function () {
                 return Divider(
     
                 );
-              }
+              },
             );
-          }
+          },
         )
 `;
 
@@ -383,7 +383,7 @@ suite("Builder Tests", function () {
               itemBuilder: (context, index) {
                 final item = componentItemsValue == null || componentItemsValue.length <= index || componentItemsValue.length == 0 ? null : componentItemsValue[index];
                 return Text(
-                  item.title
+                  item.title,
                 );
               },
               separatorBuilder: (context, index) {
@@ -391,9 +391,9 @@ suite("Builder Tests", function () {
                 return Divider(
     
                 );
-              }
+              },
             );
-          }
+          },
         )
 `;
 
@@ -420,19 +420,19 @@ suite("Builder Tests", function () {
               return Padding(
                 padding: const EdgeInsets.all(11),
                 child: Text(
-                  item.title
-                )
+                  item.title,
+                ),
               );
             }
             if (item != null) {
               return Padding(
                 padding: const EdgeInsets.all(11),
                 child: Text(
-                  item.title
-                )
+                  item.title,
+                ),
               );
             }
-          }
+          },
         )
 `;
 
@@ -458,10 +458,10 @@ suite("Builder Tests", function () {
             return Padding(
               padding: const EdgeInsets.all(11),
               child: Text(
-                item.title2
-              )
+                item.title2,
+              ),
             );
-          }
+          },
         )
 `;
 
@@ -488,17 +488,17 @@ suite("Builder Tests", function () {
               Padding(
                 padding: const EdgeInsets.all(11),
                 child: Text(
-                  item.title2
-                )
+                  item.title2,
+                ),
               ),
               Padding(
                 padding: const EdgeInsets.all(11),
                 child: Text(
-                  item.title1
-                )
+                  item.title1,
+                ),
               )
             ];
-          }
+          },
         )
 `;
 
@@ -521,9 +521,9 @@ suite("Builder Tests", function () {
           itemBuilder: (BuildContext context, index) {
             final item = component.items == null || component.items.length <= index || component.items.length == 0 ? null : component.items[index];
             return Text(
-              item.title
+              item.title,
             );
-          }
+          },
         )
 `;
 
@@ -545,9 +545,9 @@ suite("Builder Tests", function () {
         ListView.builder(
           itemBuilder: (BuildContext context) {
             return Text(
-              item.title
+              item.title,
             );
-          }
+          },
         )
 `;
 

@@ -19,21 +19,21 @@ suite("Switch Tests", function () {
               [
                 new SwitchCase(0, 
                   () => Text(
-                    'one'
+                    'one',
                   )
                 ),
                 new SwitchCase(1, 
                   () => Text(
-                    'two'
+                    'two',
                   )
                 ),
                 new SwitchCase(2, 
                   () => Text(
-                    'three'
+                    'three',
                   )
                 ),
               ]
-            )
+            ),
           )
 `;
 
@@ -60,22 +60,22 @@ suite("Switch Tests", function () {
               [
                 new SwitchCase(0, 
                   () => Text(
-                    'one'
+                    'one',
                   )
                 ),
                 new SwitchCase(1, 
                   () => Text(
-                    'two'
+                    'two',
                   )
                 ),
                 new SwitchCase(2, 
                   () => Text(
-                    'three'
+                    'three',
                   )
                 ),
               ]
-            )
-          )
+            ),
+          ),
         )
 `;
 
@@ -102,22 +102,22 @@ suite("Switch Tests", function () {
               [
                 new SwitchCase(0, 
                   () => Text(
-                    'one'
+                    'one',
                   )
                 ),
                 new SwitchCase(1, 
                   () => Text(
-                    'two'
+                    'two',
                   )
                 ),
                 new SwitchCase(2, 
                   () => Text(
-                    'three'
+                    'three',
                   )
                 ),
               ]
-            )
-          )
+            ),
+          ),
         )
 `;
 
@@ -150,23 +150,23 @@ suite("Switch Tests", function () {
                 [
                   new SwitchCase(0, 
                     () => Text(
-                      'one'
+                      'one',
                     )
                   ),
                   new SwitchCase(1, 
                     () => Text(
-                      'two'
+                      'two',
                     )
                   ),
                   new SwitchCase(2, 
                     () => Text(
-                      'three'
+                      'three',
                     )
                   ),
                 ]
-              )
+              ),
             );
-          }
+          },
         )
 `;
 
@@ -193,21 +193,21 @@ suite("Switch Tests", function () {
               [
                 new SwitchCase(0, 
                   () => Text(
-                    'one'
+                    'one',
                   )
                 ),
                 new SwitchCase(1, 
                   () => Text(
-                    'two'
+                    'two',
                   )
                 ),
                 new SwitchCase(2, 
                   () => Text(
-                    'three'
+                    'three',
                   )
                 ),
               ]
-            )
+            ),
           )
 `;
 
@@ -242,23 +242,23 @@ suite("Switch Tests", function () {
                 [
                   new SwitchCase(0, 
                     () => Text(
-                      'one'
+                      'one',
                     )
                   ),
                   new SwitchCase(1, 
                     () => Text(
-                      'two'
+                      'two',
                     )
                   ),
                   new SwitchCase(2, 
                     () => Text(
-                      'three'
+                      'three',
                     )
                   ),
                 ]
               );
-            }
-          )
+            },
+          ),
         )
 `;
 
@@ -284,21 +284,21 @@ suite("Switch Tests", function () {
               [
                 new SwitchCase(0, 
                   () => Text(
-                    'one'
+                    'one',
                   )
                 ),
                 new SwitchCase(1, 
                   () => Text(
-                    'two'
+                    'two',
                   )
                 ),
                 new SwitchCase(2, 
                   () => Text(
-                    'three'
+                    'three',
                   )
                 ),
               ]
-            )
+            ),
           ),
           () => Container(width: 0, height: 0)
         )

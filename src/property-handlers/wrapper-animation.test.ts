@@ -26,10 +26,10 @@ suite("Wrapper Animation Property Tests", function () {
                 child: Container(
                   color: Colors.red,
                   height: 200,
-                  width: 200
-                )
+                  width: 200,
+                ),
               );
-            }
+            },
           )
 `;
 
@@ -62,9 +62,9 @@ suite("Wrapper Animation Property Tests", function () {
               return Container(
                 color: animations["color"].value,
                 height: animations["height"].value,
-                width: animations["width"].value
+                width: animations["width"].value,
               );
-            }
+            },
           )
 `;
 
@@ -96,9 +96,9 @@ suite("Wrapper Animation Property Tests", function () {
               return Container(
                 color: animations["color"].value,
                 height: animations["height"].value,
-                width: animations["width"].value
+                width: animations["width"].value,
               );
-            }
+            },
           )
 `;
 

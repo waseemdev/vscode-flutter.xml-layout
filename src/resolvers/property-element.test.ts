@@ -14,8 +14,8 @@ suite("PropertyElement Tests", function () {
         Container(
             child: Column(
               children: [
-                ]
-            )
+                ],
+            ),
           )
 `;
 
@@ -35,8 +35,8 @@ suite("PropertyElement Tests", function () {
         Container(
             child: Column(
               children: [
-                ]
-            )
+                ],
+            ),
           )
 `;
 

@@ -41,7 +41,7 @@ export class WidgetCodeGenerator {
 
         const propsCode = props.filter(a => a.trim()).join(',\n');
         if (!widget.isPropertyElement && widget.type) {
-            code += `${widget.type}(\n${propsCode}\n${tabs})`;
+            code += `${widget.type}(\n${propsCode}${propsCode.trim() ? ',' : ''}\n${tabs})`;
         }
         else {
             code += propsCode;

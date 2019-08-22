@@ -22,12 +22,12 @@ suite("Forms", function () {
                 return ProgressButton(
                   onPressed: event,
                   child: Text(
-                    'Login'
-                  )
+                    'Login',
+                  ),
                 );
-              }
+              },
             );
-          }
+          },
         )
 `;
 
@@ -67,15 +67,15 @@ suite("Forms", function () {
                         buttonState: ctrlStatusStreamValue,
                         onPressed: event,
                         child: Text(
-                          'Login'
-                        )
-                      )
+                          'Login',
+                        ),
+                      ),
                     );
-                  }
+                  },
                 );
-              }
+              },
             );
-          }
+          },
         )
 `;
 
@@ -96,10 +96,10 @@ suite("Forms", function () {
             return SizedBox(
               width: 80,
               child: TextField(
-                controller: ctrl._attachController('quantity', () => TextEditingController())
-              )
+                controller: ctrl._attachController('quantity', () => TextEditingController()),
+              ),
             );
-          }
+          },
         )
 `;
 

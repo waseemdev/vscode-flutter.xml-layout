@@ -25,7 +25,7 @@ suite("Repeat Tests", function () {
             padding: const EdgeInsets.all(10),
             child: Text(
   
-            )
+            ),
           );
         }
       )
@@ -69,7 +69,7 @@ suite("Repeat Tests", function () {
     
                 );
               }),
-          ]
+          ],
         )
         `;
 
@@ -107,7 +107,7 @@ suite("Repeat Tests", function () {
                 );
               }
             ),
-          ]
+          ],
         )
         `;
 
@@ -133,12 +133,12 @@ suite("Repeat Tests", function () {
                 return PopupMenuItem(
                   value: menuItem,
                   child: Text(
-                    menuItem.title
-                  )
+                    menuItem.title,
+                  ),
                 );
               }
             );
-          }
+          },
         )
         `;
 

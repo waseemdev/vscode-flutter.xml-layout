@@ -14,9 +14,9 @@ suite("ItemBuilder Tests", function () {
           itemBuilder: (BuildContext context, int index) {
             final item = component.items == null || component.items.length <= index || component.items.length == 0 ? null : component.items[index];
             return Text(
-              item.title
+              item.title,
             );
-          }
+          },
         )
 `;
 
@@ -37,9 +37,9 @@ suite("ItemBuilder Tests", function () {
           itemBuilder: (BuildContext context, int myIndex) {
             final item = component.items == null || component.items.length <= myIndex || component.items.length == 0 ? null : component.items[myIndex];
             return Text(
-              item.title
+              item.title,
             );
-          }
+          },
         )
 `;
 
@@ -67,11 +67,11 @@ suite("ItemBuilder Tests", function () {
               itemBuilder: (BuildContext context, int index) {
                 final item = componentItemsValue == null || componentItemsValue.length <= index || componentItemsValue.length == 0 ? null : componentItemsValue[index];
                 return Text(
-                  item.title
+                  item.title,
                 );
-              }
+              },
             );
-          }
+          },
         )
 `;
 
@@ -93,10 +93,10 @@ suite("ItemBuilder Tests", function () {
             itemBuilder: (BuildContext context, int index) {
               final item = component.items == null || component.items.length <= index || component.items.length == 0 ? null : component.items[index];
               return Text(
-                item.title
+                item.title,
               );
-            }
-          )
+            },
+          ),
         )
 `;
 
@@ -117,9 +117,9 @@ suite("ItemBuilder Tests", function () {
             itemBuilder: (BuildContext context, int index) {
               final item = component.items == null || component.items.length <= index || component.items.length == 0 ? null : component.items[index];
               return Text(
-                item.title
+                item.title,
               );
-            }
+            },
           ),
           () => Container(width: 0, height: 0)
         )
@@ -144,10 +144,10 @@ suite("ItemBuilder Tests", function () {
               itemBuilder: (BuildContext context, int index) {
                 final item = component.items == null || component.items.length <= index || component.items.length == 0 ? null : component.items[index];
                 return Text(
-                  item.title
+                  item.title,
                 );
-              }
-            )
+              },
+            ),
           ),
           () => Container(width: 0, height: 0)
         )
@@ -172,10 +172,10 @@ suite("ItemBuilder Tests", function () {
               itemBuilder: (BuildContext context, int index) {
                 final item = component.items == null || component.items.length <= index || component.items.length == 0 ? null : component.items[index];
                 return Text(
-                  item.title
+                  item.title,
                 );
-              }
-            )
+              },
+            ),
           ),
           () => Container(width: 0, height: 0)
         )
@@ -199,9 +199,9 @@ suite("ItemBuilder Tests", function () {
           itemBuilder: (BuildContext context, int index) {
             final item = component.items == null || component.items.length <= index || component.items.length == 0 ? null : component.items[index];
             return Text(
-              item.title
+              item.title,
             );
-          }
+          },
         )
 `;
 
@@ -226,10 +226,10 @@ suite("ItemBuilder Tests", function () {
               itemBuilder: (BuildContext context, int index) {
                 final item = component.items == null || component.items.length <= index || component.items.length == 0 ? null : component.items[index];
                 return Text(
-                  item.title
+                  item.title,
                 );
-              }
-            )
+              },
+            ),
           ),
           () => Container(width: 0, height: 0)
         )

@@ -12,9 +12,9 @@ suite("Child Wrapper Properties Tests", function () {
           child: Padding(
             padding: const EdgeInsets.all(4),
             child: Text(
-              'hello!'
-            )
-          )
+              'hello!',
+            ),
+          ),
         )`;
 
         const generated = generateWidget(xml);
@@ -40,11 +40,11 @@ suite("Child Wrapper Properties Tests", function () {
               child: Padding(
                 padding: paddingStreamValue,
                 child: Text(
-                  'hello!'
-                )
-              )
+                  'hello!',
+                ),
+              ),
             );
-          }
+          },
         )
 `;
 
@@ -61,8 +61,8 @@ suite("Child Wrapper Properties Tests", function () {
         const expected = `
         RaisedButton(
           child: Text(
-            'hello!'
-          )
+            'hello!',
+          ),
         )`;
 
         const generated = generateWidget(xml);
@@ -78,8 +78,8 @@ suite("Child Wrapper Properties Tests", function () {
         const expected = `
         RaisedButton(
           child: Text(
-            _pipeProvider.transform(context, "translate", 'hello', [])
-          )
+            _pipeProvider.transform(context, "translate", 'hello', []),
+          ),
         )`;
 
         const generated = generateWidget(xml);

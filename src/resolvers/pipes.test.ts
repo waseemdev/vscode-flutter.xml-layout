@@ -7,7 +7,7 @@ suite("Pipes Tests", function () {
 
         const expected = `
         Text(
-            _pipeProvider.transform(context, "translate", text, [])
+            _pipeProvider.transform(context, "translate", text, []),
           )
 `;
 
@@ -20,7 +20,7 @@ suite("Pipes Tests", function () {
 
         const expected = `
         Text(
-            _pipeProvider.transform(context, "afterTranslate", _pipeProvider.transform(context, "translate", _pipeProvider.transform(context, "beforeTranslate", text, []), []), [])
+            _pipeProvider.transform(context, "afterTranslate", _pipeProvider.transform(context, "translate", _pipeProvider.transform(context, "beforeTranslate", text, []), []), []),
         )
 `;
 
@@ -33,7 +33,7 @@ suite("Pipes Tests", function () {
 
         const expected = `
         Text(
-            (_pipeProvider.transform(context, "translate", firstText, [])) + ' : ' + (_pipeProvider.transform(context, "somePipe", secondText, []))
+            (_pipeProvider.transform(context, "translate", firstText, [])) + ' : ' + (_pipeProvider.transform(context, "somePipe", secondText, [])),
         )
 `;
 
@@ -54,9 +54,9 @@ suite("Pipes Tests", function () {
                 return Container(width: 0, height: 0);
               }
               return Text(
-                textStreamValue
+                textStreamValue,
               );
-            }
+            },
           )
 `;
 
@@ -77,9 +77,9 @@ suite("Pipes Tests", function () {
                 return Container(width: 0, height: 0);
               }
               return Text(
-                textBehaviorValue
+                textBehaviorValue,
               );
-            }
+            },
           )
 `;
 
@@ -100,9 +100,9 @@ suite("Pipes Tests", function () {
                 return Container(width: 0, height: 0);
               }
               return Text(
-                _pipeProvider.transform(context, "afterStream", pipeProviderTransformContextBeforeStreamTextStreamValue, [])
+                _pipeProvider.transform(context, "afterStream", pipeProviderTransformContextBeforeStreamTextStreamValue, []),
               );
-            }
+            },
           )
 `;
 
@@ -123,9 +123,9 @@ suite("Pipes Tests", function () {
                 return Container(width: 0, height: 0);
               }
               return Text(
-                (firstTextStreamValue) + ':' + (_pipeProvider.transform(context, "translate", secondText, []))
+                (firstTextStreamValue) + ':' + (_pipeProvider.transform(context, "translate", secondText, [])),
               );
-            }
+            },
           )
 `;
 
@@ -154,11 +154,11 @@ suite("Pipes Tests", function () {
                     return Container(width: 0, height: 0);
                   }
                   return Text(
-                    (firstTextStreamValue) + ':' + (secondTextStreamValue)
+                    (firstTextStreamValue) + ':' + (secondTextStreamValue),
                   );
-                }
+                },
               );
-            }
+            },
           )
 `;
 
@@ -184,9 +184,9 @@ suite("Pipes Tests", function () {
             }
             return Text(
               backgroundColor: (componentMenuVisibleValue) ? Colors.white : Colors.lightBlue,
-              foregroundColor: (componentMenuVisibleValue) ? Colors.lightBlue : Colors.white
+              foregroundColor: (componentMenuVisibleValue) ? Colors.lightBlue : Colors.white,
             );
-          }
+          },
         )
 `;
 
@@ -210,9 +210,9 @@ suite("Pipes Tests", function () {
               return Container(width: 0, height: 0);
             }
             return ClipPath(
-              clipper: ContainerClipper((componentMenuAnimButtonPositionValue) >= MediaQuery.of(context).size.height * 0.3 ? (MediaQuery.of(context).size.height * 0.3) - ((componentMenuAnimButtonPositionValue) - (MediaQuery.of(context).size.height * 0.3)) : (componentMenuAnimButtonPositionValue))
+              clipper: ContainerClipper((componentMenuAnimButtonPositionValue) >= MediaQuery.of(context).size.height * 0.3 ? (MediaQuery.of(context).size.height * 0.3) - ((componentMenuAnimButtonPositionValue) - (MediaQuery.of(context).size.height * 0.3)) : (componentMenuAnimButtonPositionValue)),
             );
-          }
+          },
       )
 `;
 
@@ -234,18 +234,18 @@ suite("Pipes Tests", function () {
         Column(
           children: [
             Text(
-              "someText | translate"
+              "someText | translate",
             ),
             Text(
-              'someText | translate'
+              'someText | translate',
             ),
             Text(
-              "(someText | translate)"
+              "(someText | translate)",
             ),
             Text(
-                '(someText | translate)'
+                '(someText | translate)',
             ),
-          ]
+          ],
         )
 `;
 
@@ -266,15 +266,15 @@ suite("Pipes Tests", function () {
     Column(
       children: [
         Text(
-          '\${_pipeProvider.transform(context, "translate", {someText, [])}'
+          '\${_pipeProvider.transform(context, "translate", {someText, [])}',
         ),
         Text(
-          "\${(_pipeProvider.transform(context, "translate", someText, []))}"
+          "\${(_pipeProvider.transform(context, "translate", someText, []))}",
         ),
         Text(
-          '\${(_pipeProvider.transform(context, "translate", someText, []))}'
+          '\${(_pipeProvider.transform(context, "translate", someText, []))}',
         ),
-      ]
+      ],
     )
 `;
 
@@ -320,11 +320,11 @@ suite("Pipes Tests", function () {
                         Padding(
                           padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 10),
                           child: Icon(
-                            Ionicons.getIconData('logo-facebook')
-                          )
+                            Ionicons.getIconData('logo-facebook'),
+                          ),
                         ),
                         Text(
-                          'Login with Facebook'
+                          'Login with Facebook',
                         ),
                         WidgetHelpers.ifTrue((ctrlFacebookLoggingStatusStreamValue) == ButtonState.inProgress,
                           () => Padding(
@@ -333,19 +333,19 @@ suite("Pipes Tests", function () {
                               height: 28,
                               width: 28,
                               child: CircularProgressIndicator(
-                                strokeWidth: 2
-                              )
-                            )
+                                strokeWidth: 2,
+                              ),
+                            ),
                           ),
                           () => Container(width: 0, height: 0)
                         ),
-                      ]
-                    )
-                  )
+                      ],
+                    ),
+                  ),
                 );
-              }
+              },
             );
-          }
+          },
         )
 `;
 
@@ -396,11 +396,11 @@ suite("Pipes Tests", function () {
                           Padding(
                             padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 10),
                             child: Icon(
-                              Ionicons.getIconData('logo-facebook')
-                            )
+                              Ionicons.getIconData('logo-facebook'),
+                            ),
                           ),
                           Text(
-                            'Login with Facebook'
+                            'Login with Facebook',
                           ),
                           WidgetHelpers.ifTrue((ctrlFacebookLoggingStatusStreamValue) == ButtonState.inProgress,
                             () => Padding(
@@ -409,20 +409,20 @@ suite("Pipes Tests", function () {
                                 height: 28,
                                 width: 28,
                                 child: CircularProgressIndicator(
-                                  strokeWidth: 2
-                                )
-                              )
+                                  strokeWidth: 2,
+                                ),
+                              ),
                             ),
                             () => Container(width: 0, height: 0)
                           ),
-                        ]
-                      )
-                    )
+                        ],
+                      ),
+                    ),
                   );
-                }
+                },
               );
-            }
-          )
+            },
+          ),
         )
 `;
 

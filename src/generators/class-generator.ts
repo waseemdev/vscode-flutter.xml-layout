@@ -132,24 +132,29 @@ export class ClassCodeGenerator {
           ...controllers.filter(a => !a.isPrivate).map(a => a.name),
           ...vars.filter(a => a.type === 'FormGroup').map(a => a.name)
         ];
+        
+        let formCode = '';
+        if (formControls.length) {
+          formCode = `
+  Map<String, dynamic> _attachedControllers = Map();
+
+  dynamic _attachController(String controlName, controllerBuilder) {
+    if (_attachedControllers.containsKey(controlName)) {
+      final controller = _attachedControllers[controlName];
+      return controller;
+    }
+    final controller = controllerBuilder();
+    _attachedControllers[controlName] = controller;
+    formGroup.get(controlName).attachTextEditingController(controller);
+    return controller;
+  }`;
+        }
 
         return `
 
 class ${rootWidget.controller}Base {
   bool _loaded = false;
-	Map<String, dynamic> _attachedControllers = Map();
-  ${varsLines.join('\n  ')}
-
-  dynamic _attachController(String controlName, controllerBuilder) {
-    if (_attachedControllers.containsKey(controlName)) {
-			final controller = _attachedControllers[controlName];
-      return controller;
-    }
-		final controller = controllerBuilder();
-    _attachedControllers[controlName] = controller;
-    formGroup.get(controlName).attachTextEditingController(controller);
-		return controller;
-  }
+  ${varsLines.join('\n  ')}${formCode}
 
   void _load(BuildContext context) {
     if (!_loaded) {

@@ -10,7 +10,7 @@ suite("Wrapper Properties Tests", function () {
           opacity: 0,
           child: Text(
     
-          )
+          ),
         )`;
 
         const generated = generateWidget(xml);
@@ -24,8 +24,8 @@ suite("Wrapper Properties Tests", function () {
         Align(
           alignment: Alignment.topCenter,
           child: Text(
-            'test'
-          )
+            'test',
+          ),
         )
         `;
 
@@ -40,8 +40,8 @@ suite("Wrapper Properties Tests", function () {
         Align(
           alignment: Alignment.topCenter,
           child: Text(
-            'test'
-          )
+            'test',
+          ),
         )
         `;
 
@@ -55,7 +55,7 @@ suite("Wrapper Properties Tests", function () {
         const expected = `
           Text(
             'test',
-            child: TestWidget()
+            child: TestWidget(),
           )
         `;
 
@@ -80,9 +80,9 @@ suite("Wrapper Properties Tests", function () {
               opacity: valueValue,
               child: Text(
     
-              )
+              ),
             );
-          }
+          },
         )
 `;
 
@@ -99,7 +99,7 @@ suite("Wrapper Properties Tests", function () {
           opacity: _pipeProvider.transform(context, "somePipe", value, []),
           child: Text(
     
-          )
+          ),
         )
 `;
 
@@ -121,9 +121,9 @@ suite("Wrapper Properties Tests", function () {
           child: RaisedButton(
             onPressed: event,
             child: Text(
-              'Login'
-            )
-          )
+              'Login',
+            ),
+          ),
         )
 `;
 
@@ -145,9 +145,9 @@ suite("Wrapper Properties Tests", function () {
           child: RaisedButton(
             onPressed: event,
             child: Text(
-              'Login'
-            )
-          )
+              'Login',
+            ),
+          ),
         )
 `;
 
@@ -170,9 +170,9 @@ suite("Wrapper Properties Tests", function () {
           child: RaisedButton(
             onPressed: event,
             child: Text(
-              'Login'
-            )
-          )
+              'Login',
+            ),
+          ),
         )
 `;
 
@@ -207,12 +207,12 @@ suite("Wrapper Properties Tests", function () {
                   height: streamVar2Value,
                   width: streamVarValue,
                   child: Text(
-                    'Hello'
-                  )
+                    'Hello',
+                  ),
                 );
-              }
+              },
             );
-          }
+          },
         )
 `;
 
@@ -231,8 +231,8 @@ suite("Wrapper Properties Tests", function () {
           height: _pipeProvider.transform(context, "translate", 'test2', []),
           width: _pipeProvider.transform(context, "translate", 'test1', []),
           child: Text(
-            'Hello'
-          )
+            'Hello',
+          ),
         )
 `;
 
@@ -252,9 +252,9 @@ suite("Wrapper Properties Tests", function () {
               3,
               child: Text(
     
-              )
-            )
-          )
+              ),
+            ),
+          ),
         )
 `;
 
@@ -274,9 +274,9 @@ suite("Wrapper Properties Tests", function () {
               3,
               child: Text(
     
-              )
-            )
-          )
+              ),
+            ),
+          ),
         )
 `;
 
@@ -295,9 +295,9 @@ suite("Wrapper Properties Tests", function () {
           child: Padding(
             padding: const EdgeInsets.all(5),
             child: Text(
-              'Login'
-            )
-          )
+              'Login',
+            ),
+          ),
         )
 `;
 

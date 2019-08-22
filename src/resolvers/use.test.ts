@@ -7,7 +7,7 @@ suite("Use Tests", function () {
     </ListView>`;
         
         const expected = `
-        ListView.builder(children:[])
+        ListView.builder(children:[],)
 `;
 
         const generated = generateWidget(xml);

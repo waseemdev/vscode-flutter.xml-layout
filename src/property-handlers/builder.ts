@@ -78,10 +78,12 @@ export class BuilderHandler extends CustomPropertyHandler {
 
     private resolveBuilder(element: parseXml.Element, attr: AttributeModel, builderData: any, wrapperWidget: WidgetModel | null, contentWidget: WidgetModel): { tempData: any, wrapperWidget: WidgetModel | null } | null {
         let childWidget = builderData.value;
-        let arrayOfIfWidgets = null;
         if (!childWidget) {
             return null;
         }
+
+        let arrayOfIfWidgets = null;
+        let hasArrayProp = false;
 
         if (childWidget instanceof Array) {
             // get (if) widgets
@@ -91,14 +93,14 @@ export class BuilderHandler extends CustomPropertyHandler {
                 childWidget = null;
             }
             else {
-                const hasArrayProp = builderData.extraData.properties.filter((a: any) => a.name === 'array').length > 0;
+                hasArrayProp = builderData.extraData.properties.filter((a: any) => a.name === 'array').length > 0;
                 if (!hasArrayProp) {
                     childWidget = childWidget[0];
                 }
             }
             contentWidget.wrappedWidgets.push(...arrayOfIfWidgets);
         }
-        else if (childWidget) {
+        if (!hasArrayProp && childWidget) {
             contentWidget.wrappedWidgets.push(childWidget);
         }
         

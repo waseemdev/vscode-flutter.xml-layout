@@ -23,20 +23,20 @@ suite("If Element", function () {
               SwitchCase(
                 ifCondition,
                 () => Text(
-                  'if'
+                  'if',
                 )
               ),
               SwitchCase(
                 ifElseCondition,
                 () => Text(
-                  'elseIf'
+                  'elseIf',
                 )
               ),
             ],
             () => Text(
-              'else'
+              'else',
             )
-          )
+          ),
         )
 `;
 
@@ -67,21 +67,21 @@ suite("If Element", function () {
                 SwitchCase(
                   ifCondition,
                   () => Text(
-                    'if'
+                    'if',
                   )
                 ),
                 SwitchCase(
                   ifElseCondition,
                   () => Text(
-                    'elseIf'
+                    'elseIf',
                   )
                 ),
               ],
               () => Text(
-                'else'
+                'else',
               )
-            )
-          )
+            ),
+          ),
         )
 `;
 
@@ -119,22 +119,22 @@ Container(
               SwitchCase(
                 ifConditionValue,
                 () => Text(
-                  'if'
+                  'if',
                 )
               ),
               SwitchCase(
                 ifElseCondition,
                 () => Text(
-                  'elseIf'
+                  'elseIf',
                 )
               ),
             ],
             () => Text(
-              'else'
+              'else',
             )
           );
-        }
-      )
+        },
+      ),
     )
 `;
 
@@ -172,22 +172,22 @@ Container(
                   SwitchCase(
                     ifCondition,
                     () => Text(
-                      'if'
+                      'if',
                     )
                   ),
                   SwitchCase(
                     ifElseConditionValue,
                     () => Text(
-                      'elseIf'
+                      'elseIf',
                     )
                   ),
                 ],
                 () => Text(
-                  'else'
+                  'else',
                 )
               );
-            }
-          )
+            },
+          ),
         )
 `;
 
@@ -233,24 +233,24 @@ Container(
                       SwitchCase(
                         ifConditionValue,
                         () => Text(
-                          'if'
+                          'if',
                         )
                       ),
                       SwitchCase(
                         ifElseConditionValue,
                         () => Text(
-                          'elseIf'
+                          'elseIf',
                         )
                       ),
                     ],
                     () => Text(
-                      'else'
+                      'else',
                     )
                   );
-                }
+                },
               );
-            }
-          )
+            },
+          ),
         )
 `;
 
@@ -307,32 +307,32 @@ Container(
                           SwitchCase(
                             ifConditionValue,
                             () => Text(
-                              'if'
+                              'if',
                             )
                           ),
                           SwitchCase(
                             ifElse1ConditionValue,
                             () => Text(
-                              'elseIf'
+                              'elseIf',
                             )
                           ),
                           SwitchCase(
                             ifElse2ConditionValue,
                             () => Text(
-                              'elseIf'
+                              'elseIf',
                             )
                           ),
                         ],
                         () => Text(
-                          'else'
+                          'else',
                         )
                       );
-                    }
+                    },
                   );
-                }
+                },
               );
-            }
-          )
+            },
+          ),
         )
 `;
 
@@ -379,7 +379,7 @@ Container(
                       SwitchCase(
                         ifConditionValue,
                         () => Text(
-                          'if'
+                          'if',
                         )
                       ),
                       SwitchCase(
@@ -389,20 +389,20 @@ Container(
                           stream: ctrl.formGroup.get('test').valueStream,
                           builder: (BuildContext context, ctrlFormGroupGetTestValueStreamSnapshot) {
                             return TextField(
-                              controller: ctrl._attachController('test', () => TextEditingController())
+                              controller: ctrl._attachController('test', () => TextEditingController()),
                             );
-                          }
+                          },
                         )
                       ),
                     ],
                     () => Text(
-                      'else'
+                      'else',
                     )
                   );
-                }
+                },
               );
-            }
-          )
+            },
+          ),
         )
 `;
 
@@ -441,22 +441,22 @@ Container(
                   SwitchCase(
                     ifConditionValue,
                     () => Text(
-                      'if'
+                      'if',
                     )
                   ),
                   SwitchCase(
                     ifConditionValue,
                     () => Text(
-                      'elseIf'
+                      'elseIf',
                     )
                   ),
                 ],
                 () => Text(
-                  'else'
+                  'else',
                 )
               );
-            }
-          )
+            },
+          ),
         )
 `;
 
@@ -509,21 +509,21 @@ Container(
                     SwitchCase(
                       ifConditionValue,
                       () => Text(
-                        'if'
+                        'if',
                       )
                     ),
                     SwitchCase(
                       ifConditionValue,
                       () => Text(
-                        'elseIf'
+                        'elseIf',
                       )
                     ),
                   ],
                   () => Text(
-                    'else'
+                    'else',
                   )
                 );
-              }
+              },
             ),
             Divider(
     
@@ -540,23 +540,23 @@ Container(
                     SwitchCase(
                       ifConditionValue,
                       () => Text(
-                        'if'
+                        'if',
                       )
                     ),
                     SwitchCase(
                       ifConditionValue,
                       () => Text(
-                        'elseIf'
+                        'elseIf',
                       )
                     ),
                   ],
                   () => Text(
-                    'else'
+                    'else',
                   )
                 );
-              }
+              },
             ),
-          ]
+          ],
         )
 `;
 
@@ -590,7 +590,7 @@ Container(
                   ifCondition,
                   () => [
                     Text(
-                      1
+                      1,
                     )
                   ]
                 ),
@@ -598,24 +598,24 @@ Container(
                   elseIfCondition,
                   () => [
                     Text(
-                      2
+                      2,
                     ),
                     Text(
-                      3
+                      3,
                     )
                   ]
                 ),
               ],
               () => [
                 Text(
-                  4
+                  4,
                 ),
                 Text(
-                  5
+                  5,
                 )
               ]
             ),
-          ]
+          ],
         )
 `;
 

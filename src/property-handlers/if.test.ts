@@ -28,7 +28,7 @@ WidgetHelpers.ifTrue(true,
             builder: (BuildContext context, event) {
               return RasiedButton(
               );
-            }
+            },
           ),
           () => Container(width: 0, height: 0)
         )
@@ -50,9 +50,9 @@ WidgetHelpers.ifTrue(true,
               child: Padding(
                 padding: const EdgeInsets.all(4),
                 child: Text(
-                  'hello'
-                )
-              )
+                  'hello',
+                ),
+              ),
             ),
             () => Container(width: 0, height: 0)
           )

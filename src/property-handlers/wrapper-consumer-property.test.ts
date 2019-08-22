@@ -15,11 +15,11 @@ suite("Wrapper Consumer Property Tests", function () {
             return Column(
               children: [
                 Text(
-                  myProvider.myVariable
+                  myProvider.myVariable,
                 ),
-              ]
+              ],
             );
-          }
+          },
         )
 `;
 
@@ -42,12 +42,12 @@ suite("Wrapper Consumer Property Tests", function () {
               child: Column(
                 children: [
                   Text(
-                    myProvider.myVariable
+                    myProvider.myVariable,
                   ),
-                ]
-              )
+                ],
+              ),
             );
-          }
+          },
         )
         `;
 

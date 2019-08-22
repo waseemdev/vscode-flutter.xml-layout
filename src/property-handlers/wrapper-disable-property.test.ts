@@ -18,10 +18,10 @@ suite("Wrapper Disable Property Tests", function () {
             return RaisedButton(
               onPressed: event,
               child: Text(
-                'Login'
-              )
+                'Login',
+              ),
             );
-          }
+          },
         )
 `;
 
@@ -49,12 +49,12 @@ suite("Wrapper Disable Property Tests", function () {
                 return RaisedButton(
                   onPressed: event,
                   child: Text(
-                    'Login'
-                  )
+                    'Login',
+                  ),
                 );
-              }
+              },
             );
-          }
+          },
         )
 `;
 
@@ -79,11 +79,11 @@ suite("Wrapper Disable Property Tests", function () {
               child: RaisedButton(
                 onPressed: event,
                 child: Text(
-                  'Login'
-                )
-              )
+                  'Login',
+                ),
+              ),
             );
-          }
+          },
         )
 `;
 
@@ -109,11 +109,11 @@ suite("Wrapper Disable Property Tests", function () {
               child: Padding(
                 padding: const EdgeInsets.all(4),
                 child: Text(
-                  'Login'
-                )
-              )
+                  'Login',
+                ),
+              ),
             );
-          }
+          },
         )
 `;
 
