@@ -16,7 +16,7 @@ export class DartReferenceProvider implements ReferenceProvider, DefinitionProvi
 		}
 		
 		const dartDocument = await getDartDocument(xmlDocument);
-		const dartOffset = await getDartCodeIndex(xmlDocument, xmlPosition, dartDocument, wordRange);
+		const dartOffset = getDartCodeIndex(xmlDocument, xmlPosition, dartDocument, wordRange);
 		let dartPosition = null;
 
 		if (dartOffset < 0) {
@@ -57,7 +57,7 @@ export class DartReferenceProvider implements ReferenceProvider, DefinitionProvi
 		}
 		
 		const dartDocument = await getDartDocument(xmlDocument);
-		const dartOffset = await getDartCodeIndex(xmlDocument, xmlPosition, dartDocument, wordRange);
+		const dartOffset = getDartCodeIndex(xmlDocument, xmlPosition, dartDocument, wordRange);
 
 		const resp = await this.analyzer.analysisGetNavigation({
 			file: fsPath(dartDocument.uri),
@@ -76,10 +76,17 @@ export class DartReferenceProvider implements ReferenceProvider, DefinitionProvi
 				if (target.startColumn === 0)
 					target.startColumn = 1;
 
+				let file = resp.files[target.fileIndex];
+				if (file.endsWith('.xml.dart')) {
+					file = file.replace('.xml.dart', '.xml');
+					target.startColumn = 1;
+					target.startLine = 1;
+				}
+
 				return {
 					originSelectionRange: util.toRange(dartDocument, region.offset, region.length),
 					targetRange: util.toRangeOnLine(target),
-					targetUri: Uri.file(resp.files[target.fileIndex]),
+					targetUri: Uri.file(file),
 				} as DefinitionLink;
 			});
 		});

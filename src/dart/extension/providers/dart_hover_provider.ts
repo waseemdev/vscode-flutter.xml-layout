@@ -18,7 +18,7 @@ export class DartHoverProvider implements HoverProvider {
 			}
 			
 			const dartDocument = await getDartDocument(xmlDocument);
-			const dartOffset = await getDartCodeIndex(xmlDocument, xmlPosition, dartDocument, wordRange, true);
+			const dartOffset = getDartCodeIndex(xmlDocument, xmlPosition, dartDocument, wordRange, true);
 
 			if (dartOffset < 0) {
 				return;

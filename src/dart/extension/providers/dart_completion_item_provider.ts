@@ -37,7 +37,7 @@ export class DartCompletionItemProvider implements CompletionItemProvider, IAmDi
 			allResults = (await this.getTagNameCompletions(document, position, token)).concat(this.getClosingTagNameCompletions(document, position));
 		}
 		else if (isAttributeValue(document, position)) {
-			allResults = this.getAttributeValueCompletions(document, position, token);
+			allResults = await this.getAttributeValueCompletions(document, position, token);
 		}
 		else if (isAttribute(document, position)) {
 			allResults = await this.getAttributeCompletions(document, position, token);
@@ -129,9 +129,26 @@ export class DartCompletionItemProvider implements CompletionItemProvider, IAmDi
 		return await this.getAttributeCompletionsForElement(tag, false, document, position, token);
 	}
 
+	private hasUnnamedArgs(tag: string): boolean {
+		return tag === 'Text';
+	}
+
+	private getUnnamedArgsRange(tag: string, dartDocument: TextDocument, offset: number): number {
+		const dart = dartDocument.getText();
+		offset = dart.indexOf(' ' + tag + '(', offset - tag.length - 4);
+		const pos = dartDocument.positionAt(offset).translate({ lineDelta: 1, characterDelta: 200 });
+		offset = dartDocument.offsetAt(pos);
+		return offset;
+	}
+
 	private async getAttributeCompletionsForElement(elementTag: string, isTag: boolean, xmlDocument: TextDocument, xmlPosition: Position, token: CancellationToken): Promise<CompletionItem[]> {
 		const dartDocument = await getDartDocument(xmlDocument);
-		const dartOffset = await getDartCodeIndex(xmlDocument, xmlPosition, dartDocument, null);
+		const hasUnnamedArgs = this.hasUnnamedArgs(elementTag);
+		const wordRange = xmlDocument.getWordRangeAtPosition(xmlPosition);
+		let dartOffset = getDartCodeIndex(xmlDocument, xmlPosition, dartDocument, wordRange, false, !!elementTag, hasUnnamedArgs);
+		if (hasUnnamedArgs) {
+			dartOffset = this.getUnnamedArgsRange(elementTag, dartDocument, dartOffset);
+		}
 
 		const line = xmlDocument.lineAt(xmlPosition.line).text.slice(0, xmlPosition.character);
 		const nextCharacter = xmlDocument.getText(new Range(xmlPosition, xmlPosition.translate({ characterDelta: 200 }))).trim().substr(0, 1);
@@ -143,13 +160,8 @@ export class DartCompletionItemProvider implements CompletionItemProvider, IAmDi
 			offset: dartOffset,
 		});
 
-		// get used attributes
-		// todo
-		const currentUsedAttributes: string[] = [];
-
 		// map results
 		const includedResults = resp.results
-			.filter((a: any) => currentUsedAttributes.indexOf(a.displayText || a.completion) === -1)
 			.map((r: any) => {
 				const a = this.convertResult(xmlDocument, nextCharacter, enableCommitCharacters, insertArgumentPlaceholders, resp, r);
 				const item = new vs.CompletionItem(a.label.replace(':', ''), a.kind);
@@ -168,7 +180,7 @@ export class DartCompletionItemProvider implements CompletionItemProvider, IAmDi
 			});
 
 		const cachedResults = await this.getCachedResults(xmlDocument, token, nextCharacter, enableCommitCharacters, insertArgumentPlaceholders, xmlDocument.offsetAt(xmlPosition), resp);
-		return [...includedResults, ...cachedResults, ...(isTag ? this.getWrapperPropertiesElementsCompletionItems(xmlDocument, xmlPosition) : this.getWrapperPropertiesCompletionItems(xmlDocument, xmlPosition))];
+		return [...includedResults, ...(cachedResults && cachedResults.length ? cachedResults : []), ...(isTag ? this.getWrapperPropertiesElementsCompletionItems(xmlDocument, xmlPosition) : this.getWrapperPropertiesCompletionItems(xmlDocument, xmlPosition))];
 	}
 
 	private getAttributeCompletionsForAttribute(elementTag: string, document: TextDocument, position: Position): vs.CompletionItem[] {
@@ -267,13 +279,13 @@ export class DartCompletionItemProvider implements CompletionItemProvider, IAmDi
 		return item;
 	}
 
-	private getAttributeValueCompletions(document: TextDocument, position: Position, token: CancellationToken): CompletionItem[] {
-		const completions: CompletionItem[] = [];
-
+	private async getAttributeValueCompletions(xmlDocument: TextDocument, xmlPosition: Position, token: CancellationToken): Promise<CompletionItem[]> {
 		// Get the attribute name
-		const wordRange = document.getWordRangeAtPosition(position);
-		const wordStart = wordRange ? wordRange.start : position;
-		const line = document.getText(new Range(wordStart.line, 0, wordStart.line, wordStart.character));
+		const wordRange = xmlDocument.getWordRangeAtPosition(xmlPosition);
+		const wordStart = wordRange ? wordRange.start : xmlPosition;
+		const wordEnd = wordRange ? wordRange.end : xmlPosition;
+		const lineRange = new Range(wordStart.line, 0, wordStart.line, wordEnd.character);
+		const line = xmlDocument.getText(lineRange);
 		const attrNamePattern = /[\.\-:_a-zA-Z0-9]+=/g;
 		const match = line.match(attrNamePattern);
 
@@ -285,7 +297,7 @@ export class DartCompletionItemProvider implements CompletionItemProvider, IAmDi
 		attrName = attrName.slice(0, -1);
 
 		// Get the XPath
-		const xPath = getXPath(document, position);
+		const xPath = getXPath(xmlDocument, xmlPosition);
 		const isTopLevelElement = xPath.length === 1;
 		const isSecondLevelElement = xPath.length === 2;
 
@@ -300,15 +312,37 @@ export class DartCompletionItemProvider implements CompletionItemProvider, IAmDi
 			}
 		}
 
-		// todo
-		const children: any[] = [];
+		const dartDocument = await getDartDocument(xmlDocument);
+		let attrValue = xmlDocument.getText(new Range(new Position(xmlPosition.line, 0), xmlPosition.translate({ characterDelta: 200 })));
+		let endIndex = attrValue.indexOf('" ');
+		endIndex = endIndex === -1 ? attrValue.indexOf('">') : endIndex;
+		attrValue = attrValue.substring(attrValue.indexOf(attrName + '="') + attrName.length + 2, endIndex);
+		const cursorPos = line.substr(line.lastIndexOf(attrName + '="') + 2).length - attrName.length - Math.abs(wordEnd.character - xmlPosition.character);
+		const dartOffset = dartDocument.getText().indexOf(attrName + ': ' + attrValue) + attrName.length + 2 + cursorPos;
+		const nextCharacter = xmlDocument.getText(new Range(xmlPosition, xmlPosition.translate({ characterDelta: 200 }))).trim().substr(0, 1);
+		const conf = config.for(xmlDocument.uri);
+		const enableCommitCharacters = conf.enableCompletionCommitCharacters;
+		const insertArgumentPlaceholders = !enableCommitCharacters && conf.insertArgumentPlaceholders && this.shouldAllowArgPlaceholders(line);
 
-		// Apply a filter with the current prefix and return.
-		children.forEach((child: any) => {
-			const suggestion = new CompletionItem(child.displayText);
-			suggestion.detail = child.rightLabel;
-			completions.push(suggestion);
+		const resp = await this.analyzer.completionGetSuggestionsResults({
+			file: fsPath(dartDocument.uri),
+			offset: dartOffset,
 		});
+		
+		// todo
+		const completions: CompletionItem[] = resp.results
+			.map((r: any) => {
+				const a = this.convertResult(xmlDocument, nextCharacter, enableCommitCharacters, insertArgumentPlaceholders, resp, r);
+				const item = new vs.CompletionItem(a.label.replace(':', ''), a.kind);
+				(item as any)._documentation = (a as any)._documentation;
+				// item.insertText = new SnippetString(item.label + '>$0</' + item.label + '>');
+				// item.insertText = new SnippetString(item.label + '>$0');
+				// item.insertText = new SnippetString(item.label + '="$0"');
+				item.detail = a.detail;
+				item.filterText = a.filterText;
+				item.sortText = a.sortText;
+				return item;
+			});
 
 		return completions;
 	}

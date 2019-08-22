@@ -130,6 +130,11 @@ export function isAttributeValue(document: TextDocument, position: Position): bo
     return true;
   }
 
+  const word = document.getText(wordRange);
+  if (word && new RegExp('\b\w\b').exec(word)) {
+    return true;
+  }
+
   return false;
 }
 
