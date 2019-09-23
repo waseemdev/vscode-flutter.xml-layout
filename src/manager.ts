@@ -29,7 +29,7 @@ const readDir = denodeify(fs.readdir);
 const existsSync = fs.existsSync;
 
 export default class Manager {
-    private readonly propertyResolver: PropertyResolver;
+    public readonly propertyResolver: PropertyResolver;
     private readonly pipeValueResolver: PipeValueResolver;
     private readonly resolver: WidgetResolver;
     public readonly propertyHandlersProvider: PropertyHandlerProvider;
@@ -38,7 +38,8 @@ export default class Manager {
     private readonly output: vscode.OutputChannel;
 
 
-    constructor(config: Config) {
+    constructor(config: Config, 
+                private readonly diagnostics: vscode.DiagnosticCollection) {
         this.pipeValueResolver = new PipeValueResolver();
         this.propertyHandlersProvider = new PropertyHandlerProvider();
         this.propertyResolver = new PropertyResolver(config, this.propertyHandlersProvider, this.pipeValueResolver);
@@ -126,6 +127,13 @@ export default class Manager {
                 }
             });
         }
+        if (original) {
+            original.unnamedProperties = config.unnamedProperties;
+            original.arrayProperties = config.arrayProperties;
+            original.childWrappers = config.childWrappers;
+            original.valueTransformers = config.valueTransformers;
+            original.wrappers = config.wrappers;
+        }
     }
 
     private createValueTransformer(p: ConfigValueTransformer): IValueTransformer | null {
@@ -152,6 +160,9 @@ export default class Manager {
         const controllerFileName = path.parse(controllerFilePath).base;
         
         let layoutDart, rootWidget;
+
+        const fileUri = vscode.Uri.file(filePath + '.xml');
+        this.diagnostics.set(fileUri, []);
         
         try {
             const parser: ParseXml = new ParseXml();
@@ -160,9 +171,21 @@ export default class Manager {
             layoutDart = this.classGenerator.generate(rootWidget, controllerFileName);
         }
         catch (ex) {
-            vscode.window.showErrorMessage('Please check the XML structure.');
-            this.output.appendLine('Error parsing XML file.');
-            throw ex;
+            const diagnostic = this.getExceptionDiagnostics(ex.message);
+            if (diagnostic) {
+                this.diagnostics.set(fileUri, [diagnostic]);
+            }
+            const customMessage = this.getCustomErrorMessage(ex.message);
+            if (customMessage) {
+                vscode.window.showErrorMessage(customMessage);
+                this.output.appendLine(customMessage);
+                return;
+            }
+            else {
+                vscode.window.showErrorMessage('Please check the XML structure.');
+                this.output.appendLine('Error parsing XML file.');
+                throw ex;
+            }
         }
 
         if (!rootWidget) {
@@ -189,6 +212,30 @@ export default class Manager {
         if (notifyUpdate) {
             await this.notifyUpdate();
         }
+    }
+    
+    private getExceptionDiagnostics(message: string): vscode.Diagnostic {
+        const lineIndex = message.indexOf('line ');
+        const colIndex = message.indexOf('column ');
+        if (lineIndex !== -1 && colIndex !== -1) {
+            const line = +message.substring(lineIndex + 5, message.indexOf(',', lineIndex)) - 1;
+            const col = +message.substring(colIndex + 7, message.indexOf(')', colIndex)) - 1;
+            const position = new vscode.Position(line, col);
+            return new vscode.Diagnostic(
+                new vscode.Range(position, position.translate({ characterDelta: 1000 })), 
+                message.substring(0, lineIndex - 2));
+        }
+        return null;
+    }
+
+    private getCustomErrorMessage(error: string): string {
+        if (error.startsWith('::')) {
+            return error.substring(2);
+        }
+        else if (error.startsWith('Attribute') && error.indexOf(' redefined ') !== -1) {
+            return error.replace('^', '');
+        }
+        return null;
     }
 
     async generateWidgetDartFiles() {

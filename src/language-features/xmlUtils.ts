@@ -117,9 +117,18 @@ export function isClosingTagName(document: TextDocument, position: Position): bo
 
 // Check if the cursor is about complete the value of an attribute.
 export function isAttributeValue(document: TextDocument, position: Position): boolean {
+  // const lineContent = document.lineAt(position).text;
+  // let after = lineContent.substring(position.character, lineContent.indexOf('"', position.character));
+  // if (!after) {
+  //   after = '"';
+  // }
+  //const before = lineContent.substring(lineContent.lastIndexOf('="', position.character), position.character);
+  // const assignIndex = lineContent.lastIndexOf('="', position.character);
+  // const attributeName = lineContent.substring(assignIndex, lineContent.lastIndexOf(' ', assignIndex) + 1);
   const wordRange = document.getWordRangeAtPosition(position);
   const wordStart = wordRange ? wordRange.start : position;
   const wordEnd = wordRange ? wordRange.end : position;
+  //var r = isAttribute(document, position);
   if (wordStart.character === 0 || wordEnd.character > document.lineAt(wordEnd.line).text.length - 1) {
     return false;
   }
@@ -131,7 +140,7 @@ export function isAttributeValue(document: TextDocument, position: Position): bo
   }
 
   const word = document.getText(wordRange);
-  if (word && new RegExp('\b\w\b').exec(word)) {
+  if (word && /\b\w+\b/.exec(word)) {
     return true;
   }
 
@@ -139,10 +148,14 @@ export function isAttributeValue(document: TextDocument, position: Position): bo
 }
 
 export function isAttribute(document: TextDocument, position: Position): boolean {
+  const lineContent = document.lineAt(position).text;
   const wordRange = document.getWordRangeAtPosition(position);
   const wordStart = wordRange ? wordRange.start : position;
   const text = document.getText();
   const offset = document.offsetAt(wordStart);
-  return text.lastIndexOf('<', offset) > text.lastIndexOf('>', offset) && text.lastIndexOf(' ', offset) > text.lastIndexOf('<', offset) ||
-    text[offset] === '>' && text.lastIndexOf('<', offset) > text.lastIndexOf('>', offset - 1);
+  const quotsBeforeCount = lineContent.substring(position.character, 0).split('"').length - 1;
+  return quotsBeforeCount % 2 === 0 && 
+    (text.lastIndexOf('<', offset) > text.lastIndexOf('>', offset) && 
+    text.lastIndexOf(' ', offset) > text.lastIndexOf('<', offset) ||
+    text[offset] === '>' && text.lastIndexOf('<', offset) > text.lastIndexOf('>', offset - 1));
 }

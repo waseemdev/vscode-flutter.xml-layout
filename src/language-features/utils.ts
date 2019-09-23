@@ -1,12 +1,55 @@
 import { TextDocument, workspace, Uri, Position, Range } from "vscode";
-import { fsPath } from "./shared/vscode/utils";
 import * as path from "path";
 import { isAttribute, getXPath, isTagName, isClosingTagName } from "./xmlUtils";
-import { Location } from "./shared/analysis_server_types";
+import { Location } from "./dart-ext-types";
 
-export function removeXmlComments(xml: string) {
-    return xml.replace(/<!--[\s\S\n]*?-->/ig, '');
+export const isWin = /^win/.test(process.platform);
+
+export function forceWindowsDriveLetterToUppercase(p: string): string {
+	if (p && isWin && path.isAbsolute(p) && p.charAt(0) === p.charAt(0).toLowerCase())
+		p = p.substr(0, 1).toUpperCase() + p.substr(1);
+	return p;
 }
+
+export function fsPath(uri: Uri | string) {
+	// tslint:disable-next-line:disallow-fspath
+	return forceWindowsDriveLetterToUppercase(uri instanceof Uri ? uri.fsPath : uri);
+}
+
+export function sortBy<T>(items: T[], f: (item: T) => any): T[] {
+	return items.sort((item1, item2) => {
+		const r1 = f(item1);
+		const r2 = f(item2);
+		if (r1 < r2) return -1;
+		if (r1 > r2) return 1;
+		return 0;
+	});
+}
+
+export function uniq<T>(array: T[]): T[] {
+	return array.filter((value, index) => array.indexOf(value) === index);
+}
+
+export function flatMap<T1, T2>(input: T1[], f: (input: T1) => ReadonlyArray<T2>): T2[] {
+	return input.reduce((acc, x) => acc.concat(f(x)), []);
+}
+
+export function toPosition(location: Location): Position {
+	return new Position(location.startLine - 1, location.startColumn - 1);
+}
+
+// Translates an offset/length to a Range.
+// NOTE: Does not wrap lines because it does not have access to a TextDocument to know
+// where the line ends.
+export function toRangeOnLine(location: Location): Range {
+	const startPos = toPosition(location);
+	return new Range(startPos, startPos.translate(0, location.length));
+}
+
+export function toRange(document: TextDocument, offset: number, length: number): Range {
+	return new Range(document.positionAt(offset), document.positionAt(offset + length));
+}
+
 
 export function countWords(text: string, word: string, endAt: number): number {
     let count = 0;
@@ -28,14 +71,24 @@ export function wordIndexAfter(text: string, word: string, until: number, offset
     return pos + word.length;
 }
 
-export async function getDartDocument(xmlDocument: TextDocument): Promise<TextDocument> {
+export function getDartFileUri(xmlDocument: TextDocument): Uri {
     const xmlFilePath = fsPath(xmlDocument.uri);
     const xmlFile = path.parse(xmlFilePath);
     const dartFilePath = path.join(xmlFile.dir, xmlFile.base + '.dart');
-    const dartDocument = await workspace.openTextDocument(Uri.file(dartFilePath));
+    return Uri.file(dartFilePath);
+}
+
+export async function getDartDocument(xmlDocument: TextDocument): Promise<TextDocument> {
+    const uri = getDartFileUri(xmlDocument);
+    const dartDocument = await workspace.openTextDocument(uri);
     return dartDocument;
 }
 
+
+
+function removeXmlComments(xml: string) {
+    return xml.replace(/<!--[\s\S\n]*?-->/ig, '');
+}
 
 export function getDartCodeIndex(xmlDocument: TextDocument, xmlPosition: Position,
     dartDocument: TextDocument, wordRange: Range, includeCloseTag = false, useTagName?: boolean, translateLine?: boolean): number {
@@ -111,31 +164,31 @@ export function getDartCodeIndex(xmlDocument: TextDocument, xmlPosition: Positio
     return dartOffset;
 }
 
-export async function getDartCodeWordIndex(xmlDocument: TextDocument, dartDocument: TextDocument, wordRange: Range): Promise<number> {
-    if (!wordRange) {
-        return -1;
-    }
-    const dart = dartDocument.getText();
-    let dartOffset = -1;
+// export async function getDartCodeWordIndex(xmlDocument: TextDocument, dartDocument: TextDocument, wordRange: Range): Promise<number> {
+//     if (!wordRange) {
+//         return -1;
+//     }
+//     const dart = dartDocument.getText();
+//     let dartOffset = -1;
   
-    const word = xmlDocument.getText(xmlDocument.getWordRangeAtPosition(wordRange.start));
-    if (word) {
-        dartOffset = dart.indexOf(' ' + word + ' ');
-        if (dartOffset === -1) {
-            dartOffset = dart.indexOf(' ' + word + '.');
-        }
-        if (dartOffset === -1) {
-            dartOffset = dart.indexOf('.' + word + '.');
-        }
-        if (dartOffset === -1) {
-            dartOffset = dart.indexOf('.' + word + ' ');
-        }
-    }
+//     const word = xmlDocument.getText(xmlDocument.getWordRangeAtPosition(wordRange.start));
+//     if (word) {
+//         dartOffset = dart.indexOf(' ' + word + ' ');
+//         if (dartOffset === -1) {
+//             dartOffset = dart.indexOf(' ' + word + '.');
+//         }
+//         if (dartOffset === -1) {
+//             dartOffset = dart.indexOf('.' + word + '.');
+//         }
+//         if (dartOffset === -1) {
+//             dartOffset = dart.indexOf('.' + word + ' ');
+//         }
+//     }
 
-    return dartOffset;
-}
+//     return dartOffset;
+// }
 
-export function getXmlCodeWordLocation(xmlDocument: TextDocument, dart: string, location: Location): Range {
+export function getXmlCodeWordLocation(xmlDocument: TextDocument, dart: string, location: any): Range {
     let xmlOffset = -1;
     const xml = xmlDocument.getText();
     const word = dart.substr(location.offset, location.length);
@@ -152,10 +205,15 @@ export function getXmlCodeWordLocation(xmlDocument: TextDocument, dart: string, 
             xmlOffset = xml.indexOf('"' + word + '"');
         }
         if (xmlOffset === -1) {
-            // general case
-            const match = new RegExp(`\\b${word}\\b`, 'ig').exec(xml);
-            if (match) {
-                xmlOffset = match.index - 1;
+            try {
+                // general case
+                const match = new RegExp(`\\b${word}\\b`, 'ig').exec(xml);
+                if (match) {
+                    xmlOffset = match.index - 1;
+                }
+            }
+            catch {
+                return null;
             }
         }
     }
