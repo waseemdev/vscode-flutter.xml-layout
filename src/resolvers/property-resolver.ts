@@ -139,7 +139,7 @@ export class PropertyResolver {
             value = ValueTransformersProvider.transform(value, propertyName, widget.type);
         }
 
-        if (this.isUnNamedParamaeter(propertyName, ownerWidget.type)) {
+        if (this.isUnNamedParameter(propertyName, ownerWidget.type)) {
             propertyName = '';
         }
 
@@ -152,25 +152,29 @@ export class PropertyResolver {
 
         if (propertyName === 'controller') {
             property.controller = this.createController(propertyValue);
-            property.value = 'ctrl.' + property.controller.name;
-            property.name = 'controller';
+            property.value = (property.controller.name.indexOf('.') > -1 ? '' : 'ctrl.') + property.controller.name;
+            // property.name = 'controller';
         }
 
         return { property, wrapperWidget, handled };
     }
 
     private createController(propertyValue: string): VariableModel {
+        let skipGenerate = false;
         const eqSegments = propertyValue.split('=');
-
-        // e.g. controller="ScrollController myController"
-        let name = eqSegments[0].split(' ')[1];
-        let type = eqSegments[0].split(' ')[0];
+        
+        let name = eqSegments[0].split(' ')[1]; // e.g. get the name from "ScrollController myController"
+        let type = eqSegments[0].split(' ')[0]; // e.g. get the type from "ScrollController myController"
         let value;
 
         // there is a name with out type e.g. controller="myController"
         if (!name) {
             name = type;
             type = '';
+            // e.g. controller="ctrl.myController"
+            if (name.indexOf('.') > -1) {
+                skipGenerate = true;
+            }
         }
 
         // controller="TabController myController = TabController(initialIndex: 0, length: 4, vsync: this)"
@@ -191,10 +195,15 @@ export class PropertyResolver {
             value = value.trim();
         }
 
-        return { type, name, value, skipGenerate: !type && !value };
+        return { type, name, value, skipGenerate: !type && !value || skipGenerate };
     }
 
-    isUnNamedParamaeter(name: string, widgetType: string): boolean {
+    isUnNamedParameter(name: string, widgetType: string): boolean {
+        let result = this.getUnNamedParameter(widgetType) === name;
+        return result;
+    }
+
+    getUnNamedParameter(widgetType: string): string {
         widgetType = widgetType.split('.')[0];
         
         let unnamed: any = {
@@ -207,7 +216,6 @@ export class PropertyResolver {
             unnamed = Object.assign(unnamed, this.config.unnamedProperties);
         }
 
-        let result = unnamed[widgetType] === name;
-        return result;
+        return unnamed[widgetType];
     }
 }

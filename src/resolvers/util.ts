@@ -2,6 +2,10 @@ import { WidgetModel, PropertyModel } from "../models/models";
 
 
 export function removeDuplicatedBuilders(widget: WidgetModel, parent: WidgetModel | WidgetModel[] | null, parentType: 'wrappedWidgets' | 'widget' | 'widgetList', buildersCache: any) {
+    if (!widget) {
+        return;
+    }
+    
     // find and remove duplicated StreamBuilder & FutureBuilder that have same value.
     let detach = false;
 

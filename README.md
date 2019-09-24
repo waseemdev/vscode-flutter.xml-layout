@@ -126,8 +126,8 @@ import 'home.xml.dart';
 class HomeController extends HomeControllerBase {
 
   //
-  // here you can add you own logic and called the variables and methods
-  // from inside the XML file like this <Text text="ctrl.myText" />
+  // here you can add you own logic and call the variables and methods
+  // from the XML file. e.g. <Text text="ctrl.myText" />
   //
 
   @override

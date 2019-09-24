@@ -15,6 +15,10 @@ Another way is to define it within the controller class:
 ```dart
   final myTextEditingController = new TextEditingController();
 ```
+And you can access it in XML:
+```XML
+<TextField controller="ctrl.myTextEditingController" />
+```
 
 Sometimes you might need to access the instance of the State, for example, For AnimationControler to work properly, the current State (which inherets from `SingleTickerProviderStateMixin` [mixin](./mixin.md)) must be passed as parameter: `AnimationController(vsync: this)`. for this case you can define it as a `<var />` in the XML file as follow:
 ```XML

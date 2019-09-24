@@ -129,7 +129,7 @@ export class ClassCodeGenerator {
             ...rootWidget.providers.map(a => this.createControllerVar(a))
         ];
         const disposeLines = [
-          ...controllers.filter(a => !a.isPrivate).map(a => a.name),
+          ...controllers.filter(a => !a.isPrivate && !a.skipGenerate).map(a => a.name),
           ...vars.filter(a => a.type === 'FormGroup').map(a => a.name)
         ];
         
