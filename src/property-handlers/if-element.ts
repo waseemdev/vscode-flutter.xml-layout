@@ -27,14 +27,20 @@ export class IfElementHandler extends CustomPropertyHandler {
     resolvePropertyElement(ifElement: parseXml.Element, widgetResolveResult: WidgetResolveResult, parent: parseXml.Element, parentChildren: parseXml.Element[], resolveWidget: (element: parseXml.Element, parent: parseXml.Element) => WidgetResolveResult): WidgetModel {
         const ifChains: IfModel[] = [];
         const wrappers: WidgetModel[] = [];
-
+        const multipleChild = widgetResolveResult.widget instanceof Array;
+        
         // apply binding for <if> element
         const ifBoundResult = this.propertyResolver.pipeValueResolver.resolve(ifElement, 'value', widgetResolveResult.propertyElementProperties.filter(a => a.name === 'value')[0].value, widgetResolveResult.widget);
+        if (ifBoundResult.wrapperWidget && multipleChild) {
+            throw new Error("::You can't use behavior or stream pipe on <if> element that has more than one child. Instead wrap the children with Column or Row.");
+        }
+
         const ifConditionValue = ifBoundResult.value;
+        const childWidget: any[] = multipleChild ? (widgetResolveResult.widget as any) : [widgetResolveResult.widget];
         wrappers.push(ifBoundResult.wrapperWidget as any);
         ifChains.push({
             condition: ifConditionValue,
-            childWidget: [widgetResolveResult.widget]
+            childWidget: [...childWidget]
         });
 
 
@@ -168,13 +174,13 @@ export class IfElementHandler extends CustomPropertyHandler {
         code += ifChains.map(a => {
             return `SwitchCase${hasMultipleChild ? 'MultiChild' : ''}(
 ${tabs}      ${a.condition},
-${tabs}      () => ${hasMultipleChild ? `[\n${itemTabs}  ` : ''}${a.childWidget.map(c => generateChildWidgetCode(c, tabsLevel + 3 + (hasMultipleChild ? 1 : 0))).join(`,\n${itemTabs}  `)}${hasMultipleChild ? `\n${itemTabs}]` : ''}
+${tabs}      () => ${hasMultipleChild ? `[\n${itemTabs}  ` : ''}${a.childWidget.map(c => generateChildWidgetCode(c, tabsLevel + 3 + (hasMultipleChild ? 1 : 0))).join(`,\n${itemTabs}  `) || 'null'}${hasMultipleChild ? `\n${itemTabs}]` : ''}
 ${tabs}    ),`;
         }).join(`\n${tabs}    `);
 
         code += `
 ${tabs}  ],
-${tabs}  () => ${hasMultipleChild ? `[\n${elseItemsTabs}  ` : ''}${elseCode}${hasMultipleChild ? `\n${elseItemsTabs}]` : ''}
+${tabs}  () => ${hasMultipleChild ? `[\n${elseItemsTabs}  ` : ''}${elseCode || 'null'}${hasMultipleChild ? `\n${elseItemsTabs}]` : ''}
 ${tabs})`;
 
         return code;

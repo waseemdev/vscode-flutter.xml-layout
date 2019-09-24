@@ -125,7 +125,7 @@ export class WrapperPropertyHandler extends CustomPropertyHandler {
     }
 
     protected createWrapperWidget(widget: WidgetModel, targetProperty: string, value: string, onWrapped: ((wrapper: WidgetModel) => void)[]): { wrapperWidget: WidgetModel, propertyToUpdateAfterBinding: PropertyModel | null } {
-        const propertyName = this.propertyResolver.isUnNamedParamaeter(targetProperty, this.targetWidgetType) ? '' : targetProperty;
+        const propertyName = this.propertyResolver.isUnNamedParameter(targetProperty, this.targetWidgetType) ? '' : targetProperty;
         
         const wrapperWidget: WidgetModel = {
             controllers: [],

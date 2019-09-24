@@ -308,7 +308,8 @@ export class WidgetResolver {
 
         if (!result) {
             const arrayProperties: any = {
-                'DropdownButton': ['items']
+                'DropdownButton': ['items'],
+                'CustomScrollView': ['slivers']
             };
             result = arrayProperties[parentName] && arrayProperties[parentName].filter((a: any) => a === name).length === 1 || 
                 !!this.config.arrayProperties && this.config.arrayProperties[parentName] && this.config.arrayProperties[parentName].filter(a => a === name).length === 1;

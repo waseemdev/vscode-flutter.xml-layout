@@ -570,14 +570,15 @@ Container(
   <Row>
       <if value="ifCondition">
           <Text text="1" />
+          <Text text="2" />
       </if>
       <elseIf value="elseIfCondition">
-          <Text text="2" />
           <Text text="3" />
+          <Text text="4" />
       </elseIf>
       <else>
-          <Text text="4" />
           <Text text="5" />
+          <Text text="6" />
       </else>
   </Row>
 `;
@@ -591,6 +592,9 @@ Container(
                   () => [
                     Text(
                       1,
+                    ),
+                    Text(
+                      2,
                     )
                   ]
                 ),
@@ -598,20 +602,20 @@ Container(
                   elseIfCondition,
                   () => [
                     Text(
-                      2,
+                      3,
                     ),
                     Text(
-                      3,
+                      4,
                     )
                   ]
                 ),
               ],
               () => [
                 Text(
-                  4,
+                  5,
                 ),
                 Text(
-                  5,
+                  6,
                 )
               ]
             ),

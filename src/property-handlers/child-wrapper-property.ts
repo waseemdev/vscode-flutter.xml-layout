@@ -21,7 +21,7 @@ export class ChildWrapperPropertyHandler extends WrapperPropertyHandler {
         attr.value = property.value !== null && property.value !== undefined ? property.value : attr.value;
         let value = property.targetProperty ? ValueTransformersProvider.transform(attr.value, property.targetProperty, this.targetWidgetType) : attr.value;
 
-        const propertyName = this.propertyResolver.isUnNamedParamaeter(property.targetProperty, this.targetWidgetType) ? '' : property.targetProperty;
+        const propertyName = this.propertyResolver.isUnNamedParameter(property.targetProperty, this.targetWidgetType) ? '' : property.targetProperty;
 
         const newChildWidget: WidgetModel = {
             controllers: [],
