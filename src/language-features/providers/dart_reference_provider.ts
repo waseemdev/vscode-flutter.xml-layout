@@ -45,14 +45,16 @@ export class DartReferenceProvider implements ReferenceProvider, DefinitionProvi
 
 		const results: Location[] = await commands.executeCommand('vscode.executeDefinitionProvider', dartDocument.uri, dartDocument.positionAt(dartOffset));
 		return results.map(loc => {
-			const offsetStart = dartDocument.offsetAt(loc.range.start);
-			const offsetEnd = dartDocument.offsetAt(loc.range.end);
-			const target = { startColumn: loc.range.start.character + 1, startLine: loc.range.start.line + 1, length: offsetEnd - offsetStart };
+			const range: Range = loc.range || (loc as any).targetRange; // targetRange in the new versions of vscode
+			const offsetStart = dartDocument.offsetAt(range.start);
+			const offsetEnd = dartDocument.offsetAt(range.end);
+			const target = { startColumn: range.start.character + 1, startLine: range.start.line + 1, length: offsetEnd - offsetStart };
 
 			if (target.startColumn === 0)
 				target.startColumn = 1;
 
-			let file = loc.uri.fsPath;
+			const uri = loc.uri || (loc as any).targetUri; // targetUri in the new versions of vscode
+			let file = uri.fsPath;
 			if (file.endsWith('.xml.dart')) {
 				file = file.replace('.xml.dart', '.xml');
 				target.startColumn = 1;
