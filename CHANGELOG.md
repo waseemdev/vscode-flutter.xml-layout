@@ -1,3 +1,11 @@
+## [0.0.18] - 2020-06-18
+New features:
+- `<param>` now has anew `superParamName` attribute which will pass the parameter to super class constructor.
+Breaking changes:
+- `<if>` and `:if` will now return a null (instead of Container(width: 0, height: 0)) is the else statement, if there is no `<else>` provided.
+Fixes:
+- Fix goto definition bug in the new vscode release.
+
 ## [0.0.10] - 2019-08-15
 Breaking changes:
   - :formControl now accept both a variable and a string value, so current usge will break and all you need to do is to convert this :formControl="MyControlName" to :formControl="'MyControlName'".

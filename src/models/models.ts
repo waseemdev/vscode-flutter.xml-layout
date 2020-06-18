@@ -24,6 +24,7 @@ export interface ParamModel {
     type: string;
     value: string;
     required: boolean;
+    superParamName: string;
 }
 
 export interface WidgetModel {
