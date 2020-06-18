@@ -51,11 +51,12 @@ export class IfHandler extends CustomPropertyHandler {
         const data = widget.tempData;
         const wrappedWidget = widget.wrappedWidgets[0];
         const elseWidget = widget.wrappedWidgets[1];
+        const defaultElseWidget = 'null'; //'Container(width: 0, height: 0)';
         
         if (data && wrappedWidget) {
             code = `WidgetHelpers.ifTrue(${data.condition},
 ${tabs}  () => ${generateChildWidgetCode(wrappedWidget, tabsLevel + 1)},
-${tabs}  () => ${elseWidget ? generateChildWidgetCode(elseWidget, tabsLevel + 1) : 'Container(width: 0, height: 0)'}
+${tabs}  () => ${elseWidget ? generateChildWidgetCode(elseWidget, tabsLevel + 1) : defaultElseWidget}
 ${tabs})`;
         }
 

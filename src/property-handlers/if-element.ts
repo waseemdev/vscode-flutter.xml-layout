@@ -168,7 +168,8 @@ export class IfElementHandler extends CustomPropertyHandler {
         const ifChains: IfModel[] = widget.tempData.ifChains;
         const hasMultipleChild = ifChains.filter(a => a.childWidget.length > 1).length > 0 || widget.tempData.elseWidget && widget.tempData.elseWidget.length > 1;
         const elseWidget: WidgetModel[] = widget.tempData.elseWidget;
-        const elseCode = elseWidget ? elseWidget.map(c => generateChildWidgetCode(c, tabsLevel + 1 + (hasMultipleChild ? 1 : 0))).join(`,\n${elseItemsTabs}  `) : 'Container(width: 0, height: 0)';
+        const defaultElseWidget = 'null'; //'Container(width: 0, height: 0)';
+        const elseCode = elseWidget ? elseWidget.map(c => generateChildWidgetCode(c, tabsLevel + 1 + (hasMultipleChild ? 1 : 0))).join(`,\n${elseItemsTabs}  `) : defaultElseWidget;
 
         let code = `${hasMultipleChild ? '...' : ''}WidgetHelpers.ifElseChain${hasMultipleChild ? 'MultiChild' : ''}([\n${tabs}    `;
         code += ifChains.map(a => {
