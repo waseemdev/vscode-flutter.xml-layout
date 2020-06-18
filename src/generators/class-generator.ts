@@ -125,7 +125,7 @@ export class ClassCodeGenerator {
             ...controllers.filter(a => !a.isPrivate && !a.skipGenerate).map(a => this.createControllerVar(a)),
             ...vars.map(a => a.type ? `final ${a.name} = new ${a.type}();` : a.name),
             ...rootWidget.vars.map(a => this.createControllerVar(a)),
-            ...rootWidget.params.map(a => this.createControllerVar(a)),
+            ...rootWidget.params.filter(a => !!a.name).map(a => this.createControllerVar(a)),
             ...rootWidget.providers.map(a => this.createControllerVar(a))
         ];
         const disposeLines = [
@@ -187,9 +187,9 @@ class ${rootWidget.controller}Base {
       return `
 
 class ${widgetName} extends StatelessWidget${mixinsCode} {
-  ${rootWidget.params.map(a => `final ${a.type ? a.type + ' ' : ''}${a.name}${a.value !== undefined ? ' = ' + a.value : ''};`).join('\n  ')}
+  ${rootWidget.params.filter(a => !!a.name).map(a => `final ${a.type ? a.type + ' ' : ''}${a.name}${a.value !== undefined ? ' = ' + a.value : ''};`).join('\n  ')}
   ${widgetName}(${rootWidget.params.length ? '{': ''}
-    ${rootWidget.params.map(a => `${a.required ? '@required ' : ''}this.${a.name}`).join(',\n    ')}
+    ${rootWidget.params.map(a => `${a.required ? '@required ' : ''}${a.name ? `this.${a.name}` : `${(a.type ? a.type + ' ' : '')}${a.superParamName}`}`).join(',\n    ')}
   ${rootWidget.params.length ? '}': ''});
   ${buildMethodContent}
 }
@@ -206,19 +206,24 @@ class ${widgetName} extends StatelessWidget${mixinsCode} {
         ];
         const stateVarsInit: string[] = [
             ...(hasController ? [`ctrl = new ${rootWidget.controller}();`] : []),
-            ...rootWidget.params.map(a => `ctrl._${a.name} = widget.${a.name};`),
+            ...rootWidget.params.filter(a => !!a.name).map(a => `ctrl._${a.name} = widget.${a.name};`),
             ...controllers.filter(a => !a.isPrivate && !a.skipGenerate).map(a => `${hasController ? `ctrl._${a.name} = `: ''}${a.name} = ${a.value ? a.value : `new ${a.type}()`};`),
             ...rootWidget.vars.map(a => `${hasController ? `ctrl._${a.name} = `: ''}${a.name} = ${a.value};`),
             ...(hasController ? [`WidgetsBinding.instance.addPostFrameCallback((_) => ctrl.afterFirstBuild(context));`] : [])
         ];
+        const superParams = rootWidget.params
+          .filter(a => a.superParamName)
+          .map(a => `${a.superParamName}: ${a.name || a.superParamName}`)
+          .join(', ');
+        const superCtor = superParams ? ` : super(${superParams})` : '';
 
         return `
 
 class ${widgetName} extends StatefulWidget {
-  ${rootWidget.params.map(a => `final ${a.type ? a.type + ' ' : ''}${a.name}${a.value !== undefined ? ' = ' + a.value : ''};`).join('\n  ')}
+  ${rootWidget.params.filter(a => !!a.name).map(a => `final ${a.type ? a.type + ' ' : ''}${a.name}${a.value !== undefined ? ' = ' + a.value : ''};`).join('\n  ')}
   ${widgetName}(${rootWidget.params.length ? '{': ''}
-    ${rootWidget.params.map(a => `${a.required ? '@required ' : ''}this.${a.name}`).join(',\n    ')}
-  ${rootWidget.params.length ? '}': ''});
+    ${rootWidget.params.map(a => `${a.required ? '@required ' : ''}${a.name ? `this.${a.name}` : `${(a.type ? a.type + ' ' : '')}${a.superParamName}`}`).join(',\n    ')}
+  ${rootWidget.params.length ? '}': ''})${superCtor};
 
   @override
   _${widgetName}State createState() => _${widgetName}State();

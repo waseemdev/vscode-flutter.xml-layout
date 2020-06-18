@@ -127,7 +127,7 @@ class HomeController extends HomeControllerBase {
 
   //
   // here you can add you own logic and call the variables and methods
-  // from the XML file. e.g. <Text text="ctrl.myText" />
+  // within the XML file. e.g. <Text text="ctrl.myText" />
   //
 
   @override
@@ -155,6 +155,7 @@ class HomeController extends HomeControllerBase {
 ### 2. [Pipes](./docs/pipes.md)
 ### 3. [Custom properties](./docs/custom-properties.md)
 ### 4. [Injecting providers](./docs/providers.md)
+### 4. [Parameters](./docs/parameters.md)
 ### 5. [Adding controllers to widgets](./docs/controllers.md)
 ### 6. [Adding mixin to widget's states](./docs/mixins.md)
 ### 7. [Localization](./docs/localization.md)

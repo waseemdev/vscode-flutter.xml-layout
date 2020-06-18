@@ -119,9 +119,10 @@ export class WidgetResolver {
                 type: n.attributes['type'] || 'dynamic',
                 name: n.attributes['name'],
                 value: n.attributes['value'],
+                superParamName: n.attributes['superParamName'],
                 required: 'required' in n.attributes
             };
-        }).filter(a => !!a.name);
+        }).filter(a => !!a.name || !!a.superParamName);
 
         return params;
     }
