@@ -9,7 +9,7 @@ suite("If custom property", function () {
 WidgetHelpers.ifTrue(true,
     () => Text(
     ),
-    () => Container(width: 0, height: 0)
+    () => null
 )`;
 
         const generated = generateWidget(xml);
@@ -30,7 +30,7 @@ WidgetHelpers.ifTrue(true,
               );
             },
           ),
-          () => Container(width: 0, height: 0)
+          () => null
         )
 `;
 
@@ -54,7 +54,7 @@ WidgetHelpers.ifTrue(true,
                 ),
               ),
             ),
-            () => Container(width: 0, height: 0)
+            () => null
           )
 `;
 

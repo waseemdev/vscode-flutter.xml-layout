@@ -44,7 +44,7 @@ suite("Repeat Tests", function () {
             () => Text(
   
             ),
-            () => Container(width: 0, height: 0)
+            () => null
           );
         }
       )

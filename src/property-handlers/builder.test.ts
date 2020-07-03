@@ -80,7 +80,7 @@ suite("Builder Tests", function () {
               );
             },
           ),
-          () => Container(width: 0, height: 0)
+          () => null
         )
 `;
 

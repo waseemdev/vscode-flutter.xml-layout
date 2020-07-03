@@ -337,7 +337,7 @@ suite("Pipes Tests", function () {
                               ),
                             ),
                           ),
-                          () => Container(width: 0, height: 0)
+                          () => null
                         ),
                       ],
                     ),
@@ -413,7 +413,7 @@ suite("Pipes Tests", function () {
                                 ),
                               ),
                             ),
-                            () => Container(width: 0, height: 0)
+                            () => null
                           ),
                         ],
                       ),

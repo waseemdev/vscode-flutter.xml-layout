@@ -3,7 +3,7 @@
 	"displayName": "XML Layout for Flutter",
 	"description": "XML Layout for Flutter. Brings Angular's style to Flutter!",
 	"publisher": "WaseemDev",
-	"version": "0.0.18",
+	"version": "0.0.19",
 	"icon": "images/logo.png",
 	"repository": {
 		"type": "github",
@@ -12,6 +12,13 @@
 	"engines": {
 		"vscode": "^1.34.0"
 	},
+	"keywords": [
+		"flutter",
+		"dart",
+		"widgets",
+		"xml",
+		"angular"
+	],
 	"categories": [
 		"Other"
 	],

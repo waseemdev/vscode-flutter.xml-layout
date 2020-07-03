@@ -1,15 +1,13 @@
 {
 	"rules": {
-		"no-string-throw": true,
-		"no-unused-expression": true,
-		"no-duplicate-variable": true,
-		"curly": true,
-		"class-name": true,
-		"semicolon": [
-			true,
-			"always"
-		],
-		"triple-equals": true
+		"curly": false,
+		"no-console": false,
+		"max-classes-per-file": false,
+		"interface-name": false,
+		"member-ordering": false,
+		"max-line-length": false,
+		"ordered-imports": false,
+		"no-shadowed-variable": false
 	},
 	"defaultSeverity": "warning"
 }
