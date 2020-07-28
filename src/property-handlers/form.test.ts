@@ -96,7 +96,7 @@ suite("Forms", function () {
             return SizedBox(
               width: 80,
               child: TextField(
-                controller: ctrl._attachController('quantity', () => TextEditingController()),
+                controller: ctrl._attachController(ctrl.formGroup, 'quantity', () => TextEditingController()),
               ),
             );
           },

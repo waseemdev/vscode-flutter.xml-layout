@@ -389,7 +389,7 @@ Container(
                           stream: ctrl.formGroup.get('test').valueStream,
                           builder: (BuildContext context, ctrlFormGroupGetTestValueStreamSnapshot) {
                             return TextField(
-                              controller: ctrl._attachController('test', () => TextEditingController()),
+                              controller: ctrl._attachController(ctrl.formGroup, 'test', () => TextEditingController()),
                             );
                           },
                         )

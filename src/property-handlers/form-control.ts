@@ -40,7 +40,7 @@ export class FormControlHandler extends CustomPropertyHandler {
         if (['TextField', 'TextFormField'].filter(a => a === targetWidget.type).length === 1) {
             addLocalVar = false;
             const controllerName = element.attributes['controller'] ? element.attributes['controller'].split(' ')[1] : '';
-            const privateControllerName = `ctrl._attachController(${name}, ${controllerName || '() => TextEditingController()'})`;
+            const privateControllerName = `ctrl._attachController(ctrl.${formGroupName}, ${name}, ${controllerName || '() => TextEditingController()'})`;
 
             if (!controllerName) {
                 // only add controller if there is no one present

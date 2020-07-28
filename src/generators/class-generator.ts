@@ -138,7 +138,7 @@ export class ClassCodeGenerator {
           formCode = `
   Map<String, dynamic> _attachedControllers = Map();
 
-  dynamic _attachController(String controlName, controllerBuilder) {
+  dynamic _attachController(FormGroup formGroup, String controlName, controllerBuilder) {
     if (_attachedControllers.containsKey(controlName)) {
       final controller = _attachedControllers[controlName];
       return controller;
