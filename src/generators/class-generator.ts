@@ -85,8 +85,8 @@ export class ClassCodeGenerator {
   @override
   Widget build(BuildContext context) {
     final _pipeProvider = Provider.of<PipeProvider>(context);
-    final widget = ${rootChildCode};
-    return widget;
+    final __widget = ${rootChildCode};
+    return __widget;
   }`;
 
 
@@ -206,7 +206,7 @@ class ${widgetName} extends StatelessWidget${mixinsCode} {
         ];
         const stateVarsInit: string[] = [
             ...(hasController ? [`ctrl = new ${rootWidget.controller}();`] : []),
-            ...rootWidget.params.filter(a => !!a.name).map(a => `ctrl._${a.name} = widget.${a.name};`),
+            ...(hasController ? rootWidget.params.filter(a => !!a.name).map(a => `ctrl._${a.name} = widget.${a.name};`) : []),
             ...controllers.filter(a => !a.isPrivate && !a.skipGenerate).map(a => `${hasController ? `ctrl._${a.name} = `: ''}${a.name} = ${a.value ? a.value : `new ${a.type}()`};`),
             ...rootWidget.vars.map(a => `${hasController ? `ctrl._${a.name} = `: ''}${a.name} = ${a.value};`),
             ...(hasController ? [`WidgetsBinding.instance.addPostFrameCallback((_) => ctrl.afterFirstBuild(context));`] : [])
@@ -235,21 +235,20 @@ class _${widgetName}State extends State<${widgetName}>${mixinsCode} {
 
   @override
   void initState() {
-    super.initState();
-    ${stateVarsInit.join(`\n    `)}
+    super.initState();${(stateVarsInit.length > 0 ? '\n' : '') + stateVarsInit.join(`\n    `)}
   }
 
   @override
   void didChangeDependencies() {
-    super.didChangeDependencies();${routeAware ? `\n    _routeObserver = Provider.of<RouteObserver<Route>>(context)..subscribe(this, ModalRoute.of(context));` : ''}
-    ${rootWidget.providers.map(a => `${hasController ? `ctrl._${a.name} = `: ''}${a.name} = Provider.of<${a.type}>(context);`).join('\n  ')}
-    ${hasController ? `ctrl._load(context);` : ''}
+    super.didChangeDependencies();${routeAware ? `\n    _routeObserver = Provider.of<RouteObserver<Route>>(context)..subscribe(this, ModalRoute.of(context));` : ''
+  }${rootWidget.providers.map(a => `${hasController ? `ctrl._${a.name} = `: ''}${a.name} = Provider.of<${a.type}>(context);`).join('\n  ')
+  }${hasController ? `ctrl._load(context);` : ''}
   }
 
   @override
-  void dispose() {
-    ${hasController ? `ctrl.dispose();` : ''}${routeAware ? `\n    _routeObserver.unsubscribe(this);` : ''}
-    ${controllers.filter(a => a.isPrivate).map(a => `${a.name}.dispose();`).join('\n    ')}
+  void dispose() {${hasController ? `\nctrl.dispose();` : ''
+    }${routeAware ? `\n    _routeObserver.unsubscribe(this);` : ''
+    }${controllers.filter(a => a.isPrivate).map(a => `${a.name}.dispose();`).join('\n    ')}
     super.dispose();
   }
   ${buildMethodContent}

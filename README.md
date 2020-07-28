@@ -12,7 +12,7 @@ Imagine that you can do this :
 Instead of this:
 ```dart
     final size = MediaQuery.of(context).size;
-    final widget = StreamBuilder(
+    final __widget = StreamBuilder(
       initialData: ctrl.textVisible.value,
       stream: ctrl.textVisible,
       builder: (BuildContext context, snapshot) {
@@ -36,7 +36,7 @@ Instead of this:
         }
       }
     );
-    return widget;
+    return __widget;
 ```
 Which is about 20 lines of code, and if you just updated the `:text` property to use a stream variable `:text="ctrl.myTextStream | stream"` that will add another 4 lines of code for the StreamBuilder.
 
