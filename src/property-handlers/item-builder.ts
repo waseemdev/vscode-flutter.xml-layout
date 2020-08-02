@@ -6,9 +6,10 @@ import * as parseXml from '../parser/types';
 export class ItemBuilderHandler extends BuilderHandler {
     isElement = true;
     elementAttributes: AttributeInfo[] = [
-        { name: 'data', snippet: 'item of ${0:items}' },
+        { name: 'data', snippet: 'item of ${0:ctrl.items}' },
         { name: 'params' }
     ];
+    valueSnippet = 'data="${0:item of ${1:ctrl.items}}" params="${3:context}"';
 
     resolve(element: parseXml.Element, attr: AttributeModel, widget: WidgetModel): PropertyResolveResult {
 

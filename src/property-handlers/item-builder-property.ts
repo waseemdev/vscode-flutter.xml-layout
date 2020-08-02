@@ -3,7 +3,7 @@ import { ItemBuilderHandler } from "./item-builder";
 
 export class ItemBuilderPropertyHandler extends ItemBuilderHandler {
     isElement = false;
-    valueSnippet = 'item of ${0:items}';
+    valueSnippet = 'item of ${0:ctrl.items}';
 
     protected resolveValueProperty(widget: WidgetModel, attr: AttributeModel): { grandparentWidget: WidgetModel | null, hasIndex: boolean | null, indexName: string } {
         let grandparentWidget = null;

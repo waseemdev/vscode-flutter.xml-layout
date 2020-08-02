@@ -9,10 +9,10 @@ export class BuilderHandler extends CustomPropertyHandler {
     isElement = true;
     elementAttributes: AttributeInfo[] = [
         { name: 'name' },
-        { name: 'data', snippet: 'item of ${0:items}' },
+        { name: 'data', snippet: 'item of ${0:ctrl.items}' },
         { name: 'params' }
     ];
-    valueSnippet = 'name="${0:builderName}" data="${1:item of ${2:items}}" params="${3:context}"';
+    valueSnippet = 'name="${0:builderName}" data="${1:item of ${2:ctrl.items}}" params="${3:context}"';
 
     constructor(private readonly propertyResolver: PropertyResolver) {
         super();
