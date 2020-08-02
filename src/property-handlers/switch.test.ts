@@ -300,7 +300,7 @@ suite("Switch Tests", function () {
               ]
             ),
           ),
-          () => null
+          () => Container(width: 0, height: 0)
         )
 `;
 

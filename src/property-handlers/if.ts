@@ -51,7 +51,7 @@ export class IfHandler extends CustomPropertyHandler {
         const data = widget.tempData;
         const wrappedWidget = widget.wrappedWidgets[0];
         const elseWidget = widget.wrappedWidgets[1];
-        const defaultElseWidget = 'null'; //'Container(width: 0, height: 0)';
+        const defaultElseWidget = 'Container(width: 0, height: 0)'; // this must not be null (e.g. child of Row, StreamBuilder result can't be null)
         
         if (data && wrappedWidget) {
             code = `WidgetHelpers.ifTrue(${data.condition},

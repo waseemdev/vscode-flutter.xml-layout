@@ -121,7 +121,7 @@ suite("ItemBuilder Tests", function () {
               );
             },
           ),
-          () => null
+          () => Container(width: 0, height: 0)
         )
 `;
 
@@ -149,7 +149,7 @@ suite("ItemBuilder Tests", function () {
               },
             ),
           ),
-          () => null
+          () => Container(width: 0, height: 0)
         )
 `;
 
@@ -177,7 +177,7 @@ suite("ItemBuilder Tests", function () {
               },
             ),
           ),
-          () => null
+          () => Container(width: 0, height: 0)
         )
 `;
 
@@ -231,7 +231,7 @@ suite("ItemBuilder Tests", function () {
               },
             ),
           ),
-          () => null
+          () => Container(width: 0, height: 0)
         )
 `;
 
