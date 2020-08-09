@@ -235,20 +235,20 @@ class _${widgetName}State extends State<${widgetName}>${mixinsCode} {
 
   @override
   void initState() {
-    super.initState();${(stateVarsInit.length > 0 ? '\n' : '') + stateVarsInit.join(`\n    `)}
+    super.initState();${(stateVarsInit.length > 0 ? '\n    ' : '') + stateVarsInit.join(`\n    `)}
   }
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();${routeAware ? `\n    _routeObserver = Provider.of<RouteObserver<Route>>(context)..subscribe(this, ModalRoute.of(context));` : ''
-  }${rootWidget.providers.map(a => `${hasController ? `ctrl._${a.name} = `: ''}${a.name} = Provider.of<${a.type}>(context);`).join('\n  ')
-  }${hasController ? `ctrl._load(context);` : ''}
+  }${(rootWidget.providers.length ? '\n    ' : '') + rootWidget.providers.map(a => `${hasController ? `ctrl._${a.name} = `: ''}${a.name} = Provider.of<${a.type}>(context);`).join('\n    ')
+  }${hasController ? `\n    ctrl._load(context);` : ''}
   }
 
   @override
   void dispose() {${hasController ? `\nctrl.dispose();` : ''
     }${routeAware ? `\n    _routeObserver.unsubscribe(this);` : ''
-    }${controllers.filter(a => a.isPrivate).map(a => `${a.name}.dispose();`).join('\n    ')}
+    }${(controllers.length > 0 ? '\n    ' : '') + controllers.filter(a => a.isPrivate).map(a => `${a.name}.dispose();`).join('\n    ')}
     super.dispose();
   }
   ${buildMethodContent}

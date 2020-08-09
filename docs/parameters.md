@@ -26,7 +26,7 @@ Parameters are used to pass data from one widget to another, and since you can't
 
 And you can access it directly in the XML file:
 ```XML
-  <Text text="category.name" />
+  <Text text="ctrl.category.name" />
 ```
 
 Or in the controller class **after** `didLoad()`, not in the constructor:
@@ -35,4 +35,10 @@ Or in the controller class **after** `didLoad()`, not in the constructor:
   void didLoad() {
     print(category.name);
   }
+```
+
+Then, from another widget, pass parameter's value as usual:
+```xml
+<MyWidget category="...value...">
+</MyWidget>
 ```
