@@ -1,7 +1,7 @@
 import { CustomPropertyHandler, PropertyResolveResult } from "../providers/property-handler-provider";
 import * as parseXml from '../parser/types';
 import { WidgetModel, ExtraDataModel, AttributeModel, PropertyModel } from '../models/models';
-import { extractForLoopParams, makeTabs, sortProperties } from "../utils";
+import { extractForLoopParams, makeTabs, sortProperties, spaceAfter } from "../utils";
 import { PropertyResolver } from "../resolvers/property-resolver";
 
 export class ChildBuilderHandler extends CustomPropertyHandler {
@@ -21,8 +21,8 @@ export class ChildBuilderHandler extends CustomPropertyHandler {
         let wrapperWidget: WidgetModel | null = null;
         let extraData: ExtraDataModel | null = null;
         
-        const { listName, indexName, itemName } = extractForLoopParams(attr.value);
-        const tempData: any = { listName, indexName, itemName };
+        const { listName, indexName, itemName, typeName } = extractForLoopParams(attr.value);
+        const tempData: any = { listName, indexName, itemName, typeName };
         const listNameWithPipes = attr.value.substr(attr.value.indexOf(listName));
         const contentWidget: WidgetModel = {
             controllers: [],
@@ -79,7 +79,7 @@ export class ChildBuilderHandler extends CustomPropertyHandler {
         }
 
         code += 
-`${tabs}children: WidgetHelpers.mapToWidgetList(${data.listValueVariableName}, (${data.itemName || 'item'}, ${data.indexName || 'index'}) {
+`${tabs}children: WidgetHelpers.mapToWidgetList(${data.listValueVariableName}, (${spaceAfter(data.typeName)}${data.itemName || 'item'}, ${data.indexName || 'index'}) {
 ${tabs}  return ${generateChildWidgetCode(childWidget, tabsLevel + 1)};
 ${tabs}})`;
 

@@ -4,10 +4,24 @@ import { PropertyModel, WidgetModel } from "./models/models";
 export function extractForLoopParams(value: string) {
     const statements = value.split(',');
     const indexName = statements.length > 1 ? statements[0].trim() : '';
-    const segments = (statements.length > 1 ? statements[1] : statements[0]).trim().split(' ');
-    const itemName = segments[0];
-    const listName = segments[2];
-    return { listName, indexName, itemName };
+    const segments = (statements.length > 1 ? statements[1] : statements[0]).trim().split(' of ');
+    const { itemName, typeName } = extractVarAndType(segments[0]);
+    const listName = segments[1];
+    return { listName, indexName, itemName, typeName };
+}
+
+export function extractVarAndType(value: string): { itemName: string, typeName: string } {
+    const statements = value.split(' ');
+    if (statements.length === 2) {
+        return { itemName: statements[1], typeName: statements[0] };
+    }
+    else {
+        return { itemName: statements[0], typeName: '' };
+    }
+}
+
+export function spaceAfter(text: string) {
+    return text ? text + ' ' : '';
 }
 
 export function makeTabs(tabsLevel: number) {

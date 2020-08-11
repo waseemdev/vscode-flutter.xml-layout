@@ -80,7 +80,7 @@ suite("Repeat Tests", function () {
     test("multiple inside column", function() {
         const xml = `
         <Column>
-          <Text :repeat="item of items" />
+          <Text :repeat="int item of items" />
           <Text :repeat="item of items" />
           <Text :repeat="item of items" />
         </Column>
@@ -89,7 +89,7 @@ suite("Repeat Tests", function () {
         const expected = `
         Column(
           children: [
-            ...WidgetHelpers.mapToWidgetList(items, (item, index) {
+            ...WidgetHelpers.mapToWidgetList(items, (int item, index) {
                 return Text(
     
                 );
@@ -119,7 +119,7 @@ suite("Repeat Tests", function () {
         const xml = `
         <PopupMenuButton>
         <builder name="itemBuilder">
-            <PopupMenuItem :repeat="menuItem of component.menuItems" value="menuItem">
+            <PopupMenuItem :repeat="MenuItem menuItem of component.menuItems" value="menuItem">
                 <Text text="menuItem.title" />
             </PopupMenuItem>
         </builder>
@@ -129,7 +129,7 @@ suite("Repeat Tests", function () {
         const expected = `
         PopupMenuButton(
           itemBuilder: (BuildContext context) {
-            return WidgetHelpers.mapToWidgetList(component.menuItems, (menuItem, index) {
+            return WidgetHelpers.mapToWidgetList(component.menuItems, (MenuItem menuItem, index) {
                 return PopupMenuItem(
                   value: menuItem,
                   child: Text(

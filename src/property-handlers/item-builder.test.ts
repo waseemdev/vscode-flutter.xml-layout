@@ -4,7 +4,7 @@ suite("ItemBuilder Tests", function () {
 
     test("basic", function() {
         const xml = `
-    <ListView :use="builder" :itemBuilder="item of component.items">
+    <ListView :use="builder" :itemBuilder="int item of component.items">
         <Text text="item.title" />
     </ListView>
 `;
@@ -12,7 +12,7 @@ suite("ItemBuilder Tests", function () {
         const expected = `
         ListView.builder(
           itemBuilder: (BuildContext context, int index) {
-            final item = component.items == null || component.items.length <= index || component.items.length == 0 ? null : component.items[index];
+            final int item = component.items == null || component.items.length <= index || component.items.length == 0 ? null : component.items[index];
             return Text(
               item.title,
             );
@@ -27,7 +27,7 @@ suite("ItemBuilder Tests", function () {
 
     test("with specified index", function() {
         const xml = `
-    <ListView :use="builder" :itemBuilder="myIndex, item of component.items">
+    <ListView :use="builder" :itemBuilder="myIndex, ItemModel item of component.items">
         <Text text="item.title" />
     </ListView>
 `;
@@ -35,7 +35,7 @@ suite("ItemBuilder Tests", function () {
         const expected = `
         ListView.builder(
           itemBuilder: (BuildContext context, int myIndex) {
-            final item = component.items == null || component.items.length <= myIndex || component.items.length == 0 ? null : component.items[myIndex];
+            final ItemModel item = component.items == null || component.items.length <= myIndex || component.items.length == 0 ? null : component.items[myIndex];
             return Text(
               item.title,
             );
@@ -49,7 +49,7 @@ suite("ItemBuilder Tests", function () {
 
     test("with stream", function() {
         const xml = `
-    <ListView :use="builder" :itemBuilder="item of component.items | stream">
+    <ListView :use="builder" :itemBuilder="ItemModel item of component.items | stream">
         <Text text="item.title" />
     </ListView>
 `;
@@ -65,7 +65,7 @@ suite("ItemBuilder Tests", function () {
             }
             return ListView.builder(
               itemBuilder: (BuildContext context, int index) {
-                final item = componentItemsValue == null || componentItemsValue.length <= index || componentItemsValue.length == 0 ? null : componentItemsValue[index];
+                final ItemModel item = componentItemsValue == null || componentItemsValue.length <= index || componentItemsValue.length == 0 ? null : componentItemsValue[index];
                 return Text(
                   item.title,
                 );
@@ -188,7 +188,7 @@ suite("ItemBuilder Tests", function () {
     test("itemBuilder element", function() {
         const xml = `
     <ListView :use="builder">
-      <itemBuilder data="item of component.items">
+      <itemBuilder data="ItemModel item of component.items">
         <Text text="item.title" />
       </itemBuilder>
     </ListView>
@@ -197,7 +197,7 @@ suite("ItemBuilder Tests", function () {
         const expected = `
         ListView.builder(
           itemBuilder: (BuildContext context, int index) {
-            final item = component.items == null || component.items.length <= index || component.items.length == 0 ? null : component.items[index];
+            final ItemModel item = component.items == null || component.items.length <= index || component.items.length == 0 ? null : component.items[index];
             return Text(
               item.title,
             );

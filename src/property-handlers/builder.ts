@@ -1,7 +1,7 @@
 import { CustomPropertyHandler, PropertyResolveResult, WidgetResolveResult } from "../providers/property-handler-provider";
 import * as parseXml from '../parser/types';
 import { WidgetModel, ExtraDataModel, AttributeModel, PropertyModel, AttributeInfo } from '../models/models';
-import { extractForLoopParams, makeTabs, sortProperties } from "../utils";
+import { extractForLoopParams, makeTabs, sortProperties, spaceAfter } from "../utils";
 import { PropertyResolver } from "../resolvers/property-resolver";
 
 export class BuilderHandler extends CustomPropertyHandler {
@@ -109,9 +109,9 @@ export class BuilderHandler extends CustomPropertyHandler {
         const value = properties.filter(a => a.name === 'data').map(a => a.value)[0] || '';
         let params = properties.filter(a => a.name === 'params').map(a => a.value)[0];
         
-        const { listName, indexName, itemName } = extractForLoopParams(value);
+        const { listName, indexName, itemName, typeName } = extractForLoopParams(value);
         const listNameWithPipes = value.substr(value.indexOf(listName));
-        const tempData: any = { listName, indexName, itemName, builderName, params, childWidget: childWidget, arrayOfIfWidgets };
+        const tempData: any = { listName, indexName, itemName, typeName, builderName, params, childWidget: childWidget, arrayOfIfWidgets };
         // contentWidget.properties[1].value = childWidget; // todo review
 
         
@@ -185,7 +185,7 @@ export class BuilderHandler extends CustomPropertyHandler {
         // if (hasItemList && (!data.params || data.indexName)) {
         if (hasItemList) {
             code += `
-${tabs}  final ${data.itemName} = ${data.listValueVariableName} == null || ${data.listValueVariableName}.length <= ${indexName} || ${data.listValueVariableName}.length == 0 ? null : ${data.listValueVariableName}[${indexName}];`;
+${tabs}  final ${spaceAfter(data.typeName)}${data.itemName} = ${data.listValueVariableName} == null || ${data.listValueVariableName}.length <= ${indexName} || ${data.listValueVariableName}.length == 0 ? null : ${data.listValueVariableName}[${indexName}];`;
         }
 
         if (ifWidgets && ifWidgets.length) {

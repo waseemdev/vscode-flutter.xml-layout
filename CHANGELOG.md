@@ -1,8 +1,11 @@
+## [0.0.25] - 2020-06-18
+- Add item data type for builder, itemBuilder, childBuilder and repeat.
+
 ## [0.0.18] - 2020-06-18
 New features:
 - `<param>` now has anew `superParamName` attribute which will pass the parameter to super class constructor.
 Breaking changes:
-- `<if>` and `:if` will now return a null (instead of Container(width: 0, height: 0)) is the else statement, if there is no `<else>` provided.
+- `<if>` will now return a null (instead of Container(width: 0, height: 0)) in the else statement, if there is no `<else>` provided.
 Fixes:
 - Fix goto definition bug in the new vscode release.
 

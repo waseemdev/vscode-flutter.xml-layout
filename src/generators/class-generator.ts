@@ -220,9 +220,9 @@ class ${widgetName} extends StatelessWidget${mixinsCode} {
         return `
 
 class ${widgetName} extends StatefulWidget {
-  ${rootWidget.params.filter(a => !!a.name).map(a => `final ${a.type ? a.type + ' ' : ''}${a.name}${a.value !== undefined ? ' = ' + a.value : ''};`).join('\n  ')}
+  ${rootWidget.params.filter(a => !!a.name).map(a => `final ${a.type ? a.type + ' ' : ''}${a.name};`).join('\n  ')}
   ${widgetName}(${rootWidget.params.length ? '{': ''}
-    ${rootWidget.params.map(a => `${a.required ? '@required ' : ''}${a.name ? `this.${a.name}` : `${(a.type ? a.type + ' ' : '')}${a.superParamName}`}`).join(',\n    ')}
+    ${rootWidget.params.map(a => `${a.required ? '@required ' : ''}${a.name ? `this.${a.name}` : `${(a.type ? a.type + ' ' : '')}${a.superParamName}`}${a.value !== undefined ? ' = ' + a.value : ''}`).join(',\n    ')}
   ${rootWidget.params.length ? '}': ''})${superCtor};
 
   @override
@@ -246,7 +246,7 @@ class _${widgetName}State extends State<${widgetName}>${mixinsCode} {
   }
 
   @override
-  void dispose() {${hasController ? `\nctrl.dispose();` : ''
+  void dispose() {${hasController ? `\n    ctrl.dispose();` : ''
     }${routeAware ? `\n    _routeObserver.unsubscribe(this);` : ''
     }${(controllers.length > 0 ? '\n    ' : '') + controllers.filter(a => a.isPrivate).map(a => `${a.name}.dispose();`).join('\n    ')}
     super.dispose();

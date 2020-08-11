@@ -360,7 +360,7 @@ suite("Builder Tests", function () {
     test("ListView.separated (multiple builder) with streams for both builders", function() {
         const xml = `
     <ListView :use="separated" itemCount="component.items.length">
-        <builder name="itemBuilder" params="context, index" data="index, item of component.items | stream">
+        <builder name="itemBuilder" params="context, index" data="index, ItemModel item of component.items | stream">
             <Text text="item.title" />
         </builder>
         <builder name="separatorBuilder" params="context, index" data="index, item of component.items | stream">
@@ -381,7 +381,7 @@ suite("Builder Tests", function () {
             return ListView.separated(
               itemCount: component.items.length,
               itemBuilder: (context, index) {
-                final item = componentItemsValue == null || componentItemsValue.length <= index || componentItemsValue.length == 0 ? null : componentItemsValue[index];
+                final ItemModel item = componentItemsValue == null || componentItemsValue.length <= index || componentItemsValue.length == 0 ? null : componentItemsValue[index];
                 return Text(
                   item.title,
                 );

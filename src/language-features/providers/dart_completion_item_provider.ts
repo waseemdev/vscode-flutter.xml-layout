@@ -210,6 +210,7 @@ export class DartCompletionItemProvider implements CompletionItemProvider {
 				this.createCustomCompletionItem(document, position, 'type', vs.CompletionItemKind.Variable),
 				this.createCustomCompletionItem(document, position, 'name', vs.CompletionItemKind.Variable),
 				this.createCustomCompletionItem(document, position, 'required', vs.CompletionItemKind.Variable),
+				this.createCustomCompletionItem(document, position, 'value', vs.CompletionItemKind.Variable),
 				this.createCustomCompletionItem(document, position, 'superParamName', vs.CompletionItemKind.Variable),
 			],
 		};

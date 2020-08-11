@@ -1,7 +1,7 @@
 import { CustomPropertyHandler, PropertyResolveResult } from "../providers/property-handler-provider";
 import * as parseXml from '../parser/types';
 import { WidgetModel, ExtraDataModel, AttributeModel, PropertyModel } from '../models/models';
-import { extractForLoopParams, makeTabs } from "../utils";
+import { extractForLoopParams, makeTabs, spaceAfter } from "../utils";
 import { PropertyResolver } from "../resolvers/property-resolver";
 
 export class RepeatHandler extends CustomPropertyHandler {
@@ -20,8 +20,8 @@ export class RepeatHandler extends CustomPropertyHandler {
         let wrapperWidget: WidgetModel | null = null;
         let extraData: ExtraDataModel | null = null;
         
-        const { listName, indexName, itemName } = extractForLoopParams(attr.value);
-        const tempData: any = { listName, indexName, itemName, widget };
+        const { listName, indexName, itemName, typeName } = extractForLoopParams(attr.value);
+        const tempData: any = { listName, indexName, itemName, typeName, widget };
         const listNameWithPipes = attr.value.substr(attr.value.indexOf(listName));
         const contentWidget: WidgetModel = {
             controllers: [],
@@ -66,7 +66,7 @@ export class RepeatHandler extends CustomPropertyHandler {
         const originalWidget = data.widget as WidgetModel;
 
         const code = 
-`...WidgetHelpers.mapToWidgetList(${data.listValueVariableName}, (${data.itemName || 'item'}, ${data.indexName || 'index'}) {
+`...WidgetHelpers.mapToWidgetList(${data.listValueVariableName}, (${spaceAfter(data.typeName)}${data.itemName || 'item'}, ${data.indexName || 'index'}) {
 ${tabs}    return ${generateChildWidgetCode(originalWidget, tabsLevel + 1)};
 ${tabs}  }
 ${tabs})`;
