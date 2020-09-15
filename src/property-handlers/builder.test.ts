@@ -554,4 +554,30 @@ suite("Builder Tests", function () {
         const generated = generateWidget(xml);
         assertEqual(generated, expected);
     });
+    
+
+    test("builder without name, with other named properties (unnamed should become first)", function() {
+        const xml = `
+    <SliverChildBuilderDelegate childCount="4">
+      <builder data="index, item of ctrl.products" params="context, index" nocheck>
+          <Container />  
+      </builder>
+    </SliverChildBuilderDelegate>
+`;
+        
+        const expected = `
+        SliverChildBuilderDelegate(
+          (context, index) {
+            final item = ctrl.products == null || ctrl.products.length <= index || ctrl.products.length == 0 ? null : ctrl.products[index];
+            return Container(
+    
+            );
+          },
+          childCount: 4,
+        )
+`;
+
+        const generated = generateWidget(xml);
+        assertEqual(generated, expected);
+    });
 });

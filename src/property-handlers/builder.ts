@@ -156,18 +156,32 @@ export class BuilderHandler extends CustomPropertyHandler {
         const originalWidget = widget.wrappedWidgets[0];
         const buildersData: any[] = tempData.buildersData;
         let code = '';
+        
+        // generate builders code (builder that have no names)
+        let codes = buildersData.filter(a => !a.builderName).map(data => this.generateBuilderCode(data, generateChildWidgetCode, tabsLevel));
+        code += codes.join(',\n');
+
+        if (codes.length) {
+            code += ',\n';
+        }
 
         // generate other user-defined properties
-        originalWidget.properties.sort(sortProperties)
+        let propCode = originalWidget.properties.sort(sortProperties)
             .filter(a => !a.skipGeneratingCode && ['children', 'builder'].indexOf(a.name) === -1)
-            .forEach(p => {
-                code += generatePropertyCode(originalWidget, p, tabsLevel) + `,\n`;
-            });
+            .map(p => {
+                return generatePropertyCode(originalWidget, p, tabsLevel);
+            })
+            .join(`,\n`);
+        code += propCode;
         
-        // generate builders code
-        let codes = buildersData.map(data => this.generateBuilderCode(data, generateChildWidgetCode, tabsLevel));
-        code += codes.join(',\n');
+        // generate builders code (builder that have names)
+        let codes2 = buildersData.filter(a => !!a.builderName).map(data => this.generateBuilderCode(data, generateChildWidgetCode, tabsLevel));
         
+        if (propCode.length && codes2.length) {
+            code += ',\n';
+        }
+        code += codes2.join(',\n');
+
         return code;
     }
 
