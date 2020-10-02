@@ -235,7 +235,7 @@ StreamBuilder(
 ### 5. :itemBuilder
 It's a custom `builder` property made specifically for `ListView` and `GridView`. the following code is exactly the same as the previous `builder` example:
 ```XML
-<ListView :itemBuilder="item of ctrl.items | stream">
+<ListView :use="builder" :itemBuilder="item of ctrl.items | stream">
     <Text text="item.title" />
 </ListView>
 ```

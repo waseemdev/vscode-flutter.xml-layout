@@ -51,6 +51,11 @@ Extension features:
 * Customizable! so developers can add their own properties and modify some features.
 * Supports Code completion, hover information, Go to Definition, diagnostics and code actions.
 
+
+## Example
+[Here is a working example](https://github.com/waseemdev/flutter_xmllayout_example)
+
+
 # Get Started
 
 1. Install the extension from [vscode marketplace](https://marketplace.visualstudio.com/items?itemName=WaseemDev.flutter-xml-layout)
