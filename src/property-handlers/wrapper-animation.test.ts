@@ -5,9 +5,9 @@ suite("Wrapper Animation Property Tests", function () {
     test("test 1", function() {
         const xml = `
 <Transform :use="translate">
-    <animation curve="easeOut" duration="milliseconds: 300" autoTrigger>
+    <apply-animation curve="easeOut" duration="milliseconds: 300" autoTrigger>
         <offset type="Offset" begin="Offset(-10, 0)" end="Offset(0, 0)" />
-    </animation>
+    </apply-animation>
     <Container color="red" width="200" height="200" />
 </Transform>
 `;
@@ -40,11 +40,11 @@ suite("Wrapper Animation Property Tests", function () {
     test("test 2", function() {
         const xml = `
 <Container>
-    <animation duration="milliseconds: 1000" autoTrigger cycles="5">
+    <apply-animation duration="milliseconds: 1000" autoTrigger cycles="5">
         <color type="color" begin="Colors.transparent" end="Colors.white" />
         <width type="int" begin="100" end="200" />
         <height type="int" begin="100" end="300" />
-    </animation>
+    </apply-animation>
 </Container>
 `;
         
@@ -75,11 +75,11 @@ suite("Wrapper Animation Property Tests", function () {
     test("test 3", function() {
         const xml = `
     <Container>
-        <animation name="myAnimation" duration="seconds: 1" >
+        <apply-animation name="myAnimation" duration="seconds: 1" >
           <color type="color" begin="Colors.blue" end="Colors.red" />
           <width type="double" begin="100" end="200" />
           <height type="double" begin="100" end="300" />
-        </animation>
+        </apply-animation>
       </Container>
 `;
         

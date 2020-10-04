@@ -71,7 +71,7 @@ dependencies:
   flutter_localizations:
     sdk: flutter
   provider: ^3.0.0+1
-  flutter_xmllayout_helpers: ^0.0.7
+  flutter_xmllayout_helpers: ^0.0.8
 ```
 4. Apply one of the following steps:
     * Clear all `main.dart` content then use `fxml_app` snippet to create the app.

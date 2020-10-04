@@ -74,7 +74,7 @@ export function registerBuiltInPropertyHandlers(provider: PropertyHandlerProvide
     provider.register(':consumer', new WrapperConsumerPropertyHandler(propertyResolver));
     provider.register(':stream', new WrapperStreamPropertyHandler(propertyResolver));
     provider.register(':disable', new WrapperDisablePropertyHandler(propertyResolver));
-    provider.register('animation', new WrapperAnimationHandler(propertyResolver));
+    provider.register('apply-animation', new WrapperAnimationHandler(propertyResolver));
 
     //
     // wrapper events

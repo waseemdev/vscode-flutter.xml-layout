@@ -1,3 +1,8 @@
+
+## [0.0.27] - 2020-10-4
+Breaking changes:
+- rename the custom property `<animation>` to `<apply-animation>`.
+
 ## [0.0.25] - 2020-06-18
 - Add item data type for builder, itemBuilder, childBuilder and repeat.
 

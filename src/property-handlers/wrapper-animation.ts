@@ -15,7 +15,7 @@ export class WrapperAnimationHandler extends WrapperPropertyHandler {
     ];
 
     constructor(propertyResolver: PropertyResolver) {
-        super(propertyResolver, [{ handler: 'animation', targetProperty: 'animation' }], 'AnimationBuilder');
+        super(propertyResolver, [{ handler: 'apply-animation', targetProperty: 'animation' }], 'AnimationBuilder');
     }
 
     protected createWrapperWidget(widget: WidgetModel, targetProperty: string, value: string, onWrapped: ((wrapper: WidgetModel) => void)[]): { wrapperWidget: WidgetModel, propertyToUpdateAfterBinding: PropertyModel | null } {

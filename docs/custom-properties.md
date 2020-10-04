@@ -533,8 +533,8 @@ Then add the controls in the controller class:
 ```
 
 ### 10. animation
-`animation` can be applied on any widget easily, it uses a modified version of the [animator](https://github.com/GIfatahTH/animator) but without the usage of the [states_rebuilder](https://pub.dev/packages/states_rebuilder).
-`animation` has these properties:
+`apply-animation` can be applied on any widget easily, it uses a modified version of the [animator](https://github.com/GIfatahTH/animator) but without the usage of the [states_rebuilder](https://pub.dev/packages/states_rebuilder).
+`apply-animation` has these properties:
 - `curve`: animation curve.
 - `duration`: the duration of the animation.
 - `autoTrigger`: to determine whether to start the animation at the begining or not.
@@ -544,9 +544,9 @@ Then add the controls in the controller class:
 Example:
 ```XML
 <Transform :use="translate">
-    <animation curve="easeOut" duration="milliseconds: 300" autoTrigger>
+    <apply-animation curve="easeOut" duration="milliseconds: 300" autoTrigger>
         <offset type="Offset" begin="Offset(0, 0)" end="Offset(50, 200)" />
-    </animation>
+    </apply-animation>
     <Container color="red" width="200" height="200" />
 </Transform>
 ```
@@ -572,14 +572,14 @@ AnimationBuilder(
 );
 ```
 
-`animation` can be applied on multiple properties as well:
+`apply-animation` can be applied on multiple properties as well:
 ```XML
 <Container>
-  <animation duration="milliseconds: 1000" autoTrigger cycles="5">
+  <apply-animation duration="milliseconds: 1000" autoTrigger cycles="5">
       <color type="color" begin="Colors.blue" end="Colors.red" />
       <width type="double" begin="100" end="200" />
       <height type="double" begin="100" end="300" />
-  </animation>
+  </apply-animation>
 </Container>
 ```
 Result:
@@ -606,9 +606,9 @@ AnimationBuilder(
 You also can access the `AnimationBuilderState` to trigger the animation manually by specifying the `name` property:
 ```XML
 <Container>
-  <animation name="myAnimation" duration="milliseconds: 1000" cycles="5">
+  <apply-animation name="myAnimation" duration="milliseconds: 1000" cycles="5">
       <color type="color" begin="Colors.transparent" end="Colors.red" />
-  </animation>
+  </apply-animation>
 </Container>
 ```
 Then access the variable in the controller class:
