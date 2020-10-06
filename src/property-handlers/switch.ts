@@ -94,13 +94,13 @@ export class SwitchHandler extends CustomPropertyHandler {
         generatePropertyCode: (widget: WidgetModel, property: PropertyModel, tabsLevel: number) => string): string {
         const tabs = makeTabs(tabsLevel);
         const tempData = widget.tempData;
-        const casesWidgets = tempData.casesWidgets as WidgetModel[];
+        const casesWidgets = (tempData.casesWidgets instanceof Array ? tempData.casesWidgets : [tempData.casesWidgets]) as WidgetModel[];
         const defaultWidget = 'Container(width: 0, height: 0)';
         let cases = '';
         let code = '';
 
         if (casesWidgets) {
-            casesWidgets.forEach(w => {
+            casesWidgets.filter(a => !!a).forEach(w => {
                 const caseProp = w.properties.filter(a => a.name === ':switchCase')[0];
                 if (caseProp) {
                     cases += `\n${tabs}    new SwitchCase(${caseProp.value}, \n${tabs}      () => ${generateChildWidgetCode(w, tabsLevel + 3)}\n${tabs}    ),`;

@@ -15,7 +15,30 @@ export class WidgetResolver {
         const rootElement = xmlDoc.children[0] as parseXml.Element;
         const rootElementAttrs = JSON.parse(JSON.stringify(rootElement.attributes));
         const rootChild = this.getChildWidget(rootElement);
-        const rootChildWidget = this.resolveWidget(rootChild, null);
+        let rootChildWidget = this.resolveWidget(rootChild, null);
+        
+        // check for top-level properties, specially for <if>
+        if (rootChildWidget.isPropertyElement) {
+            const propertyHandler = this.propertyHandlerProvider.get(rootChildWidget.propertyElement);
+            if (propertyHandler && propertyHandler.canResolvePropertyElement()) {
+                const childrenElements = rootElement.children.filter(a => a.type === 'element').map(a => a as parseXml.Element);
+                const child = childrenElements.filter(a => a.name === rootChildWidget.propertyElement)[0];
+                const widget = this.resolvePropertyElement(rootChildWidget, rootElement, childrenElements, child);
+                if (widget) {
+                    rootChildWidget = {
+                        widget: widget,
+                        isPropertyElement: false,
+                        propertyElement: null,
+                        propertyElementProperties: []
+                    };
+                }
+            }
+            // no need for now
+            // else {
+            //     // this child is a property element <title>...</title>
+            //     this.addElementAsAttribute(rootElement, rootChildWidget);
+            // }
+        }
 
         removeDuplicatedBuilders(rootChildWidget.widget, null, 'wrappedWidgets', { });
         this.callOnResolved(rootChildWidget.widget);
@@ -222,20 +245,9 @@ export class WidgetResolver {
             }
             
             if (childResult.isPropertyElement) {
-                // check if we want to treat it as a custom element and not a property <if>...</if>
-                const propertyHandler = this.propertyHandlerProvider.get(childResult.propertyElement);
-                if (propertyHandler && propertyHandler.canResolvePropertyElement()) {
-                    const propertyElementWidget: WidgetModel | null = propertyHandler.resolvePropertyElement(
-                        child, childResult, element, childrenElements, 
-                        (el, parent) => this.resolveWidget(el, parent));
-                    if (propertyElementWidget) {
-                        childResult.isPropertyElement = false;
-                        childrenWidgets.push(propertyElementWidget);
-                    }
-                }
-                else {
-                    // this child is a property element <title>...</title>
-                    this.addElementAsAttribute(element, childResult);
+                const widget = this.resolvePropertyElement(childResult, element, childrenElements, child);
+                if (widget) {
+                    childrenWidgets.push(widget);
                 }
             }
             else {
@@ -260,6 +272,27 @@ export class WidgetResolver {
                 value: childrenWidgets[0]
             });
         }
+    }
+    
+    private resolvePropertyElement(resolvedWidget: WidgetResolveResult, 
+            parentElement: parseXml.Element, parentChildrenElements: parseXml.Element[],
+            childElement: parseXml.Element): WidgetModel | null {
+        // check if we want to treat it as a custom element and not a property <if>...</if>
+        const propertyHandler = this.propertyHandlerProvider.get(resolvedWidget.propertyElement);
+        if (propertyHandler && propertyHandler.canResolvePropertyElement()) {
+            const propertyElementWidget: WidgetModel | null = propertyHandler.resolvePropertyElement(
+                childElement, resolvedWidget, parentElement, parentChildrenElements, 
+                (el, parent) => this.resolveWidget(el, parent));
+            if (propertyElementWidget) {
+                resolvedWidget.isPropertyElement = false;
+                return propertyElementWidget;
+            }
+        }
+        else {
+            // this child is a property element <title>...</title>
+            this.addElementAsAttribute(parentElement, resolvedWidget);
+        }
+        return null;
     }
     
     private resolveContentChildData(element: parseXml.Element, widget: WidgetModel) {
