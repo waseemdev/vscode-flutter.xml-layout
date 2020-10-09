@@ -17,9 +17,16 @@ export class ColorValueTransformer implements IValueTransformer {
             value = `Color.fromARGB(${parseInt(a, 16)}, ${parseInt(r, 16)}, ${parseInt(g, 16)}, ${parseInt(b, 16)})`;
             handled = true;
         }
-        else if (!originalValue.startsWith('Colors.') && /^[a-zA-Z0-9\.\s*]+$/ig.test(originalValue)) {
-            value = `Colors.${originalValue}`;
-            handled = true;
+        else if (!originalValue.startsWith('Colors.') && 
+                !originalValue.startsWith('ctrl.') &&
+                /^[a-zA-Z0-9\.\s*]+$/ig.test(originalValue) &&
+                !originalValue.startsWith('widget.')) {
+            const dotsCount = (originalValue.match(/\./g) || []).length;
+            if (dotsCount === 1 && (originalValue.indexOf('.shade') > -1 || originalValue.indexOf('.with') > -1 && originalValue.indexOf('(') > -1) ||// e.g. accept red, red.shaded100, red.with*()
+                dotsCount === 0) {
+                value = `Colors.${originalValue}`;
+                handled = true;
+            }
         }
         else {
             value = originalValue;
