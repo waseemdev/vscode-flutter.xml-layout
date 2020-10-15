@@ -218,4 +218,8 @@ export class PropertyResolver {
 
         return unnamed[widgetType];
     }
+    
+    getConfig(): Config {
+        return this.config;
+    }
 }

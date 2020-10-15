@@ -44,4 +44,9 @@ export interface Config {
      * `{ "DropdownButton": ["items", "children"] }`
      */
     arrayProperties?: { [name: string]: string[] };
+
+    /**
+     * `["items"]`
+     */
+    controlsWithTextEditingControllers?: string[];
 }
