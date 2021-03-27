@@ -155,7 +155,7 @@ export default class Manager {
             return;
         }
 
-        const filePath = docName.substring(0, docName.indexOf('.'));
+        const filePath = docName.substring(0, docName.lastIndexOf('.'));
         const controllerFilePath = filePath + '.ctrl.dart';
         const controllerFileName = path.parse(controllerFilePath).base;
         
