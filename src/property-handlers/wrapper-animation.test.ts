@@ -54,9 +54,9 @@ suite("Wrapper Animation Property Tests", function () {
             cycles: 5,
             duration: Duration(milliseconds: 1000),
             tweenMap: {
-              "color": ColorTween(begin: Colors.transparent, end: Colors.white),
+              "height": Tween<int>(begin: 100, end: 300),
               "width": Tween<int>(begin: 100, end: 200),
-              "height": Tween<int>(begin: 100, end: 300)
+              "color": ColorTween(begin: Colors.transparent, end: Colors.white)
             },
             builderMap: (Map<String, Animation> animations, Widget child) {
               return Container(
@@ -88,9 +88,9 @@ suite("Wrapper Animation Property Tests", function () {
             duration: Duration(seconds: 1),
             key: ctrl._myAnimationKey,
             tweenMap: {
-              "color": ColorTween(begin: Colors.blue, end: Colors.red),
+              "height": Tween<double>(begin: 100, end: 300),
               "width": Tween<double>(begin: 100, end: 200),
-              "height": Tween<double>(begin: 100, end: 300)
+              "color": ColorTween(begin: Colors.blue, end: Colors.red)
             },
             builderMap: (Map<String, Animation> animations, Widget child) {
               return Container(

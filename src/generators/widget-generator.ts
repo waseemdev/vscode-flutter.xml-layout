@@ -24,7 +24,8 @@ export class WidgetCodeGenerator {
         let props: string[] = [];
         const tabs = makeTabs(tabsLevel);
 
-        const properties = widget.properties.sort(sortProperties).filter(a => !a.skipGeneratingCode);
+        const constProp = widget.properties.find(a => a.name === 'const');
+        const properties = widget.properties.sort(sortProperties).filter(a => !a.skipGeneratingCode && a.name !== 'const');
 
         for (const prop of properties) {
             let propCode = this.generatePropertyCode(widget, prop, tabsLevel + (widget.isPropertyElement ? 0: 1));
@@ -39,9 +40,11 @@ export class WidgetCodeGenerator {
             code = widget.comments.map(a => a.trim()).filter(a => !!a).join('\n' + tabs) + '\n';
         }
 
+        const constCode = constProp && (constProp.value === '' || constProp.value === 'true') ? 'const ' : '';
         const propsCode = props.filter(a => a.trim()).join(',\n');
+        
         if (!widget.isPropertyElement && widget.type) {
-            code += `${widget.type}(\n${propsCode}${propsCode.trim() ? ',' : ''}\n${tabs})`;
+            code += `${constCode}${widget.type}(\n${propsCode}${propsCode.trim() ? ',' : ''}\n${tabs})`;
         }
         else {
             code += propsCode;

@@ -361,3 +361,13 @@ Some widgets have parameters without names (e.g. Text, Icon), you can add a name
   }
 }
 ```
+
+
+## 5. Form controls that have controllers
+*****
+If you use :formControl on a TextField-like, you should add it to "controlsWithTextEditingControllers" option, otherwise will use `onChanged` event and `value` property instead.
+```json
+{
+  "controlsWithTextEditingControllers": ["CupertinoTextField"]
+}
+```

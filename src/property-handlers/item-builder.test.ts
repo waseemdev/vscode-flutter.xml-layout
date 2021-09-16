@@ -79,6 +79,39 @@ suite("ItemBuilder Tests", function () {
         assertEqual(generated, expected);
     });
 
+    test("with stream 2", function() {
+        const xml = `
+    <ListView :use="builder" itemCount="(component.items | stream).length" :itemBuilder="ItemModel item of component.items | stream">
+        <Text text="item.title" />
+    </ListView>
+`;
+        
+        const expected = `
+        StreamBuilder(
+          initialData: null,
+          stream: component.items,
+          builder: (BuildContext context, componentItemsSnapshot) {
+            final componentItemsValue = componentItemsSnapshot.data;
+            if (componentItemsValue == null) {
+              return Container(width: 0, height: 0);
+            }
+            return ListView.builder(
+              itemCount: (componentItemsValue).length,
+              itemBuilder: (BuildContext context, int index) {
+                final ItemModel item = componentItemsValue == null || componentItemsValue.length <= index || componentItemsValue.length == 0 ? null : componentItemsValue[index];
+                return Text(
+                  item.title,
+                );
+              },
+            );
+          },
+        )
+`;
+
+        const generated = generateWidget(xml);
+        assertEqual(generated, expected);
+    });
+
     test("with wrapper property (margin)", function() {
         const xml = `
     <ListView :use="builder" :margin="5" :itemBuilder="item of component.items">
