@@ -1,7 +1,21 @@
-import { CancellationToken, CodeAction, CodeActionContext, CodeActionKind, CodeActionProviderMetadata, DocumentSelector, Range, TextDocument, commands, Command } from "vscode";
-import { RankedCodeActionProvider } from "./ranking_code_action_provider";
-import { getDartDocument } from "../utils";
-import { Location, SourceChange } from "../dart-ext-types";
+import {
+	CancellationToken,
+	CodeAction,
+	CodeActionContext,
+	CodeActionKind,
+	CodeActionProviderMetadata,
+	Command,
+	DocumentSelector,
+	Range,
+	TextDocument,
+	TextEdit,
+	WorkspaceEdit,
+	commands,
+} from 'vscode';
+import { Location, SourceChange } from '../dart-ext-types';
+
+import { RankedCodeActionProvider } from './ranking_code_action_provider';
+import { getDartDocument } from '../utils';
 
 export class FixCodeActionProvider implements RankedCodeActionProvider {
 	constructor(public readonly selector: DocumentSelector) { }
@@ -25,7 +39,7 @@ export class FixCodeActionProvider implements RankedCodeActionProvider {
 
 		try {
 			const rangeStart = dartDocument.positionAt(location.offset);
-			let results: Command[] = await commands.executeCommand('vscode.executeCodeActionProvider', dartDocument.uri, new Range(rangeStart, rangeStart.translate({ characterDelta: 10 })));
+			let results: (Command | CodeAction)[] = await commands.executeCommand('vscode.executeCodeActionProvider', dartDocument.uri, new Range(rangeStart, rangeStart.translate({ characterDelta: 10 })));
 			return results.map(a => this.buildCodeAction(xmlDocument, a));
 		}
 		catch (e) {
@@ -34,30 +48,40 @@ export class FixCodeActionProvider implements RankedCodeActionProvider {
 		}
 	}
 
-	private buildCodeAction(document: TextDocument, command: Command): CodeAction {
-		if (!command.command || !(command.command as any).arguments || !(command.command as any).arguments.length) {
+	private buildCodeAction(document: TextDocument, command: Command | CodeAction): CodeAction {
+		const innerCommand = command.command as any;
+		const title = innerCommand && innerCommand.title ? innerCommand.title : command.title;
+		if (!title || !title.startsWith('Import library')) {
 			return null;
 		}
 
-		const innerCommand = (command.command as any);
-		const change = innerCommand.arguments[innerCommand.arguments.length - 1];
-		const title = innerCommand.title;
-		
-		if (title.startsWith('Import library')) {
-			this.buildImportNamespace(document, change);
-		}
-		else {
-			return null;
-		}
-
-		// const diagnostics = error ? [DartDiagnosticProvider.createDiagnostic(error)] : undefined;
-		const action = new CodeAction(title, CodeActionKind.QuickFix);
-		action.command = {
-			arguments: [document, change],
-			command: "_dart.applySourceChange",
-			title,
+		// once we have a title like "Import library 'package:xxx.xml.dart'", we can build a CodeAction to import file
+		const change: SourceChange = {
+			message: 'import library',
+			edits: [
+				{
+					file: document.uri.path,
+					fileStamp: -1,
+					edits: [
+						{
+							offset: 0,
+							length: 0,
+							replacement: title,
+						},
+					],
+				},
+			],
+			linkedEditGroups: [],
 		};
-		// action.diagnostics = diagnostics;
+		this.buildImportNamespace(document, change);
+
+		const action = new CodeAction(title, CodeActionKind.QuickFix);
+		action.edit = new WorkspaceEdit();
+		const edit = new TextEdit(
+			new Range(document.positionAt(change.edits[0].edits[0].offset), document.positionAt(change.edits[0].edits[0].offset + change.edits[0].edits[0].length)),
+			change.edits[0].edits[0].replacement
+		);
+		action.edit.set(document.uri, [edit]);
 		return action;
 	}
 
