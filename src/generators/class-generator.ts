@@ -209,7 +209,7 @@ class ${widgetName} extends StatelessWidget${mixinsCode} {
             ...(hasController ? rootWidget.params.filter(a => !!a.name).map(a => `ctrl._${a.name} = widget.${a.name};`) : []),
             ...controllers.filter(a => !a.isPrivate && !a.skipGenerate).map(a => `${hasController ? `ctrl._${a.name} = `: ''}${a.name} = ${a.value ? a.value : `new ${a.type}()`};`),
             ...rootWidget.vars.map(a => `${hasController ? `ctrl._${a.name} = `: ''}${a.name} = ${a.value};`),
-            ...(hasController ? [`WidgetsBinding.instance.addPostFrameCallback((_) => mounted ? ctrl.afterFirstBuild(context) : null);`] : [])
+            ...(hasController ? [`WidgetsBinding.instance?.addPostFrameCallback((_) => mounted ? ctrl.afterFirstBuild(context) : null);`] : [])
         ];
         const superParams = rootWidget.params
           .filter(a => a.superParamName)
