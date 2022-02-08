@@ -1,7 +1,7 @@
-import { RootWidgetModel, WidgetModel, VariableModel, FormControlModel } from "../models/models";
+import { FormControlModel, RootWidgetModel, VariableModel, WidgetModel } from "../models/models";
+
 import { WidgetCodeGenerator } from "./widget-generator";
 import { getUniqueBy } from "../utils";
-
 
 export class ClassCodeGenerator {
     private readonly widgetGenerator: WidgetCodeGenerator;
@@ -209,7 +209,7 @@ class ${widgetName} extends StatelessWidget${mixinsCode} {
             ...(hasController ? rootWidget.params.filter(a => !!a.name).map(a => `ctrl._${a.name} = widget.${a.name};`) : []),
             ...controllers.filter(a => !a.isPrivate && !a.skipGenerate).map(a => `${hasController ? `ctrl._${a.name} = `: ''}${a.name} = ${a.value ? a.value : `new ${a.type}()`};`),
             ...rootWidget.vars.map(a => `${hasController ? `ctrl._${a.name} = `: ''}${a.name} = ${a.value};`),
-            ...(hasController ? [`WidgetsBinding.instance.addPostFrameCallback((_) => ctrl.afterFirstBuild(context));`] : [])
+            ...(hasController ? [`WidgetsBinding.instance.addPostFrameCallback((_) => mounted ? ctrl.afterFirstBuild(context) : null);`] : [])
         ];
         const superParams = rootWidget.params
           .filter(a => a.superParamName)
