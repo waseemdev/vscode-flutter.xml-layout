@@ -1,7 +1,9 @@
-import { CustomPropertyHandler, PropertyResolveResult, WidgetResolveResult } from "../providers/property-handler-provider";
 import * as parseXml from '../parser/types';
-import { WidgetModel, ExtraDataModel, AttributeModel, PropertyModel, AttributeInfo } from '../models/models';
+
+import { AttributeInfo, AttributeModel, ExtraDataModel, PropertyModel, WidgetModel } from '../models/models';
+import { CustomPropertyHandler, PropertyResolveResult, WidgetResolveResult } from "../providers/property-handler-provider";
 import { extractForLoopParams, makeTabs, sortProperties, spaceAfter } from "../utils";
+
 import { PropertyResolver } from "../resolvers/property-resolver";
 
 export class BuilderHandler extends CustomPropertyHandler {
@@ -199,7 +201,7 @@ export class BuilderHandler extends CustomPropertyHandler {
         // if (hasItemList && (!data.params || data.indexName)) {
         if (hasItemList) {
             code += `
-${tabs}  final ${spaceAfter(data.typeName)}${data.itemName} = ${data.listValueVariableName} == null || ${data.listValueVariableName}.length <= ${indexName} || ${data.listValueVariableName}.length == 0 ? null : ${data.listValueVariableName}[${indexName}];`;
+${tabs}  final ${spaceAfter(data.typeName)}${data.itemName} = ${data.listValueVariableName} == null || ${data.listValueVariableName}.length <= ${indexName} || ${data.listValueVariableName}.length == 0 ? [] : ${data.listValueVariableName}[${indexName}];`;
         }
 
         if (ifWidgets && ifWidgets.length) {

@@ -1,8 +1,10 @@
-import { scan } from "../parser/parser";
-import * as parseXml from '../parser/types';
 import * as Syntax from '../parser/syntax';
-import { WidgetModel, ExtraDataModel } from "../models/models";
-import { makeVariableName, makePipeUniqueName } from "../utils";
+import * as parseXml from '../parser/types';
+
+import { ExtraDataModel, WidgetModel } from "../models/models";
+import { makePipeUniqueName, makeVariableName } from "../utils";
+
+import { scan } from "../parser/parser";
 
 export class PipeValueResolver {
 
@@ -103,7 +105,7 @@ export class PipeValueResolver {
                     extraData: {
                         parameters: [
                             { name: 'context', type: 'BuildContext' },
-                            { name: `${snapshotVarName}`, type: '' }
+                            { name: `${snapshotVarName}`, type: 'dynamic' }
                         ],
                         logic: [
                             ...(addLocalVar ? [`final ${resultVarName} = ${snapshotVarName}.data;`] : []),
