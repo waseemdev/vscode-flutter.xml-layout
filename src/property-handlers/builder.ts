@@ -201,7 +201,7 @@ export class BuilderHandler extends CustomPropertyHandler {
         // if (hasItemList && (!data.params || data.indexName)) {
         if (hasItemList) {
             code += `
-${tabs}  final ${spaceAfter(data.typeName)}${data.itemName} = ${data.listValueVariableName} == null || ${data.listValueVariableName}.length <= ${indexName} || ${data.listValueVariableName}.length == 0 ? [] : ${data.listValueVariableName}[${indexName}];`;
+${tabs}  final ${spaceAfter(data.typeName)}${data.itemName} = (${data.listValueVariableName} as dynamic) == null || ${data.listValueVariableName}.length <= ${indexName} || ${data.listValueVariableName}.length == 0 ? [] : ${data.listValueVariableName}[${indexName}];`;
         }
 
         if (ifWidgets && ifWidgets.length) {
