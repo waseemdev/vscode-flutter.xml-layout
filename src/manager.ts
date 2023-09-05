@@ -1,25 +1,27 @@
+import * as fs from 'fs';
+import * as mkdirp from 'mkdirp';
 import * as path from "path";
 import * as vscode from "vscode";
-import * as mkdirp from 'mkdirp';
-import * as fs from 'fs';
-import { denodeify } from 'q';
-import { WidgetResolver } from "./resolvers/widget-resolver";
-import { ParseXml } from "./parser/parser";
-import { PropertyHandlerProvider } from "./providers/property-handler-provider";
-import { WrapperPropertyHandler } from "./property-handlers/wrapper-property";
-import { ChildWrapperPropertyHandler } from "./property-handlers/child-wrapper-property";
-import { ValueTransformersProvider, IValueTransformer } from "./providers/value-transformers-provider";
-import { EnumValueTransformer } from "./value-transformers/enum";
-import { EdgeInsetsValueTransformer } from "./value-transformers/edge-insets";
-import { ColorValueTransformer } from "./value-transformers/color";
-import { LocalizationGenerator } from "./generators/localization-generator";
-import { ClassCodeGenerator } from "./generators/class-generator";
-import { WidgetCodeGenerator } from "./generators/widget-generator";
-import { insertAutoCloseTag } from "./autoclose/autoclose";
+
 import { Config, ConfigValueTransformer } from "./models/config";
-import { registerBuiltInValueTransformers, registerBuiltInPropertyHandlers } from "./builtin-handlers";
-import { PropertyResolver } from "./resolvers/property-resolver";
+import { IValueTransformer, ValueTransformersProvider } from "./providers/value-transformers-provider";
+import { registerBuiltInPropertyHandlers, registerBuiltInValueTransformers } from "./builtin-handlers";
+
+import { ChildWrapperPropertyHandler } from "./property-handlers/child-wrapper-property";
+import { ClassCodeGenerator } from "./generators/class-generator";
+import { ColorValueTransformer } from "./value-transformers/color";
+import { EdgeInsetsValueTransformer } from "./value-transformers/edge-insets";
+import { EnumValueTransformer } from "./value-transformers/enum";
+import { LocalizationGenerator } from "./generators/localization-generator";
+import { ParseXml } from "./parser/parser";
 import { PipeValueResolver } from "./resolvers/pipe-value-resolver";
+import { PropertyHandlerProvider } from "./providers/property-handler-provider";
+import { PropertyResolver } from "./resolvers/property-resolver";
+import { WidgetCodeGenerator } from "./generators/widget-generator";
+import { WidgetResolver } from "./resolvers/widget-resolver";
+import { WrapperPropertyHandler } from "./property-handlers/wrapper-property";
+import { denodeify } from 'q';
+import { insertAutoCloseTag } from "./autoclose/autoclose";
 
 const mkdir = denodeify(mkdirp);
 const writeFile = denodeify(fs.writeFile);
@@ -171,11 +173,11 @@ export default class Manager {
             layoutDart = this.classGenerator.generate(rootWidget, controllerFileName);
         }
         catch (ex) {
-            const diagnostic = this.getExceptionDiagnostics(ex.message);
+            const diagnostic = this.getExceptionDiagnostics((ex as any).message);
             if (diagnostic) {
                 this.diagnostics.set(fileUri, [diagnostic]);
             }
-            const customMessage = this.getCustomErrorMessage(ex.message);
+            const customMessage = this.getCustomErrorMessage((ex as any).message);
             if (customMessage) {
                 vscode.window.showErrorMessage(customMessage);
                 this.output.appendLine(customMessage);

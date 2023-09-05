@@ -10,5 +10,6 @@
     "typescript.tsc.autoDetect": "off",
     "mochaExplorer.files": "**/*.test.ts",
     "mochaExplorer.require": "ts-node/register",
-    "mochaExplorer.optsFile": "mocha.opts"
+    "mochaExplorer.optsFile": "mocha.opts",
+    "editor.formatOnSave": true
 }
