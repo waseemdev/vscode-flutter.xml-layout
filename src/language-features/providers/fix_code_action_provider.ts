@@ -1,3 +1,5 @@
+import * as vscode from "vscode";
+
 import {
 	CancellationToken,
 	CodeAction,
@@ -43,10 +45,12 @@ export class FixCodeActionProvider implements RankedCodeActionProvider {
 		try {
 			const dartDocument = await getDartDocument(xmlDocument);
 			const dartOffset = getDartCodeIndex(xmlDocument, xmlRange.start, dartDocument, xmlRange);
-			const rangeEnd = dartDocument.positionAt(dartOffset);
+			const rangeEnd = dartOffset != -1 ? dartDocument.positionAt(dartOffset) : null;
 
-			const dartRange = new Range(rangeEnd.translate({ characterDelta: -(xmlRange.end.character - xmlRange.start.character) }), rangeEnd);
-			let results: (Command | CodeAction)[] = await commands.executeCommand('vscode.executeCodeActionProvider', dartDocument.uri, dartRange);
+			const dartRange = dartOffset != -1 ?  new Range(rangeEnd.translate({ characterDelta: -(xmlRange.end.character - xmlRange.start.character) }), rangeEnd) :
+			new Range(dartDocument.positionAt(0), dartDocument.positionAt(dartDocument.getText().length - 1)) ;
+
+			let results: (Command | CodeAction)[] = await commands.executeCommand('vscode.executeCodeActionProvider', dartDocument.uri,  dartRange );
 			return results.map(a => this.buildCodeAction(xmlDocument, a));
 		}
 		catch (e) {
