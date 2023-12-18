@@ -211,6 +211,11 @@ class ${widgetName} extends StatelessWidget${mixinsCode} {
             ...rootWidget.vars.map(a => `${hasController ? `ctrl._${a.name} = `: ''}${a.name} = ${a.value};`),
             ...(hasController ? [`WidgetsBinding.instance.addPostFrameCallback((_) => mounted ? ctrl.afterFirstBuild(context) : null);`] : [])
         ];
+        const stateVarsUpdate: string[] = [
+          ...(hasController ? rootWidget.params.filter(a => !!a.name).map(a => `ctrl._${a.name} = widget.${a.name};`) : []),
+          ...controllers.filter(a => !a.isPrivate && !a.skipGenerate).map(a => `${hasController ? `ctrl._${a.name} = `: ''}${a.name} = ${a.value ? a.value : `new ${a.type}()`};`),
+          ...rootWidget.vars.map(a => `${hasController ? `ctrl._${a.name} = `: ''}${a.name} = ${a.value};`),
+        ];
         const superParams = rootWidget.params
           .filter(a => a.superParamName)
           .map(a => `${a.superParamName}: ${a.name || a.superParamName}`)
@@ -236,6 +241,11 @@ class _${widgetName}State extends State<${widgetName}>${mixinsCode} {
   @override
   void initState() {
     super.initState();${(stateVarsInit.length > 0 ? '\n    ' : '') + stateVarsInit.join(`\n    `)}
+  }
+
+  @override
+  void didUpdateWidget(${widgetName} oldWidget) {
+    super.didUpdateWidget(oldWidget);${(stateVarsUpdate.length > 0 ? '\n    ' : '') + stateVarsUpdate.join(`\n    `)}
   }
 
   @override
