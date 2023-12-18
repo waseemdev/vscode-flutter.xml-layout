@@ -187,9 +187,9 @@ class ${rootWidget.controller}Base {
       return `
 
 class ${widgetName} extends StatelessWidget${mixinsCode} {
-  ${rootWidget.params.filter(a => !!a.name).map(a => `final ${a.type ? a.type + ' ' : ''}${a.name}${a.value !== undefined ? ' = ' + a.value : ''};`).join('\n  ')}
+  ${rootWidget.params.filter(a => !!a.name).map(a => `final ${a.type ? (a.value === undefined && !a.required ? a.type + '? ' : a.type + ' ') : ''}${a.name}${a.value !== undefined ? ' = ' + a.value : ''};`).join('\n  ')}
   ${widgetName}(${rootWidget.params.length ? '{': ''}
-    ${rootWidget.params.map(a => `${a.required ? '@required ' : ''}${a.name ? `this.${a.name}` : `${(a.type ? a.type + ' ' : '')}${a.superParamName}`}`).join(',\n    ')}
+    ${rootWidget.params.map(a => `${a.required ? 'required ' : ''}${a.name ? `this.${a.name}` : `${(a.type ? a.type + ' ' : '')}${a.superParamName}`}`).join(',\n    ')}
   ${rootWidget.params.length ? '}': ''});
   ${buildMethodContent}
 }
@@ -198,18 +198,23 @@ class ${widgetName} extends StatelessWidget${mixinsCode} {
 
     private createStatefulWidget(widgetName: string, mixinsCode: string, rootWidget: RootWidgetModel, controllers: VariableModel[], routeAware: boolean, routeAwareStateMethods: string, buildMethodContent: string, hasController: boolean, formControls: FormControlModel[]) {
         const stateVarsDeclaration: string[] = [
-            ...(hasController ? [`${rootWidget.controller} ctrl;`] : []),
+            ...(hasController ? [`late ${rootWidget.controller} ctrl;`] : []),
             ...controllers.filter(a => !a.skipGenerate).map(a => a.isPrivate ? `final ${a.name} = new ${a.type}();` : `${a.type} ${a.name};`),
             ...rootWidget.providers.map(a => `${a.type} ${a.name};`),
-            ...rootWidget.vars.map(a => `${a.type} ${a.name};`),
-            ...(routeAware ? [`RouteObserver<Route> _routeObserver;`] : [])
+            ...rootWidget.vars.map(a => `late ${a.type} ${a.name};`),
+            ...(routeAware ? [`late RouteObserver<Route> _routeObserver;`] : [])
         ];
         const stateVarsInit: string[] = [
             ...(hasController ? [`ctrl = new ${rootWidget.controller}();`] : []),
             ...(hasController ? rootWidget.params.filter(a => !!a.name).map(a => `ctrl._${a.name} = widget.${a.name};`) : []),
             ...controllers.filter(a => !a.isPrivate && !a.skipGenerate).map(a => `${hasController ? `ctrl._${a.name} = `: ''}${a.name} = ${a.value ? a.value : `new ${a.type}()`};`),
             ...rootWidget.vars.map(a => `${hasController ? `ctrl._${a.name} = `: ''}${a.name} = ${a.value};`),
-            ...(hasController ? [`WidgetsBinding.instance?.addPostFrameCallback((_) => mounted ? ctrl.afterFirstBuild(context) : null);`] : [])
+            ...(hasController ? [`WidgetsBinding.instance.addPostFrameCallback((_) => mounted ? ctrl.afterFirstBuild(context) : null);`] : [])
+        ];
+        const stateVarsUpdate: string[] = [
+          ...(hasController ? rootWidget.params.filter(a => !!a.name).map(a => `ctrl._${a.name} = widget.${a.name};`) : []),
+          ...controllers.filter(a => !a.isPrivate && !a.skipGenerate).map(a => `${hasController ? `ctrl._${a.name} = `: ''}${a.name} = ${a.value ? a.value : `new ${a.type}()`};`),
+          ...rootWidget.vars.map(a => `${hasController ? `ctrl._${a.name} = `: ''}${a.name} = ${a.value};`),
         ];
         const superParams = rootWidget.params
           .filter(a => a.superParamName)
@@ -220,9 +225,9 @@ class ${widgetName} extends StatelessWidget${mixinsCode} {
         return `
 
 class ${widgetName} extends StatefulWidget {
-  ${rootWidget.params.filter(a => !!a.name).map(a => `final ${a.type ? a.type + ' ' : ''}${a.name};`).join('\n  ')}
+  ${rootWidget.params.filter(a => !!a.name).map(a => `final ${a.type ? (a.value === undefined && !a.required ? a.type + '? ' : a.type + ' ') : ''}${a.name};`).join('\n  ')}
   ${widgetName}(${rootWidget.params.length ? '{': ''}
-    ${rootWidget.params.map(a => `${a.required ? '@required ' : ''}${a.name ? `this.${a.name}` : `${(a.type ? a.type + ' ' : '')}${a.superParamName}`}${a.value !== undefined ? ' = ' + a.value : ''}`).join(',\n    ')}
+    ${rootWidget.params.map(a => `${a.required ? 'required ' : ''}${a.name ? `this.${a.name}` : `${(a.type ? a.type + ' ' : '')}${a.superParamName}`}${a.value !== undefined ? ' = ' + a.value : ''}`).join(',\n    ')}
   ${rootWidget.params.length ? '}': ''})${superCtor};
 
   @override
@@ -239,8 +244,13 @@ class _${widgetName}State extends State<${widgetName}>${mixinsCode} {
   }
 
   @override
+  void didUpdateWidget(${widgetName} oldWidget) {
+    super.didUpdateWidget(oldWidget);${(stateVarsUpdate.length > 0 ? '\n    ' : '') + stateVarsUpdate.join(`\n    `)}
+  }
+
+  @override
   void didChangeDependencies() {
-    super.didChangeDependencies();${routeAware ? `\n    _routeObserver = Provider.of<RouteObserver<Route>>(context)..subscribe(this, ModalRoute.of(context));` : ''
+    super.didChangeDependencies();${routeAware ? `\n    _routeObserver = Provider.of<RouteObserver<Route>>(context)..subscribe(this, ModalRoute.of(context) as Route);` : ''
   }${(rootWidget.providers.length ? '\n    ' : '') + rootWidget.providers.map(a => `${hasController ? `ctrl._${a.name} = `: ''}${a.name} = Provider.of<${a.type}>(context);`).join('\n    ')
   }${hasController ? `\n    ctrl._load(context);` : ''}
   }
@@ -257,7 +267,9 @@ class _${widgetName}State extends State<${widgetName}>${mixinsCode} {
 
     private createControllerVar(a: VariableModel): string {
         a.type = a.type || 'var';
-        return `${a.type} _${a.name};\n  ${a.type} get ${a.name} => _${a.name};`;
+        return ((a as any).required || a.value !== undefined) ? 
+          `late ${a.type} _${a.name};\n  ${a.type} get ${a.name} => _${a.name};` : 
+          `${a.type}? _${a.name};\n  ${a.type}? get ${a.name} => _${a.name};`;
     }
 
     generateControllerFile(fileName: string, rootWidget: RootWidgetModel): string {

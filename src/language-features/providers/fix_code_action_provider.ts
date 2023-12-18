@@ -1,3 +1,5 @@
+import * as vscode from "vscode";
+
 import {
 	CancellationToken,
 	CodeAction,
@@ -12,10 +14,10 @@ import {
 	WorkspaceEdit,
 	commands,
 } from 'vscode';
-import { Location, SourceChange } from '../dart-ext-types';
+import { getDartCodeIndex, getDartDocument } from '../utils';
 
 import { RankedCodeActionProvider } from './ranking_code_action_provider';
-import { getDartDocument } from '../utils';
+import { SourceChange } from '../dart-ext-types';
 
 export class FixCodeActionProvider implements RankedCodeActionProvider {
 	constructor(public readonly selector: DocumentSelector) { }
@@ -26,10 +28,13 @@ export class FixCodeActionProvider implements RankedCodeActionProvider {
 		providedCodeActionKinds: [CodeActionKind.QuickFix],
 	};
 
-	public async provideCodeActions(xmlDocument: TextDocument, xmlRange: Range, context: CodeActionContext, token: CancellationToken): Promise<CodeAction[] | undefined> {
-		const dartDocument = await getDartDocument(xmlDocument);
-		const location = ((context.diagnostics[0] || {}) as any).location as Location;
-		if (!location || location.offset === -1) {
+	public async provideCodeActions(xmlDocument: TextDocument, cursorRange: Range, context: CodeActionContext, token: CancellationToken): Promise<CodeAction[] | undefined> {
+		if (context.diagnostics.length < 1) {
+			return undefined;
+		}
+		
+		const xmlRange = context.diagnostics[0].range;
+		if (!xmlRange || xmlRange.start == null) {
 			return undefined;
 		}
 
@@ -38,8 +43,14 @@ export class FixCodeActionProvider implements RankedCodeActionProvider {
 		}
 
 		try {
-			const rangeStart = dartDocument.positionAt(location.offset);
-			let results: (Command | CodeAction)[] = await commands.executeCommand('vscode.executeCodeActionProvider', dartDocument.uri, new Range(rangeStart, rangeStart.translate({ characterDelta: 10 })));
+			const dartDocument = await getDartDocument(xmlDocument);
+			const dartOffset = getDartCodeIndex(xmlDocument, xmlRange.start, dartDocument, xmlRange);
+			const rangeEnd = dartOffset != -1 ? dartDocument.positionAt(dartOffset) : null;
+
+			const dartRange = dartOffset != -1 ?  new Range(rangeEnd.translate({ characterDelta: -(xmlRange.end.character - xmlRange.start.character) }), rangeEnd) :
+			new Range(dartDocument.positionAt(0), dartDocument.positionAt(dartDocument.getText().length - 1)) ;
+
+			let results: (Command | CodeAction)[] = await commands.executeCommand('vscode.executeCodeActionProvider', dartDocument.uri,  dartRange );
 			return results.map(a => this.buildCodeAction(xmlDocument, a));
 		}
 		catch (e) {
@@ -50,7 +61,7 @@ export class FixCodeActionProvider implements RankedCodeActionProvider {
 
 	private buildCodeAction(document: TextDocument, command: Command | CodeAction): CodeAction {
 		const innerCommand = command.command as any;
-		const title = innerCommand && innerCommand.title ? innerCommand.title : command.title;
+		const title = command.title ? command.title : innerCommand.title;
 		if (!title || !title.startsWith('Import library')) {
 			return null;
 		}

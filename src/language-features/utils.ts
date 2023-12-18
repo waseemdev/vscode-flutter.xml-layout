@@ -1,6 +1,8 @@
-import { TextDocument, workspace, Uri, Position, Range } from "vscode";
 import * as path from "path";
-import { isAttribute, getXPath, isTagName, isClosingTagName } from "./xmlUtils";
+
+import { Position, Range, TextDocument, Uri, workspace } from "vscode";
+import { getXPath, isAttribute, isClosingTagName, isTagName } from "./xmlUtils";
+
 import { Location } from "./dart-ext-types";
 
 export const isWin = /^win/.test(process.platform);
@@ -158,6 +160,11 @@ export function getDartCodeIndex(xmlDocument: TextDocument, xmlPosition: Positio
             else {
                 dartOffset = classIndex;
             }
+        }
+    } else {
+        if (wordRange) {
+            const code = xmlDocument.getText(wordRange);
+            dartOffset = dart.indexOf(code);
         }
     }
 
