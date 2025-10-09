@@ -17,6 +17,7 @@ export interface ConfigValueTransformer {
     properties: string[];
     type: 'enum' | 'color' | 'edgeInsets';
     enumType?: string;
+    widgetEnumMap?: { [widgetType: string]: string };
 }
 
 export interface Config {

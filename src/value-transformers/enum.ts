@@ -3,13 +3,22 @@ import { IValueTransformer, ValueTransformResult } from "../providers/value-tran
 
 export class EnumValueTransformer implements IValueTransformer {
     enumName: string;
+    widgetEnumMap?: { [widgetType: string]: string };
 
-    constructor(enumName: string) {
+    constructor(enumName: string, widgetEnumMap?: { [widgetType: string]: string }) {
         this.enumName = enumName;
+        this.widgetEnumMap = widgetEnumMap;
     }
 
     transform(originalValue: string, name: string, widgetType: string): ValueTransformResult {
-        const value = this.resolveEnumValue(this.enumName, originalValue);
+        let enumType = this.enumName;
+        
+        // If widgetEnumMap is provided, use widget-specific enum type
+        if (this.widgetEnumMap && this.widgetEnumMap[widgetType]) {
+            enumType = this.widgetEnumMap[widgetType];
+        }
+        
+        const value = this.resolveEnumValue(enumType, originalValue);
         return {
             handled: true,
             propertyType: 'object',

@@ -1,7 +1,8 @@
-import { WidgetModel, PropertyModel, VariableModel, AttributeInfo } from '../models/models';
+import { AttributeInfo, PropertyModel, VariableModel, WidgetModel } from '../models/models';
+
+import { PropertyResolver } from '../resolvers/property-resolver';
 import { WrapperPropertyHandler } from "./wrapper-property";
 import { makeTabs } from '../utils';
-import { PropertyResolver } from '../resolvers/property-resolver';
 
 export class WrapperAnimationHandler extends WrapperPropertyHandler {
     isElement = true;
@@ -41,7 +42,7 @@ export class WrapperAnimationHandler extends WrapperPropertyHandler {
                 value:`GlobalKey<AnimationBuilderState>()`
             });
             vars.push({
-                name:`AnimationBuilderStateMixin get ${animationControllerName} => _${animationControllerName}Key.currentState;`,
+                name:`AnimationBuilderStateMixin get ${animationControllerName} => _${animationControllerName}Key.currentState as AnimationBuilderStateMixin;`,
                 type: '',
                 value:``
             });
@@ -69,7 +70,7 @@ export class WrapperAnimationHandler extends WrapperPropertyHandler {
             extraData: {
                 parameters: [
                     { name: 'animations', type: 'Map<String, Animation>' },
-                    { name: `child`, type: 'Widget' }
+                    { name: `child`, type: 'Widget?' }
                 ],
                 addReturn: true
             }
@@ -124,7 +125,7 @@ export class WrapperAnimationHandler extends WrapperPropertyHandler {
         const values = tweens.map(t => {
             return {
                 propertyName: t.property,
-                propertyValue: `animations["${t.property}"]${isTransitionWidget ? '' : '.value'}`
+                propertyValue: `animations["${t.property}"]${isTransitionWidget ? '' : '!.value'}`
             };
         });
 

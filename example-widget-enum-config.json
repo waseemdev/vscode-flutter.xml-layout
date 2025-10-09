@@ -1,0 +1,12 @@
+{
+  "valueTransformers": [
+    {
+      "type": "enum",
+      "properties": ["weight"],
+      "widgetEnumMap": {
+        "MyLabel": "A7LabelWeight",
+        "MyButton": "A7ButtonWeight"
+      }
+    }
+  ]
+}
